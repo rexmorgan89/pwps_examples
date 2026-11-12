@@ -1,0 +1,4102 @@
+﻿## Export-DMIncomingCorrespondenceFiles
+
+
+NAME
+    Export-DMIncomingCorrespondenceFiles
+    
+SYNTAX
+    Export-DMIncomingCorrespondenceFiles [-IncomingCorrespondencePackages] <IncomingCorrespondence[]> [-ExportPath] <string> [[-ExportInProjectTree]]  [<CommonParameters>]
+    
+    
+PARAMETERS
+    -ExportInProjectTree
+        If activated, will export the package content to ExportPath -> ProjectCode -> PackageType -> PackageContent
+        
+        Required?                    false
+        Position?                    2
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    -ExportPath <string>
+        The folder path to export to - e.g. C:\temp\pwdm_export
+        
+        Required?                    true
+        Position?                    1
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    -IncomingCorrespondencePackages <IncomingCorrespondence[]>
+        PWDM Incoming Correspondence packages.
+        
+        Required?                    true
+        Position?                    0
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    <CommonParameters>
+        This cmdlet supports the common parameters: Verbose, Debug,
+        ErrorAction, ErrorVariable, WarningAction, WarningVariable,
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see 
+        about_CommonParameters (https:/go.microsoft.com/fwlink/?LinkID=113216). 
+    
+    
+INPUTS
+    None
+    
+    
+OUTPUTS
+    System.Object
+    
+ALIASES
+    None
+    
+
+REMARKS
+    None
+
+
+
+
+
+--
+
+## Export-DMIncomingCorrespondenceReport
+
+
+NAME
+    Export-DMIncomingCorrespondenceReport
+    
+SYNTAX
+    Export-DMIncomingCorrespondenceReport [-ConnectedProjectId] <string> [-IMSToken] <string> [-IncomingCorrespondenceIds] <guid[]> [-ExportPath] <string> [[-ExportInProjectTree]]  [<CommonParameters>]
+    
+    
+PARAMETERS
+    -ConnectedProjectId <string>
+        ProjectWise Connected Project Id.
+        
+        Required?                    true
+        Position?                    0
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    -ExportInProjectTree
+        If activated, will export the file to the correct location in the project tree ExportPath -> ProjectCode -> PackageType -> <PackageType>Report.xlsx
+        
+        Required?                    false
+        Position?                    4
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    -ExportPath <string>
+        The folder path to export to - e.g. C:\temp\pwdm_export
+        
+        Required?                    true
+        Position?                    3
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    -IMSToken <string>
+        Bentley IMS token.
+        
+        Required?                    true
+        Position?                    1
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    -IncomingCorrespondenceIds <guid[]>
+        PWDM Incoming Correspondence Ids.
+        
+        Required?                    true
+        Position?                    2
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    <CommonParameters>
+        This cmdlet supports the common parameters: Verbose, Debug,
+        ErrorAction, ErrorVariable, WarningAction, WarningVariable,
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see 
+        about_CommonParameters (https:/go.microsoft.com/fwlink/?LinkID=113216). 
+    
+    
+INPUTS
+    None
+    
+    
+OUTPUTS
+    System.Object
+    
+ALIASES
+    None
+    
+
+REMARKS
+    None
+
+
+
+
+
+--
+
+## Export-DMIncomingRFIsFiles
+
+
+NAME
+    Export-DMIncomingRFIsFiles
+    
+SYNTAX
+    Export-DMIncomingRFIsFiles [-IncomingRFIPackages] <IncomingRFI[]> [-ExportPath] <string> [[-ExportInProjectTree]]  [<CommonParameters>]
+    
+    
+PARAMETERS
+    -ExportInProjectTree
+        If activated, will export the package content to ExportPath -> ProjectCode -> PackageType -> PackageContent
+        
+        Required?                    false
+        Position?                    2
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    -ExportPath <string>
+        The folder path to export to - e.g. C:\temp\pwdm_export
+        
+        Required?                    true
+        Position?                    1
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    -IncomingRFIPackages <IncomingRFI[]>
+        PWDM Incoming RFIs packages.
+        
+        Required?                    true
+        Position?                    0
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    <CommonParameters>
+        This cmdlet supports the common parameters: Verbose, Debug,
+        ErrorAction, ErrorVariable, WarningAction, WarningVariable,
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see 
+        about_CommonParameters (https:/go.microsoft.com/fwlink/?LinkID=113216). 
+    
+    
+INPUTS
+    None
+    
+    
+OUTPUTS
+    System.Object
+    
+ALIASES
+    None
+    
+
+REMARKS
+    None
+
+
+
+
+
+--
+
+## Export-DMIncomingRFIsReport
+
+
+NAME
+    Export-DMIncomingRFIsReport
+    
+SYNTAX
+    Export-DMIncomingRFIsReport [-ConnectedProjectId] <string> [-IMSToken] <string> [-IncomingRFIIds] <guid[]> [-ExportPath] <string> [[-ExportInProjectTree]]  [<CommonParameters>]
+    
+    
+PARAMETERS
+    -ConnectedProjectId <string>
+        ProjectWise Connected Project Id.
+        
+        Required?                    true
+        Position?                    0
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    -ExportInProjectTree
+        If activated, will export the file to the correct location in the project tree ExportPath -> ProjectCode -> PackageType -> <PackageType>Report.xlsx
+        
+        Required?                    false
+        Position?                    4
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    -ExportPath <string>
+        The folder path to export to - e.g. C:\temp\pwdm_export
+        
+        Required?                    true
+        Position?                    3
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    -IMSToken <string>
+        Bentley IMS token.
+        
+        Required?                    true
+        Position?                    1
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    -IncomingRFIIds <guid[]>
+        PWDM IncomingRFI Ids.
+        
+        Required?                    true
+        Position?                    2
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    <CommonParameters>
+        This cmdlet supports the common parameters: Verbose, Debug,
+        ErrorAction, ErrorVariable, WarningAction, WarningVariable,
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see 
+        about_CommonParameters (https:/go.microsoft.com/fwlink/?LinkID=113216). 
+    
+    
+INPUTS
+    None
+    
+    
+OUTPUTS
+    System.Object
+    
+ALIASES
+    None
+    
+
+REMARKS
+    None
+
+
+
+
+
+--
+
+## Export-DMOutgoingCorrespondenceFiles
+
+
+NAME
+    Export-DMOutgoingCorrespondenceFiles
+    
+SYNTAX
+    Export-DMOutgoingCorrespondenceFiles [-OutgoingCorrespondencePackages] <OutgoingCorrespondence[]> [-ExportPath] <string> [[-ExportInProjectTree]]  [<CommonParameters>]
+    
+    
+PARAMETERS
+    -ExportInProjectTree
+        If activated, will export the package content to ExportPath -> ProjectCode -> PackageType -> PackageContent
+        
+        Required?                    false
+        Position?                    2
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    -ExportPath <string>
+        The folder path to export to - e.g. C:\temp\pwdm_export
+        
+        Required?                    true
+        Position?                    1
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    -OutgoingCorrespondencePackages <OutgoingCorrespondence[]>
+        PWDM Outgoing Correspondence packages.
+        
+        Required?                    true
+        Position?                    0
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    <CommonParameters>
+        This cmdlet supports the common parameters: Verbose, Debug,
+        ErrorAction, ErrorVariable, WarningAction, WarningVariable,
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see 
+        about_CommonParameters (https:/go.microsoft.com/fwlink/?LinkID=113216). 
+    
+    
+INPUTS
+    None
+    
+    
+OUTPUTS
+    System.Object
+    
+ALIASES
+    None
+    
+
+REMARKS
+    None
+
+
+
+
+
+--
+
+## Export-DMOutgoingCorrespondenceReport
+
+
+NAME
+    Export-DMOutgoingCorrespondenceReport
+    
+SYNTAX
+    Export-DMOutgoingCorrespondenceReport [-ConnectedProjectId] <string> [-IMSToken] <string> [-OutgoingCorrespondenceIds] <guid[]> [-ExportPath] <string> [[-ExportInProjectTree]]  [<CommonParameters>]
+    
+    
+PARAMETERS
+    -ConnectedProjectId <string>
+        ProjectWise Connected Project Id.
+        
+        Required?                    true
+        Position?                    0
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    -ExportInProjectTree
+        If activated, will export the file to the correct location in the project tree ExportPath -> ProjectCode -> PackageType -> <PackageType>Report.xlsx
+        
+        Required?                    false
+        Position?                    4
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    -ExportPath <string>
+        The folder path to export to - e.g. C:\temp\pwdm_export
+        
+        Required?                    true
+        Position?                    3
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    -IMSToken <string>
+        Bentley IMS token.
+        
+        Required?                    true
+        Position?                    1
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    -OutgoingCorrespondenceIds <guid[]>
+        PWDM Outgoing Correspondence Ids.
+        
+        Required?                    true
+        Position?                    2
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    <CommonParameters>
+        This cmdlet supports the common parameters: Verbose, Debug,
+        ErrorAction, ErrorVariable, WarningAction, WarningVariable,
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see 
+        about_CommonParameters (https:/go.microsoft.com/fwlink/?LinkID=113216). 
+    
+    
+INPUTS
+    None
+    
+    
+OUTPUTS
+    System.Object
+    
+ALIASES
+    None
+    
+
+REMARKS
+    None
+
+
+
+
+
+--
+
+## Export-DMOutgoingRFIsFiles
+
+
+NAME
+    Export-DMOutgoingRFIsFiles
+    
+SYNTAX
+    Export-DMOutgoingRFIsFiles [-OutgoingRFIPackages] <OutgoingRFI[]> [-ExportPath] <string> [[-ExportInProjectTree]]  [<CommonParameters>]
+    
+    
+PARAMETERS
+    -ExportInProjectTree
+        If activated, will export the package content to ExportPath -> ProjectCode -> PackageType -> PackageContent
+        
+        Required?                    false
+        Position?                    2
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    -ExportPath <string>
+        The folder path to export to - e.g. C:\temp\pwdm_export
+        
+        Required?                    true
+        Position?                    1
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    -OutgoingRFIPackages <OutgoingRFI[]>
+        PWDM Outgoing RFIs packages.
+        
+        Required?                    true
+        Position?                    0
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    <CommonParameters>
+        This cmdlet supports the common parameters: Verbose, Debug,
+        ErrorAction, ErrorVariable, WarningAction, WarningVariable,
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see 
+        about_CommonParameters (https:/go.microsoft.com/fwlink/?LinkID=113216). 
+    
+    
+INPUTS
+    None
+    
+    
+OUTPUTS
+    System.Object
+    
+ALIASES
+    None
+    
+
+REMARKS
+    None
+
+
+
+
+
+--
+
+## Export-DMOutgoingRFIsReport
+
+
+NAME
+    Export-DMOutgoingRFIsReport
+    
+SYNTAX
+    Export-DMOutgoingRFIsReport [-ConnectedProjectId] <string> [-IMSToken] <string> [-OutgoingRFIIds] <guid[]> [-ExportPath] <string> [[-ExportInProjectTree]]  [<CommonParameters>]
+    
+    
+PARAMETERS
+    -ConnectedProjectId <string>
+        ProjectWise Connected Project Id.
+        
+        Required?                    true
+        Position?                    0
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    -ExportInProjectTree
+        If activated, will export the file to the correct location in the project tree ExportPath -> ProjectCode -> PackageType -> <PackageType>Report.xlsx
+        
+        Required?                    false
+        Position?                    4
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    -ExportPath <string>
+        The folder path to export to - e.g. C:\temp\pwdm_export
+        
+        Required?                    true
+        Position?                    3
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    -IMSToken <string>
+        Bentley IMS token.
+        
+        Required?                    true
+        Position?                    1
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    -OutgoingRFIIds <guid[]>
+        PWDM OutgoingRFI Ids.
+        
+        Required?                    true
+        Position?                    2
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    <CommonParameters>
+        This cmdlet supports the common parameters: Verbose, Debug,
+        ErrorAction, ErrorVariable, WarningAction, WarningVariable,
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see 
+        about_CommonParameters (https:/go.microsoft.com/fwlink/?LinkID=113216). 
+    
+    
+INPUTS
+    None
+    
+    
+OUTPUTS
+    System.Object
+    
+ALIASES
+    None
+    
+
+REMARKS
+    None
+
+
+
+
+
+--
+
+## Export-DMSubmittalsFiles
+
+
+NAME
+    Export-DMSubmittalsFiles
+    
+SYNTAX
+    Export-DMSubmittalsFiles [-SubmittalPackages] <IncomingPackage[]> [-ExportPath] <string> [[-ExportInProjectTree]]  [<CommonParameters>]
+    
+    
+PARAMETERS
+    -ExportInProjectTree
+        If activated, will export package content to ExportPath -> ProjectCode -> PackageType -> PackageContent
+        
+        Required?                    false
+        Position?                    2
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    -ExportPath <string>
+        The folder path to export to - e.g. C:\temp\pwdm_export
+        
+        Required?                    true
+        Position?                    1
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    -SubmittalPackages <IncomingPackage[]>
+        PWDM Submittals.
+        
+        Required?                    true
+        Position?                    0
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    <CommonParameters>
+        This cmdlet supports the common parameters: Verbose, Debug,
+        ErrorAction, ErrorVariable, WarningAction, WarningVariable,
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see 
+        about_CommonParameters (https:/go.microsoft.com/fwlink/?LinkID=113216). 
+    
+    
+INPUTS
+    None
+    
+    
+OUTPUTS
+    System.Object
+    
+ALIASES
+    None
+    
+
+REMARKS
+    None
+
+
+
+
+
+--
+
+## Export-DMSubmittalsReport
+
+
+NAME
+    Export-DMSubmittalsReport
+    
+SYNTAX
+    Export-DMSubmittalsReport [-ConnectedProjectId] <string> [-IMSToken] <string> [-SubmittalIds] <guid[]> [-ExportPath] <string> [[-ExportInProjectTree]]  [<CommonParameters>]
+    
+    
+PARAMETERS
+    -ConnectedProjectId <string>
+        ProjectWise Connected Project Id.
+        
+        Required?                    true
+        Position?                    0
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    -ExportInProjectTree
+        If activated, will export the file to the path specified in ExportPath, rather than ExportPath -> ProjectCode -> PackageType -> <PackageType>Report.xlsx
+        
+        Required?                    false
+        Position?                    4
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    -ExportPath <string>
+        The folder path to export to - e.g. C:\temp\pwdm_export
+        
+        Required?                    true
+        Position?                    3
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    -IMSToken <string>
+        Bentley IMS token.
+        
+        Required?                    true
+        Position?                    1
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    -SubmittalIds <guid[]>
+        PWDM Submittal Ids.
+        
+        Required?                    true
+        Position?                    2
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    <CommonParameters>
+        This cmdlet supports the common parameters: Verbose, Debug,
+        ErrorAction, ErrorVariable, WarningAction, WarningVariable,
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see 
+        about_CommonParameters (https:/go.microsoft.com/fwlink/?LinkID=113216). 
+    
+    
+INPUTS
+    None
+    
+    
+OUTPUTS
+    System.Object
+    
+ALIASES
+    None
+    
+
+REMARKS
+    None
+
+
+
+
+
+--
+
+## Export-DMTransmittalsFiles
+
+
+NAME
+    Export-DMTransmittalsFiles
+    
+SYNTAX
+    Export-DMTransmittalsFiles [-TransmittalPackages] <OutgoingPackage[]> [-ExportPath] <string> [[-ExportInProjectTree]]  [<CommonParameters>]
+    
+    
+PARAMETERS
+    -ExportInProjectTree
+        If activated, will export the package content to ExportPath -> ProjectCode -> PackageType -> PackageContent
+        
+        Required?                    false
+        Position?                    2
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    -ExportPath <string>
+        The folder path to export to - e.g. C:\temp\pwdm_export
+        
+        Required?                    true
+        Position?                    1
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    -TransmittalPackages <OutgoingPackage[]>
+        PWDM Transmittals.
+        
+        Required?                    true
+        Position?                    0
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    <CommonParameters>
+        This cmdlet supports the common parameters: Verbose, Debug,
+        ErrorAction, ErrorVariable, WarningAction, WarningVariable,
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see 
+        about_CommonParameters (https:/go.microsoft.com/fwlink/?LinkID=113216). 
+    
+    
+INPUTS
+    None
+    
+    
+OUTPUTS
+    System.Object
+    
+ALIASES
+    None
+    
+
+REMARKS
+    None
+
+
+
+
+
+--
+
+## Export-DMTransmittalsReport
+
+
+NAME
+    Export-DMTransmittalsReport
+    
+SYNTAX
+    Export-DMTransmittalsReport [-ConnectedProjectId] <string> [-IMSToken] <string> [-TransmittalIds] <guid[]> [-ExportPath] <string> [[-ExportInProjectTree]]  [<CommonParameters>]
+    
+    
+PARAMETERS
+    -ConnectedProjectId <string>
+        ProjectWise Connected Project Id.
+        
+        Required?                    true
+        Position?                    0
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    -ExportInProjectTree
+        If activated, will export the file to the correct location in the project tree ExportPath -> ProjectCode -> PackageType -> <PackageType>Report.xlsx
+        
+        Required?                    false
+        Position?                    4
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    -ExportPath <string>
+        The folder path to export to - e.g. C:\temp\pwdm_export
+        
+        Required?                    true
+        Position?                    3
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    -IMSToken <string>
+        Bentley IMS token.
+        
+        Required?                    true
+        Position?                    1
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    -TransmittalIds <guid[]>
+        PWDM Transmittal Ids.
+        
+        Required?                    true
+        Position?                    2
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    <CommonParameters>
+        This cmdlet supports the common parameters: Verbose, Debug,
+        ErrorAction, ErrorVariable, WarningAction, WarningVariable,
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see 
+        about_CommonParameters (https:/go.microsoft.com/fwlink/?LinkID=113216). 
+    
+    
+INPUTS
+    None
+    
+    
+OUTPUTS
+    System.Object
+    
+ALIASES
+    None
+    
+
+REMARKS
+    None
+
+
+
+
+
+--
+
+## Get-DMConnectedProjectDetails
+
+
+NAME
+    Get-DMConnectedProjectDetails
+    
+SYNTAX
+    Get-DMConnectedProjectDetails [-ConnectedProjectId] <string> [-IMSToken] <string>  [<CommonParameters>]
+    
+    
+PARAMETERS
+    -ConnectedProjectId <string>
+        ProjectWise Connected Project Id.
+        
+        Required?                    true
+        Position?                    0
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    -IMSToken <string>
+        Bentley IMS token.
+        
+        Required?                    true
+        Position?                    1
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    <CommonParameters>
+        This cmdlet supports the common parameters: Verbose, Debug,
+        ErrorAction, ErrorVariable, WarningAction, WarningVariable,
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see 
+        about_CommonParameters (https:/go.microsoft.com/fwlink/?LinkID=113216). 
+    
+    
+INPUTS
+    None
+    
+    
+OUTPUTS
+    System.Object
+    
+ALIASES
+    None
+    
+
+REMARKS
+    None
+
+
+
+
+
+--
+
+## Get-DMIncomingCorrespondence
+
+
+NAME
+    Get-DMIncomingCorrespondence
+    
+SYNTAX
+    Get-DMIncomingCorrespondence [-ConnectedProjectId] <string> [-IMSToken] <string> [[-BatchSize] <uint32>]  [<CommonParameters>]
+    
+    
+PARAMETERS
+    -BatchSize <uint32>
+        Packages are returned iteratively, this lets you control the batch size. A batch size too large will cause the process to time out. Default batch size is 1.
+        
+        Required?                    false
+        Position?                    2
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    -ConnectedProjectId <string>
+        ProjectWise Connected Project Id.
+        
+        Required?                    true
+        Position?                    0
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    -IMSToken <string>
+        Bentley IMS token.
+        
+        Required?                    true
+        Position?                    1
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    <CommonParameters>
+        This cmdlet supports the common parameters: Verbose, Debug,
+        ErrorAction, ErrorVariable, WarningAction, WarningVariable,
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see 
+        about_CommonParameters (https:/go.microsoft.com/fwlink/?LinkID=113216). 
+    
+    
+INPUTS
+    None
+    
+    
+OUTPUTS
+    System.Object
+    
+ALIASES
+    None
+    
+
+REMARKS
+    None
+
+
+
+
+
+--
+
+## Get-DMIncomingCorrespondenceByPackageID
+
+
+NAME
+    Get-DMIncomingCorrespondenceByPackageID
+    
+SYNTAX
+    Get-DMIncomingCorrespondenceByPackageID [-ConnectedProjectId] <string> [-IMSToken] <string> [-PackageID] <guid>  [<CommonParameters>]
+    
+    
+PARAMETERS
+    -ConnectedProjectId <string>
+        ProjectWise Connected Project Id.
+        
+        Required?                    true
+        Position?                    0
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    -IMSToken <string>
+        Bentley IMS token.
+        
+        Required?                    true
+        Position?                    1
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    -PackageID <guid>
+        Target package ID.
+        
+        Required?                    true
+        Position?                    2
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    <CommonParameters>
+        This cmdlet supports the common parameters: Verbose, Debug,
+        ErrorAction, ErrorVariable, WarningAction, WarningVariable,
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see 
+        about_CommonParameters (https:/go.microsoft.com/fwlink/?LinkID=113216). 
+    
+    
+INPUTS
+    None
+    
+    
+OUTPUTS
+    System.Object
+    
+ALIASES
+    None
+    
+
+REMARKS
+    None
+
+
+
+
+
+--
+
+## Get-DMIncomingCorrespondenceByPackageIDs
+
+
+NAME
+    Get-DMIncomingCorrespondenceByPackageIDs
+    
+SYNTAX
+    Get-DMIncomingCorrespondenceByPackageIDs [-ConnectedProjectId] <string> [-PackageIDs] <guid[]>  [<CommonParameters>]
+    
+    
+PARAMETERS
+    -ConnectedProjectId <string>
+        ProjectWise Connected Project Id.
+        
+        Required?                    true
+        Position?                    0
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    -IMSToken <string>
+        Bentley IMS token.
+        
+        Required?                    true
+        Position?                    1
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    -PackageIDs <guid[]>
+        Array of target package IDs as Guids.
+        
+        Required?                    true
+        Position?                    1
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    <CommonParameters>
+        This cmdlet supports the common parameters: Verbose, Debug,
+        ErrorAction, ErrorVariable, WarningAction, WarningVariable,
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see 
+        about_CommonParameters (https:/go.microsoft.com/fwlink/?LinkID=113216). 
+    
+    
+INPUTS
+    None
+    
+    
+OUTPUTS
+    System.Object
+    
+ALIASES
+    None
+    
+
+REMARKS
+    None
+
+
+
+
+
+--
+
+## Get-DMIncomingCorrespondenceIds
+
+
+NAME
+    Get-DMIncomingCorrespondenceIds
+    
+SYNTAX
+    Get-DMIncomingCorrespondenceIds [-ConnectedProjectId] <string> [-IMSToken] <string> [[-BatchSize] <uint32>]  [<CommonParameters>]
+    
+    
+PARAMETERS
+    -BatchSize <uint32>
+        Packages are returned iteratively, this lets you control the batch size. A batch size too large will cause the process to time out. Default batch size is 10.
+        
+        Required?                    false
+        Position?                    2
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    -ConnectedProjectId <string>
+        ProjectWise Connected Project Id.
+        
+        Required?                    true
+        Position?                    0
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    -IMSToken <string>
+        Bentley IMS token.
+        
+        Required?                    true
+        Position?                    1
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    <CommonParameters>
+        This cmdlet supports the common parameters: Verbose, Debug,
+        ErrorAction, ErrorVariable, WarningAction, WarningVariable,
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see 
+        about_CommonParameters (https:/go.microsoft.com/fwlink/?LinkID=113216). 
+    
+    
+INPUTS
+    None
+    
+    
+OUTPUTS
+    System.Object
+    
+ALIASES
+    None
+    
+
+REMARKS
+    None
+
+
+
+
+
+--
+
+## Get-DMIncomingCorrespondenceIdsIssuedInDateRange
+
+
+NAME
+    Get-DMIncomingCorrespondenceIdsIssuedInDateRange
+    
+SYNTAX
+    Get-DMIncomingCorrespondenceIdsIssuedInDateRange [-ConnectedProjectId] <string> [-IMSToken] <string> [-FromDate] <datetime> [-ToDate] <datetime>  [<CommonParameters>]
+    
+    
+PARAMETERS
+    -ConnectedProjectId <string>
+        ProjectWise Connected Project Id.
+        
+        Required?                    true
+        Position?                    0
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    -FromDate <datetime>
+        Issued from date
+        
+        Required?                    true
+        Position?                    2
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    -IMSToken <string>
+        Bentley IMS token.
+        
+        Required?                    true
+        Position?                    1
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    -ToDate <datetime>
+        Issued until date
+        
+        Required?                    true
+        Position?                    3
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    <CommonParameters>
+        This cmdlet supports the common parameters: Verbose, Debug,
+        ErrorAction, ErrorVariable, WarningAction, WarningVariable,
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see 
+        about_CommonParameters (https:/go.microsoft.com/fwlink/?LinkID=113216). 
+    
+    
+INPUTS
+    None
+    
+    
+OUTPUTS
+    System.Object
+    
+ALIASES
+    None
+    
+
+REMARKS
+    None
+
+
+
+
+
+--
+
+## Get-DMIncomingCorrespondenceIdsRespondedInDateRange
+
+
+NAME
+    Get-DMIncomingCorrespondenceIdsRespondedInDateRange
+    
+SYNTAX
+    Get-DMIncomingCorrespondenceIdsRespondedInDateRange [-ConnectedProjectId] <string> [-IMSToken] <string> [-FromDate] <datetime> [-ToDate] <datetime>  [<CommonParameters>]
+    
+    
+PARAMETERS
+    -ConnectedProjectId <string>
+        ProjectWise Connected Project Id.
+        
+        Required?                    true
+        Position?                    0
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    -FromDate <datetime>
+        Responded from date
+        
+        Required?                    true
+        Position?                    2
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    -IMSToken <string>
+        Bentley IMS token.
+        
+        Required?                    true
+        Position?                    1
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    -ToDate <datetime>
+        Responded until date
+        
+        Required?                    true
+        Position?                    3
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    <CommonParameters>
+        This cmdlet supports the common parameters: Verbose, Debug,
+        ErrorAction, ErrorVariable, WarningAction, WarningVariable,
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see 
+        about_CommonParameters (https:/go.microsoft.com/fwlink/?LinkID=113216). 
+    
+    
+INPUTS
+    None
+    
+    
+OUTPUTS
+    System.Object
+    
+ALIASES
+    None
+    
+
+REMARKS
+    None
+
+
+
+
+
+--
+
+## Get-DMIncomingRFIByPackageID
+
+
+NAME
+    Get-DMIncomingRFIByPackageID
+    
+SYNTAX
+    Get-DMIncomingRFIByPackageID [-ConnectedProjectId] <string> [-IMSToken] <string> [-PackageID] <guid>  [<CommonParameters>]
+    
+    
+PARAMETERS
+    -ConnectedProjectId <string>
+        ProjectWise Connected Project Id.
+        
+        Required?                    true
+        Position?                    0
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    -IMSToken <string>
+        Bentley IMS token.
+        
+        Required?                    true
+        Position?                    1
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    -PackageID <guid>
+        Target package ID.
+        
+        Required?                    true
+        Position?                    2
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    <CommonParameters>
+        This cmdlet supports the common parameters: Verbose, Debug,
+        ErrorAction, ErrorVariable, WarningAction, WarningVariable,
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see 
+        about_CommonParameters (https:/go.microsoft.com/fwlink/?LinkID=113216). 
+    
+    
+INPUTS
+    None
+    
+    
+OUTPUTS
+    System.Object
+    
+ALIASES
+    None
+    
+
+REMARKS
+    None
+
+
+
+
+
+--
+
+## Get-DMIncomingRFIIds
+
+
+NAME
+    Get-DMIncomingRFIIds
+    
+SYNTAX
+    Get-DMIncomingRFIIds [-ConnectedProjectId] <string> [-IMSToken] <string> [[-BatchSize] <uint32>]  [<CommonParameters>]
+    
+    
+PARAMETERS
+    -BatchSize <uint32>
+        Packages are returned iteratively, this lets you control the batch size. A batch size too large will cause the process to time out. Default batch size is 10.
+        
+        Required?                    false
+        Position?                    2
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    -ConnectedProjectId <string>
+        ProjectWise Connected Project Id.
+        
+        Required?                    true
+        Position?                    0
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    -IMSToken <string>
+        Bentley IMS token.
+        
+        Required?                    true
+        Position?                    1
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    <CommonParameters>
+        This cmdlet supports the common parameters: Verbose, Debug,
+        ErrorAction, ErrorVariable, WarningAction, WarningVariable,
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see 
+        about_CommonParameters (https:/go.microsoft.com/fwlink/?LinkID=113216). 
+    
+    
+INPUTS
+    None
+    
+    
+OUTPUTS
+    System.Object
+    
+ALIASES
+    None
+    
+
+REMARKS
+    None
+
+
+
+
+
+--
+
+## Get-DMIncomingRFIIdsIssuedInDateRange
+
+
+NAME
+    Get-DMIncomingRFIIdsIssuedInDateRange
+    
+SYNTAX
+    Get-DMIncomingRFIIdsIssuedInDateRange [-ConnectedProjectId] <string> [-IMSToken] <string> [-FromDate] <datetime> [-ToDate] <datetime>  [<CommonParameters>]
+    
+    
+PARAMETERS
+    -ConnectedProjectId <string>
+        ProjectWise Connected Project Id.
+        
+        Required?                    true
+        Position?                    0
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    -FromDate <datetime>
+        Issued from date
+        
+        Required?                    true
+        Position?                    2
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    -IMSToken <string>
+        Bentley IMS token.
+        
+        Required?                    true
+        Position?                    1
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    -ToDate <datetime>
+        Issued until date
+        
+        Required?                    true
+        Position?                    3
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    <CommonParameters>
+        This cmdlet supports the common parameters: Verbose, Debug,
+        ErrorAction, ErrorVariable, WarningAction, WarningVariable,
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see 
+        about_CommonParameters (https:/go.microsoft.com/fwlink/?LinkID=113216). 
+    
+    
+INPUTS
+    None
+    
+    
+OUTPUTS
+    System.Object
+    
+ALIASES
+    None
+    
+
+REMARKS
+    None
+
+
+
+
+
+--
+
+## Get-DMIncomingRFIIdsRespondedInDateRange
+
+
+NAME
+    Get-DMIncomingRFIIdsRespondedInDateRange
+    
+SYNTAX
+    Get-DMIncomingRFIIdsRespondedInDateRange [-ConnectedProjectId] <string> [-IMSToken] <string> [-FromDate] <datetime> [-ToDate] <datetime>  [<CommonParameters>]
+    
+    
+PARAMETERS
+    -ConnectedProjectId <string>
+        ProjectWise Connected Project Id.
+        
+        Required?                    true
+        Position?                    0
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    -FromDate <datetime>
+        Responded from date
+        
+        Required?                    true
+        Position?                    2
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    -IMSToken <string>
+        Bentley IMS token.
+        
+        Required?                    true
+        Position?                    1
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    -ToDate <datetime>
+        Responded until date
+        
+        Required?                    true
+        Position?                    3
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    <CommonParameters>
+        This cmdlet supports the common parameters: Verbose, Debug,
+        ErrorAction, ErrorVariable, WarningAction, WarningVariable,
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see 
+        about_CommonParameters (https:/go.microsoft.com/fwlink/?LinkID=113216). 
+    
+    
+INPUTS
+    None
+    
+    
+OUTPUTS
+    System.Object
+    
+ALIASES
+    None
+    
+
+REMARKS
+    None
+
+
+
+
+
+--
+
+## Get-DMIncomingRFIs
+
+
+NAME
+    Get-DMIncomingRFIs
+    
+SYNTAX
+    Get-DMIncomingRFIs [-ConnectedProjectId] <string> [-IMSToken] <string> [[-BatchSize] <uint32>]  [<CommonParameters>]
+    
+    
+PARAMETERS
+    -BatchSize <uint32>
+        Packages are returned iteratively, this lets you control the batch size. A batch size too large will cause the process to time out. Default batch size is 1.
+        
+        Required?                    false
+        Position?                    2
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    -ConnectedProjectId <string>
+        ProjectWise Connected Project Id.
+        
+        Required?                    true
+        Position?                    0
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    -IMSToken <string>
+        Bentley IMS token.
+        
+        Required?                    true
+        Position?                    1
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    <CommonParameters>
+        This cmdlet supports the common parameters: Verbose, Debug,
+        ErrorAction, ErrorVariable, WarningAction, WarningVariable,
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see 
+        about_CommonParameters (https:/go.microsoft.com/fwlink/?LinkID=113216). 
+    
+    
+INPUTS
+    None
+    
+    
+OUTPUTS
+    System.Object
+    
+ALIASES
+    None
+    
+
+REMARKS
+    None
+
+
+
+
+
+--
+
+## Get-DMIncomingRFIsByPackageIDs
+
+
+NAME
+    Get-DMIncomingRFIsByPackageIDs
+    
+SYNTAX
+    Get-DMIncomingRFIsByPackageIDs [-ConnectedProjectId] <string> [-PackageIDs] <guid[]>  [<CommonParameters>]
+    
+    
+PARAMETERS
+    -ConnectedProjectId <string>
+        ProjectWise Connected Project Id.
+        
+        Required?                    true
+        Position?                    0
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    -IMSToken <string>
+        Bentley IMS token.
+        
+        Required?                    true
+        Position?                    1
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    -PackageIDs <guid[]>
+        Array of target package IDs.
+        
+        Required?                    true
+        Position?                    1
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    <CommonParameters>
+        This cmdlet supports the common parameters: Verbose, Debug,
+        ErrorAction, ErrorVariable, WarningAction, WarningVariable,
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see 
+        about_CommonParameters (https:/go.microsoft.com/fwlink/?LinkID=113216). 
+    
+    
+INPUTS
+    None
+    
+    
+OUTPUTS
+    System.Object
+    
+ALIASES
+    None
+    
+
+REMARKS
+    None
+
+
+
+
+
+--
+
+## Get-DMIncomingRFIsDataSet
+
+
+NAME
+    Get-DMIncomingRFIsDataSet
+    
+SYNTAX
+    Get-DMIncomingRFIsDataSet [-IncomingRFIs] <List[IncomingRFI]>  [<CommonParameters>]
+    
+    
+PARAMETERS
+    -IncomingRFIs <List[IncomingRFI]>
+        List of PWDM Incoming RFIs.
+        
+        Required?                    true
+        Position?                    0
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    <CommonParameters>
+        This cmdlet supports the common parameters: Verbose, Debug,
+        ErrorAction, ErrorVariable, WarningAction, WarningVariable,
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see 
+        about_CommonParameters (https:/go.microsoft.com/fwlink/?LinkID=113216). 
+    
+    
+INPUTS
+    None
+    
+    
+OUTPUTS
+    System.Object
+    
+ALIASES
+    None
+    
+
+REMARKS
+    None
+
+
+
+
+
+--
+
+## Get-DMOutgoingCorrespondence
+
+
+NAME
+    Get-DMOutgoingCorrespondence
+    
+SYNTAX
+    Get-DMOutgoingCorrespondence [-ConnectedProjectId] <string> [-IMSToken] <string> [[-BatchSize] <uint32>]  [<CommonParameters>]
+    
+    
+PARAMETERS
+    -BatchSize <uint32>
+        Packages are returned iteratively, this lets you control the batch size. A batch size too large will cause the process to time out. Default batch size is 1.
+        
+        Required?                    false
+        Position?                    2
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    -ConnectedProjectId <string>
+        ProjectWise Connected Project Id.
+        
+        Required?                    true
+        Position?                    0
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    -IMSToken <string>
+        Bentley IMS token.
+        
+        Required?                    true
+        Position?                    1
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    <CommonParameters>
+        This cmdlet supports the common parameters: Verbose, Debug,
+        ErrorAction, ErrorVariable, WarningAction, WarningVariable,
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see 
+        about_CommonParameters (https:/go.microsoft.com/fwlink/?LinkID=113216). 
+    
+    
+INPUTS
+    None
+    
+    
+OUTPUTS
+    System.Object
+    
+ALIASES
+    None
+    
+
+REMARKS
+    None
+
+
+
+
+
+--
+
+## Get-DMOutgoingCorrespondenceByPackageID
+
+
+NAME
+    Get-DMOutgoingCorrespondenceByPackageID
+    
+SYNTAX
+    Get-DMOutgoingCorrespondenceByPackageID [-ConnectedProjectId] <string> [-IMSToken] <string> [-PackageID] <guid>  [<CommonParameters>]
+    
+    
+PARAMETERS
+    -ConnectedProjectId <string>
+        ProjectWise Connected Project Id.
+        
+        Required?                    true
+        Position?                    0
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    -IMSToken <string>
+        Bentley IMS token.
+        
+        Required?                    true
+        Position?                    1
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    -PackageID <guid>
+        Target package ID.
+        
+        Required?                    true
+        Position?                    2
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    <CommonParameters>
+        This cmdlet supports the common parameters: Verbose, Debug,
+        ErrorAction, ErrorVariable, WarningAction, WarningVariable,
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see 
+        about_CommonParameters (https:/go.microsoft.com/fwlink/?LinkID=113216). 
+    
+    
+INPUTS
+    None
+    
+    
+OUTPUTS
+    System.Object
+    
+ALIASES
+    None
+    
+
+REMARKS
+    None
+
+
+
+
+
+--
+
+## Get-DMOutgoingCorrespondenceByPackageIDs
+
+
+NAME
+    Get-DMOutgoingCorrespondenceByPackageIDs
+    
+SYNTAX
+    Get-DMOutgoingCorrespondenceByPackageIDs [-ConnectedProjectId] <string> [-PackageIDs] <guid[]>  [<CommonParameters>]
+    
+    
+PARAMETERS
+    -ConnectedProjectId <string>
+        ProjectWise Connected Project Id.
+        
+        Required?                    true
+        Position?                    0
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    -IMSToken <string>
+        Bentley IMS token.
+        
+        Required?                    true
+        Position?                    1
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    -PackageIDs <guid[]>
+        Array of target package IDs.
+        
+        Required?                    true
+        Position?                    1
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    <CommonParameters>
+        This cmdlet supports the common parameters: Verbose, Debug,
+        ErrorAction, ErrorVariable, WarningAction, WarningVariable,
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see 
+        about_CommonParameters (https:/go.microsoft.com/fwlink/?LinkID=113216). 
+    
+    
+INPUTS
+    None
+    
+    
+OUTPUTS
+    System.Object
+    
+ALIASES
+    None
+    
+
+REMARKS
+    None
+
+
+
+
+
+--
+
+## Get-DMOutgoingCorrespondenceIds
+
+
+NAME
+    Get-DMOutgoingCorrespondenceIds
+    
+SYNTAX
+    Get-DMOutgoingCorrespondenceIds [-ConnectedProjectId] <string> [-IMSToken] <string> [[-BatchSize] <uint32>]  [<CommonParameters>]
+    
+    
+PARAMETERS
+    -BatchSize <uint32>
+        Packages are returned iteratively, this lets you control the batch size. A batch size too large will cause the process to time out. Default batch size is 10.
+        
+        Required?                    false
+        Position?                    2
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    -ConnectedProjectId <string>
+        ProjectWise Connected Project Id.
+        
+        Required?                    true
+        Position?                    0
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    -IMSToken <string>
+        Bentley IMS token.
+        
+        Required?                    true
+        Position?                    1
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    <CommonParameters>
+        This cmdlet supports the common parameters: Verbose, Debug,
+        ErrorAction, ErrorVariable, WarningAction, WarningVariable,
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see 
+        about_CommonParameters (https:/go.microsoft.com/fwlink/?LinkID=113216). 
+    
+    
+INPUTS
+    None
+    
+    
+OUTPUTS
+    System.Object
+    
+ALIASES
+    None
+    
+
+REMARKS
+    None
+
+
+
+
+
+--
+
+## Get-DMOutgoingCorrespondenceIdsIssuedInDateRange
+
+
+NAME
+    Get-DMOutgoingCorrespondenceIdsIssuedInDateRange
+    
+SYNTAX
+    Get-DMOutgoingCorrespondenceIdsIssuedInDateRange [-ConnectedProjectId] <string> [-IMSToken] <string> [-FromDate] <datetime> [-ToDate] <datetime>  [<CommonParameters>]
+    
+    
+PARAMETERS
+    -ConnectedProjectId <string>
+        ProjectWise Connected Project Id.
+        
+        Required?                    true
+        Position?                    0
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    -FromDate <datetime>
+        Issued from date
+        
+        Required?                    true
+        Position?                    2
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    -IMSToken <string>
+        Bentley IMS token.
+        
+        Required?                    true
+        Position?                    1
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    -ToDate <datetime>
+        Issued until date
+        
+        Required?                    true
+        Position?                    3
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    <CommonParameters>
+        This cmdlet supports the common parameters: Verbose, Debug,
+        ErrorAction, ErrorVariable, WarningAction, WarningVariable,
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see 
+        about_CommonParameters (https:/go.microsoft.com/fwlink/?LinkID=113216). 
+    
+    
+INPUTS
+    None
+    
+    
+OUTPUTS
+    System.Object
+    
+ALIASES
+    None
+    
+
+REMARKS
+    None
+
+
+
+
+
+--
+
+## Get-DMOutgoingCorrespondenceIdsRespondedInDateRange
+
+
+NAME
+    Get-DMOutgoingCorrespondenceIdsRespondedInDateRange
+    
+SYNTAX
+    Get-DMOutgoingCorrespondenceIdsRespondedInDateRange [-ConnectedProjectId] <string> [-IMSToken] <string> [-FromDate] <datetime> [-ToDate] <datetime>  [<CommonParameters>]
+    
+    
+PARAMETERS
+    -ConnectedProjectId <string>
+        ProjectWise Connected Project Id.
+        
+        Required?                    true
+        Position?                    0
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    -FromDate <datetime>
+        Responded from date
+        
+        Required?                    true
+        Position?                    2
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    -IMSToken <string>
+        Bentley IMS token.
+        
+        Required?                    true
+        Position?                    1
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    -ToDate <datetime>
+        Responded until date
+        
+        Required?                    true
+        Position?                    3
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    <CommonParameters>
+        This cmdlet supports the common parameters: Verbose, Debug,
+        ErrorAction, ErrorVariable, WarningAction, WarningVariable,
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see 
+        about_CommonParameters (https:/go.microsoft.com/fwlink/?LinkID=113216). 
+    
+    
+INPUTS
+    None
+    
+    
+OUTPUTS
+    System.Object
+    
+ALIASES
+    None
+    
+
+REMARKS
+    None
+
+
+
+
+
+--
+
+## Get-DMOutgoingRFIByPackageID
+
+
+NAME
+    Get-DMOutgoingRFIByPackageID
+    
+SYNTAX
+    Get-DMOutgoingRFIByPackageID [-ConnectedProjectId] <string> [-IMSToken] <string> [-PackageID] <guid>  [<CommonParameters>]
+    
+    
+PARAMETERS
+    -ConnectedProjectId <string>
+        ProjectWise Connected Project Id.
+        
+        Required?                    true
+        Position?                    0
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    -IMSToken <string>
+        Bentley IMS token.
+        
+        Required?                    true
+        Position?                    1
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    -PackageID <guid>
+        Target package ID.
+        
+        Required?                    true
+        Position?                    2
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    <CommonParameters>
+        This cmdlet supports the common parameters: Verbose, Debug,
+        ErrorAction, ErrorVariable, WarningAction, WarningVariable,
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see 
+        about_CommonParameters (https:/go.microsoft.com/fwlink/?LinkID=113216). 
+    
+    
+INPUTS
+    None
+    
+    
+OUTPUTS
+    System.Object
+    
+ALIASES
+    None
+    
+
+REMARKS
+    None
+
+
+
+
+
+--
+
+## Get-DMOutgoingRFIIds
+
+
+NAME
+    Get-DMOutgoingRFIIds
+    
+SYNTAX
+    Get-DMOutgoingRFIIds [-ConnectedProjectId] <string> [-IMSToken] <string> [[-BatchSize] <uint32>]  [<CommonParameters>]
+    
+    
+PARAMETERS
+    -BatchSize <uint32>
+        Packages are returned iteratively, this lets you control the batch size. A batch size too large will cause the process to time out. Default batch size is 10.
+        
+        Required?                    false
+        Position?                    2
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    -ConnectedProjectId <string>
+        ProjectWise Connected Project Id.
+        
+        Required?                    true
+        Position?                    0
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    -IMSToken <string>
+        Bentley IMS token.
+        
+        Required?                    true
+        Position?                    1
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    <CommonParameters>
+        This cmdlet supports the common parameters: Verbose, Debug,
+        ErrorAction, ErrorVariable, WarningAction, WarningVariable,
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see 
+        about_CommonParameters (https:/go.microsoft.com/fwlink/?LinkID=113216). 
+    
+    
+INPUTS
+    None
+    
+    
+OUTPUTS
+    System.Object
+    
+ALIASES
+    None
+    
+
+REMARKS
+    None
+
+
+
+
+
+--
+
+## Get-DMOutgoingRFIIdsIssuedInDateRange
+
+
+NAME
+    Get-DMOutgoingRFIIdsIssuedInDateRange
+    
+SYNTAX
+    Get-DMOutgoingRFIIdsIssuedInDateRange [-ConnectedProjectId] <string> [-IMSToken] <string> [-FromDate] <datetime> [-ToDate] <datetime>  [<CommonParameters>]
+    
+    
+PARAMETERS
+    -ConnectedProjectId <string>
+        ProjectWise Connected Project Id.
+        
+        Required?                    true
+        Position?                    0
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    -FromDate <datetime>
+        Issued from date
+        
+        Required?                    true
+        Position?                    2
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    -IMSToken <string>
+        Bentley IMS token.
+        
+        Required?                    true
+        Position?                    1
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    -ToDate <datetime>
+        Issued until date
+        
+        Required?                    true
+        Position?                    3
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    <CommonParameters>
+        This cmdlet supports the common parameters: Verbose, Debug,
+        ErrorAction, ErrorVariable, WarningAction, WarningVariable,
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see 
+        about_CommonParameters (https:/go.microsoft.com/fwlink/?LinkID=113216). 
+    
+    
+INPUTS
+    None
+    
+    
+OUTPUTS
+    System.Object
+    
+ALIASES
+    None
+    
+
+REMARKS
+    None
+
+
+
+
+
+--
+
+## Get-DMOutgoingRFIIdsRespondedInDateRange
+
+
+NAME
+    Get-DMOutgoingRFIIdsRespondedInDateRange
+    
+SYNTAX
+    Get-DMOutgoingRFIIdsRespondedInDateRange [-ConnectedProjectId] <string> [-IMSToken] <string> [-FromDate] <datetime> [-ToDate] <datetime>  [<CommonParameters>]
+    
+    
+PARAMETERS
+    -ConnectedProjectId <string>
+        ProjectWise Connected Project Id.
+        
+        Required?                    true
+        Position?                    0
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    -FromDate <datetime>
+        Responded from date
+        
+        Required?                    true
+        Position?                    2
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    -IMSToken <string>
+        Bentley IMS token.
+        
+        Required?                    true
+        Position?                    1
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    -ToDate <datetime>
+        Responded until date
+        
+        Required?                    true
+        Position?                    3
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    <CommonParameters>
+        This cmdlet supports the common parameters: Verbose, Debug,
+        ErrorAction, ErrorVariable, WarningAction, WarningVariable,
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see 
+        about_CommonParameters (https:/go.microsoft.com/fwlink/?LinkID=113216). 
+    
+    
+INPUTS
+    None
+    
+    
+OUTPUTS
+    System.Object
+    
+ALIASES
+    None
+    
+
+REMARKS
+    None
+
+
+
+
+
+--
+
+## Get-DMOutgoingRFIs
+
+
+NAME
+    Get-DMOutgoingRFIs
+    
+SYNTAX
+    Get-DMOutgoingRFIs [-ConnectedProjectId] <string> [-IMSToken] <string> [[-BatchSize] <uint32>]  [<CommonParameters>]
+    
+    
+PARAMETERS
+    -BatchSize <uint32>
+        Packages are returned iteratively, this lets you control the batch size. A batch size too large will cause the process to time out. Default batch size is 1.
+        
+        Required?                    false
+        Position?                    2
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    -ConnectedProjectId <string>
+        ProjectWise Connected Project Id.
+        
+        Required?                    true
+        Position?                    0
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    -IMSToken <string>
+        Bentley IMS token.
+        
+        Required?                    true
+        Position?                    1
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    <CommonParameters>
+        This cmdlet supports the common parameters: Verbose, Debug,
+        ErrorAction, ErrorVariable, WarningAction, WarningVariable,
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see 
+        about_CommonParameters (https:/go.microsoft.com/fwlink/?LinkID=113216). 
+    
+    
+INPUTS
+    None
+    
+    
+OUTPUTS
+    System.Object
+    
+ALIASES
+    None
+    
+
+REMARKS
+    None
+
+
+
+
+
+--
+
+## Get-DMOutgoingRFIsByPackageIDs
+
+
+NAME
+    Get-DMOutgoingRFIsByPackageIDs
+    
+SYNTAX
+    Get-DMOutgoingRFIsByPackageIDs [-ConnectedProjectId] <string> [-PackageIDs] <guid[]>  [<CommonParameters>]
+    
+    
+PARAMETERS
+    -ConnectedProjectId <string>
+        ProjectWise Connected Project Id.
+        
+        Required?                    true
+        Position?                    0
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    -IMSToken <string>
+        Bentley IMS token.
+        
+        Required?                    true
+        Position?                    1
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    -PackageIDs <guid[]>
+        Array of target package IDs.
+        
+        Required?                    true
+        Position?                    1
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    <CommonParameters>
+        This cmdlet supports the common parameters: Verbose, Debug,
+        ErrorAction, ErrorVariable, WarningAction, WarningVariable,
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see 
+        about_CommonParameters (https:/go.microsoft.com/fwlink/?LinkID=113216). 
+    
+    
+INPUTS
+    None
+    
+    
+OUTPUTS
+    System.Object
+    
+ALIASES
+    None
+    
+
+REMARKS
+    None
+
+
+
+
+
+--
+
+## Get-DMOutgoingRFIsDataSet
+
+
+NAME
+    Get-DMOutgoingRFIsDataSet
+    
+SYNTAX
+    Get-DMOutgoingRFIsDataSet [-OutgoingRFIs] <List[OutgoingRFI]>  [<CommonParameters>]
+    
+    
+PARAMETERS
+    -OutgoingRFIs <List[OutgoingRFI]>
+        List of PWDM Outgoing RFIs.
+        
+        Required?                    true
+        Position?                    0
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    <CommonParameters>
+        This cmdlet supports the common parameters: Verbose, Debug,
+        ErrorAction, ErrorVariable, WarningAction, WarningVariable,
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see 
+        about_CommonParameters (https:/go.microsoft.com/fwlink/?LinkID=113216). 
+    
+    
+INPUTS
+    None
+    
+    
+OUTPUTS
+    System.Object
+    
+ALIASES
+    None
+    
+
+REMARKS
+    None
+
+
+
+
+
+--
+
+## Get-DMSubmittalByPackageID
+
+
+NAME
+    Get-DMSubmittalByPackageID
+    
+SYNTAX
+    Get-DMSubmittalByPackageID [-ConnectedProjectId] <string> [-IMSToken] <string> [-PackageID] <guid>  [<CommonParameters>]
+    
+    
+PARAMETERS
+    -ConnectedProjectId <string>
+        ProjectWise Connected Project Id.
+        
+        Required?                    true
+        Position?                    0
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    -IMSToken <string>
+        Bentley IMS token.
+        
+        Required?                    true
+        Position?                    1
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    -PackageID <guid>
+        Target package ID.
+        
+        Required?                    true
+        Position?                    2
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    <CommonParameters>
+        This cmdlet supports the common parameters: Verbose, Debug,
+        ErrorAction, ErrorVariable, WarningAction, WarningVariable,
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see 
+        about_CommonParameters (https:/go.microsoft.com/fwlink/?LinkID=113216). 
+    
+    
+INPUTS
+    None
+    
+    
+OUTPUTS
+    System.Object
+    
+ALIASES
+    None
+    
+
+REMARKS
+    None
+
+
+
+
+
+--
+
+## Get-DMSubmittalIds
+
+
+NAME
+    Get-DMSubmittalIds
+    
+SYNTAX
+    Get-DMSubmittalIds [-ConnectedProjectId] <string> [-IMSToken] <string> [[-BatchSize] <uint32>]  [<CommonParameters>]
+    
+    
+PARAMETERS
+    -BatchSize <uint32>
+        Packages are returned iteratively, this lets you control the batch size. A batch size too large will cause the process to time out. Default batch size is 10.
+        
+        Required?                    false
+        Position?                    2
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    -ConnectedProjectId <string>
+        ProjectWise Connected Project Id.
+        
+        Required?                    true
+        Position?                    0
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    -IMSToken <string>
+        Bentley IMS token.
+        
+        Required?                    true
+        Position?                    1
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    <CommonParameters>
+        This cmdlet supports the common parameters: Verbose, Debug,
+        ErrorAction, ErrorVariable, WarningAction, WarningVariable,
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see 
+        about_CommonParameters (https:/go.microsoft.com/fwlink/?LinkID=113216). 
+    
+    
+INPUTS
+    None
+    
+    
+OUTPUTS
+    System.Object
+    
+ALIASES
+    None
+    
+
+REMARKS
+    None
+
+
+
+
+
+--
+
+## Get-DMSubmittalIdsByFileName
+
+
+NAME
+    Get-DMSubmittalIdsByFileName
+    
+SYNTAX
+    Get-DMSubmittalIdsByFileName [-ConnectedProjectId] <string> [-IMSToken] <string> [-FileName] <string>  [<CommonParameters>]
+    
+    
+PARAMETERS
+    -ConnectedProjectId <string>
+        ProjectWise Connected Project Id.
+        
+        Required?                    true
+        Position?                    0
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    -FileName <string>
+        Packages containing this file name will be returned
+        
+        Required?                    true
+        Position?                    2
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    -IMSToken <string>
+        Bentley IMS token.
+        
+        Required?                    true
+        Position?                    1
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    <CommonParameters>
+        This cmdlet supports the common parameters: Verbose, Debug,
+        ErrorAction, ErrorVariable, WarningAction, WarningVariable,
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see 
+        about_CommonParameters (https:/go.microsoft.com/fwlink/?LinkID=113216). 
+    
+    
+INPUTS
+    None
+    
+    
+OUTPUTS
+    System.Object
+    
+ALIASES
+    None
+    
+
+REMARKS
+    None
+
+
+
+
+
+--
+
+## Get-DMSubmittalIdsIssuedInDateRange
+
+
+NAME
+    Get-DMSubmittalIdsIssuedInDateRange
+    
+SYNTAX
+    Get-DMSubmittalIdsIssuedInDateRange [-ConnectedProjectId] <string> [-IMSToken] <string> [-FromDate] <datetime> [-ToDate] <datetime>  [<CommonParameters>]
+    
+    
+PARAMETERS
+    -ConnectedProjectId <string>
+        ProjectWise Connected Project Id.
+        
+        Required?                    true
+        Position?                    0
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    -FromDate <datetime>
+        Issued from date
+        
+        Required?                    true
+        Position?                    2
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    -IMSToken <string>
+        Bentley IMS token.
+        
+        Required?                    true
+        Position?                    1
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    -ToDate <datetime>
+        Issued until date
+        
+        Required?                    true
+        Position?                    3
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    <CommonParameters>
+        This cmdlet supports the common parameters: Verbose, Debug,
+        ErrorAction, ErrorVariable, WarningAction, WarningVariable,
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see 
+        about_CommonParameters (https:/go.microsoft.com/fwlink/?LinkID=113216). 
+    
+    
+INPUTS
+    None
+    
+    
+OUTPUTS
+    System.Object
+    
+ALIASES
+    None
+    
+
+REMARKS
+    None
+
+
+
+
+
+--
+
+## Get-DMSubmittalIdsOverdue
+
+
+NAME
+    Get-DMSubmittalIdsOverdue
+    
+SYNTAX
+    Get-DMSubmittalIdsOverdue [-ConnectedProjectId] <string> [-IMSToken] <string>  [<CommonParameters>]
+    
+    
+PARAMETERS
+    -ConnectedProjectId <string>
+        ProjectWise Connected Project Id.
+        
+        Required?                    true
+        Position?                    0
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    -IMSToken <string>
+        Bentley IMS token.
+        
+        Required?                    true
+        Position?                    1
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    <CommonParameters>
+        This cmdlet supports the common parameters: Verbose, Debug,
+        ErrorAction, ErrorVariable, WarningAction, WarningVariable,
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see 
+        about_CommonParameters (https:/go.microsoft.com/fwlink/?LinkID=113216). 
+    
+    
+INPUTS
+    None
+    
+    
+OUTPUTS
+    System.Object
+    
+ALIASES
+    None
+    
+
+REMARKS
+    None
+
+
+
+
+
+--
+
+## Get-DMSubmittalIdsRespondedInDateRange
+
+
+NAME
+    Get-DMSubmittalIdsRespondedInDateRange
+    
+SYNTAX
+    Get-DMSubmittalIdsRespondedInDateRange [-ConnectedProjectId] <string> [-IMSToken] <string> [-FromDate] <datetime> [-ToDate] <datetime>  [<CommonParameters>]
+    
+    
+PARAMETERS
+    -ConnectedProjectId <string>
+        ProjectWise Connected Project Id.
+        
+        Required?                    true
+        Position?                    0
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    -FromDate <datetime>
+        Responded from date
+        
+        Required?                    true
+        Position?                    2
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    -IMSToken <string>
+        Bentley IMS token.
+        
+        Required?                    true
+        Position?                    1
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    -ToDate <datetime>
+        Responded until date
+        
+        Required?                    true
+        Position?                    3
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    <CommonParameters>
+        This cmdlet supports the common parameters: Verbose, Debug,
+        ErrorAction, ErrorVariable, WarningAction, WarningVariable,
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see 
+        about_CommonParameters (https:/go.microsoft.com/fwlink/?LinkID=113216). 
+    
+    
+INPUTS
+    None
+    
+    
+OUTPUTS
+    System.Object
+    
+ALIASES
+    None
+    
+
+REMARKS
+    None
+
+
+
+
+
+--
+
+## Get-DMSubmittals
+
+
+NAME
+    Get-DMSubmittals
+    
+SYNTAX
+    Get-DMSubmittals [-ConnectedProjectId] <string> [-IMSToken] <string> [[-BatchSize] <uint32>]  [<CommonParameters>]
+    
+    
+PARAMETERS
+    -BatchSize <uint32>
+        Packages are returned iteratively, this lets you control the batch size. A batch size too large will cause the process to time out. Default batch size is 1.
+        
+        Required?                    false
+        Position?                    2
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    -ConnectedProjectId <string>
+        ProjectWise Connected Project Id.
+        
+        Required?                    true
+        Position?                    0
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    -IMSToken <string>
+        Bentley IMS token.
+        
+        Required?                    true
+        Position?                    1
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    <CommonParameters>
+        This cmdlet supports the common parameters: Verbose, Debug,
+        ErrorAction, ErrorVariable, WarningAction, WarningVariable,
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see 
+        about_CommonParameters (https:/go.microsoft.com/fwlink/?LinkID=113216). 
+    
+    
+INPUTS
+    None
+    
+    
+OUTPUTS
+    System.Object
+    
+ALIASES
+    None
+    
+
+REMARKS
+    None
+
+
+
+
+
+--
+
+## Get-DMSubmittalsByPackageIDs
+
+
+NAME
+    Get-DMSubmittalsByPackageIDs
+    
+SYNTAX
+    Get-DMSubmittalsByPackageIDs [-ConnectedProjectId] <string> [-PackageIDs] <guid[]>  [<CommonParameters>]
+    
+    
+PARAMETERS
+    -ConnectedProjectId <string>
+        ProjectWise Connected Project Id.
+        
+        Required?                    true
+        Position?                    0
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    -IMSToken <string>
+        Bentley IMS token.
+        
+        Required?                    true
+        Position?                    1
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    -PackageIDs <guid[]>
+        Array of target package IDs as Guids.
+        
+        Required?                    true
+        Position?                    1
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    <CommonParameters>
+        This cmdlet supports the common parameters: Verbose, Debug,
+        ErrorAction, ErrorVariable, WarningAction, WarningVariable,
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see 
+        about_CommonParameters (https:/go.microsoft.com/fwlink/?LinkID=113216). 
+    
+    
+INPUTS
+    None
+    
+    
+OUTPUTS
+    System.Object
+    
+ALIASES
+    None
+    
+
+REMARKS
+    None
+
+
+
+
+
+--
+
+## Get-DMSubmittalsDataSet
+
+
+NAME
+    Get-DMSubmittalsDataSet
+    
+SYNTAX
+    Get-DMSubmittalsDataSet [-SubmittalPackages] <List[IncomingPackage]>  [<CommonParameters>]
+    
+    
+PARAMETERS
+    -SubmittalPackages <List[IncomingPackage]>
+        List of PWDM Submittals.
+        
+        Required?                    true
+        Position?                    0
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    <CommonParameters>
+        This cmdlet supports the common parameters: Verbose, Debug,
+        ErrorAction, ErrorVariable, WarningAction, WarningVariable,
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see 
+        about_CommonParameters (https:/go.microsoft.com/fwlink/?LinkID=113216). 
+    
+    
+INPUTS
+    None
+    
+    
+OUTPUTS
+    System.Object
+    
+ALIASES
+    None
+    
+
+REMARKS
+    None
+
+
+
+
+
+--
+
+## Get-DMTransmittalByPackageID
+
+
+NAME
+    Get-DMTransmittalByPackageID
+    
+SYNTAX
+    Get-DMTransmittalByPackageID [-ConnectedProjectId] <string> [-IMSToken] <string> [-PackageID] <guid>  [<CommonParameters>]
+    
+    
+PARAMETERS
+    -ConnectedProjectId <string>
+        ProjectWise Connected Project Id.
+        
+        Required?                    true
+        Position?                    0
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    -IMSToken <string>
+        Bentley IMS token.
+        
+        Required?                    true
+        Position?                    1
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    -PackageID <guid>
+        Target package ID.
+        
+        Required?                    true
+        Position?                    2
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    <CommonParameters>
+        This cmdlet supports the common parameters: Verbose, Debug,
+        ErrorAction, ErrorVariable, WarningAction, WarningVariable,
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see 
+        about_CommonParameters (https:/go.microsoft.com/fwlink/?LinkID=113216). 
+    
+    
+INPUTS
+    None
+    
+    
+OUTPUTS
+    System.Object
+    
+ALIASES
+    None
+    
+
+REMARKS
+    None
+
+
+
+
+
+--
+
+## Get-DMTransmittalIds
+
+
+NAME
+    Get-DMTransmittalIds
+    
+SYNTAX
+    Get-DMTransmittalIds [-ConnectedProjectId] <string> [-IMSToken] <string> [[-BatchSize] <uint32>]  [<CommonParameters>]
+    
+    
+PARAMETERS
+    -BatchSize <uint32>
+        Packages are returned iteratively, this lets you control the batch size. A batch size too large will cause the process to time out. Default batch size is 10.
+        
+        Required?                    false
+        Position?                    2
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    -ConnectedProjectId <string>
+        ProjectWise Connected Project Id.
+        
+        Required?                    true
+        Position?                    0
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    -IMSToken <string>
+        Bentley IMS token.
+        
+        Required?                    true
+        Position?                    1
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    <CommonParameters>
+        This cmdlet supports the common parameters: Verbose, Debug,
+        ErrorAction, ErrorVariable, WarningAction, WarningVariable,
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see 
+        about_CommonParameters (https:/go.microsoft.com/fwlink/?LinkID=113216). 
+    
+    
+INPUTS
+    None
+    
+    
+OUTPUTS
+    System.Object
+    
+ALIASES
+    None
+    
+
+REMARKS
+    None
+
+
+
+
+
+--
+
+## Get-DMTransmittalIdsByFileName
+
+
+NAME
+    Get-DMTransmittalIdsByFileName
+    
+SYNTAX
+    Get-DMTransmittalIdsByFileName [-ConnectedProjectId] <string> [-IMSToken] <string> [-FileName] <string>  [<CommonParameters>]
+    
+    
+PARAMETERS
+    -ConnectedProjectId <string>
+        ProjectWise Connected Project Id.
+        
+        Required?                    true
+        Position?                    0
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    -FileName <string>
+        Packages containing this file name will be returned
+        
+        Required?                    true
+        Position?                    2
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    -IMSToken <string>
+        Bentley IMS token.
+        
+        Required?                    true
+        Position?                    1
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    <CommonParameters>
+        This cmdlet supports the common parameters: Verbose, Debug,
+        ErrorAction, ErrorVariable, WarningAction, WarningVariable,
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see 
+        about_CommonParameters (https:/go.microsoft.com/fwlink/?LinkID=113216). 
+    
+    
+INPUTS
+    None
+    
+    
+OUTPUTS
+    System.Object
+    
+ALIASES
+    None
+    
+
+REMARKS
+    None
+
+
+
+
+
+--
+
+## Get-DMTransmittalIdsIssuedInDateRange
+
+
+NAME
+    Get-DMTransmittalIdsIssuedInDateRange
+    
+SYNTAX
+    Get-DMTransmittalIdsIssuedInDateRange [-ConnectedProjectId] <string> [-IMSToken] <string> [-FromDate] <datetime> [-ToDate] <datetime>  [<CommonParameters>]
+    
+    
+PARAMETERS
+    -ConnectedProjectId <string>
+        ProjectWise Connected Project Id.
+        
+        Required?                    true
+        Position?                    0
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    -FromDate <datetime>
+        Issued from date
+        
+        Required?                    true
+        Position?                    2
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    -IMSToken <string>
+        Bentley IMS token.
+        
+        Required?                    true
+        Position?                    1
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    -ToDate <datetime>
+        Issued until date
+        
+        Required?                    true
+        Position?                    3
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    <CommonParameters>
+        This cmdlet supports the common parameters: Verbose, Debug,
+        ErrorAction, ErrorVariable, WarningAction, WarningVariable,
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see 
+        about_CommonParameters (https:/go.microsoft.com/fwlink/?LinkID=113216). 
+    
+    
+INPUTS
+    None
+    
+    
+OUTPUTS
+    System.Object
+    
+ALIASES
+    None
+    
+
+REMARKS
+    None
+
+
+
+
+
+--
+
+## Get-DMTransmittalIdsOverdue
+
+
+NAME
+    Get-DMTransmittalIdsOverdue
+    
+SYNTAX
+    Get-DMTransmittalIdsOverdue [-ConnectedProjectId] <string> [-IMSToken] <string>  [<CommonParameters>]
+    
+    
+PARAMETERS
+    -ConnectedProjectId <string>
+        ProjectWise Connected Project Id.
+        
+        Required?                    true
+        Position?                    0
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    -IMSToken <string>
+        Bentley IMS token.
+        
+        Required?                    true
+        Position?                    1
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    <CommonParameters>
+        This cmdlet supports the common parameters: Verbose, Debug,
+        ErrorAction, ErrorVariable, WarningAction, WarningVariable,
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see 
+        about_CommonParameters (https:/go.microsoft.com/fwlink/?LinkID=113216). 
+    
+    
+INPUTS
+    None
+    
+    
+OUTPUTS
+    System.Object
+    
+ALIASES
+    None
+    
+
+REMARKS
+    None
+
+
+
+
+
+--
+
+## Get-DMTransmittalIdsRespondedInDateRange
+
+
+NAME
+    Get-DMTransmittalIdsRespondedInDateRange
+    
+SYNTAX
+    Get-DMTransmittalIdsRespondedInDateRange [-ConnectedProjectId] <string> [-IMSToken] <string> [-FromDate] <datetime> [-ToDate] <datetime>  [<CommonParameters>]
+    
+    
+PARAMETERS
+    -ConnectedProjectId <string>
+        ProjectWise Connected Project Id.
+        
+        Required?                    true
+        Position?                    0
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    -FromDate <datetime>
+        Responded from date
+        
+        Required?                    true
+        Position?                    2
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    -IMSToken <string>
+        Bentley IMS token.
+        
+        Required?                    true
+        Position?                    1
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    -ToDate <datetime>
+        Responded until date
+        
+        Required?                    true
+        Position?                    3
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    <CommonParameters>
+        This cmdlet supports the common parameters: Verbose, Debug,
+        ErrorAction, ErrorVariable, WarningAction, WarningVariable,
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see 
+        about_CommonParameters (https:/go.microsoft.com/fwlink/?LinkID=113216). 
+    
+    
+INPUTS
+    None
+    
+    
+OUTPUTS
+    System.Object
+    
+ALIASES
+    None
+    
+
+REMARKS
+    None
+
+
+
+
+
+--
+
+## Get-DMTransmittals
+
+
+NAME
+    Get-DMTransmittals
+    
+SYNTAX
+    Get-DMTransmittals [-ConnectedProjectId] <string> [-IMSToken] <string> [[-BatchSize] <uint32>]  [<CommonParameters>]
+    
+    
+PARAMETERS
+    -BatchSize <uint32>
+        Packages are returned iteratively, this lets you control the batch size. A batch size too large will cause the process to time out. Default batch size is 1.
+        
+        Required?                    false
+        Position?                    2
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    -ConnectedProjectId <string>
+        ProjectWise Connected Project Id.
+        
+        Required?                    true
+        Position?                    0
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    -IMSToken <string>
+        Bentley IMS token.
+        
+        Required?                    true
+        Position?                    1
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    <CommonParameters>
+        This cmdlet supports the common parameters: Verbose, Debug,
+        ErrorAction, ErrorVariable, WarningAction, WarningVariable,
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see 
+        about_CommonParameters (https:/go.microsoft.com/fwlink/?LinkID=113216). 
+    
+    
+INPUTS
+    None
+    
+    
+OUTPUTS
+    System.Object
+    
+ALIASES
+    None
+    
+
+REMARKS
+    None
+
+
+
+
+
+--
+
+## Get-DMTransmittalsByPackageIDs
+
+
+NAME
+    Get-DMTransmittalsByPackageIDs
+    
+SYNTAX
+    Get-DMTransmittalsByPackageIDs [-ConnectedProjectId] <string> [-PackageIDs] <guid[]>  [<CommonParameters>]
+    
+    
+PARAMETERS
+    -ConnectedProjectId <string>
+        ProjectWise Connected Project Id.
+        
+        Required?                    true
+        Position?                    0
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    -IMSToken <string>
+        Bentley IMS token.
+        
+        Required?                    true
+        Position?                    1
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    -PackageIDs <guid[]>
+        Array of target package IDs.
+        
+        Required?                    true
+        Position?                    1
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    <CommonParameters>
+        This cmdlet supports the common parameters: Verbose, Debug,
+        ErrorAction, ErrorVariable, WarningAction, WarningVariable,
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see 
+        about_CommonParameters (https:/go.microsoft.com/fwlink/?LinkID=113216). 
+    
+    
+INPUTS
+    None
+    
+    
+OUTPUTS
+    System.Object
+    
+ALIASES
+    None
+    
+
+REMARKS
+    None
+
+
+
+
+
+--
+
+## Get-DMTransmittalsDataSet
+
+
+NAME
+    Get-DMTransmittalsDataSet
+    
+SYNTAX
+    Get-DMTransmittalsDataSet [-TransmittalPackages] <List[OutgoingPackage]>  [<CommonParameters>]
+    
+    
+PARAMETERS
+    -TransmittalPackages <List[OutgoingPackage]>
+        List of PWDM Transmittals.
+        
+        Required?                    true
+        Position?                    0
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    <CommonParameters>
+        This cmdlet supports the common parameters: Verbose, Debug,
+        ErrorAction, ErrorVariable, WarningAction, WarningVariable,
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see 
+        about_CommonParameters (https:/go.microsoft.com/fwlink/?LinkID=113216). 
+    
+    
+INPUTS
+    None
+    
+    
+OUTPUTS
+    System.Object
+    
+ALIASES
+    None
+    
+
+REMARKS
+    None
+
+
+
+
+
+--
+
+## Get-IMSNonFederatedAccountToken
+
+
+NAME
+    Get-IMSNonFederatedAccountToken
+    
+SYNTAX
+    Get-IMSNonFederatedAccountToken [-UserName] <string> [-Password] <securestring>  [<CommonParameters>]
+    
+    
+PARAMETERS
+    -Password <securestring>
+        Bentley IMS password.
+        
+        Required?                    true
+        Position?                    1
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    -UserName <string>
+        Bentley IMS username.
+        
+        Required?                    true
+        Position?                    0
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    <CommonParameters>
+        This cmdlet supports the common parameters: Verbose, Debug,
+        ErrorAction, ErrorVariable, WarningAction, WarningVariable,
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see 
+        about_CommonParameters (https:/go.microsoft.com/fwlink/?LinkID=113216). 
+    
+    
+INPUTS
+    None
+    
+    
+OUTPUTS
+    System.Object
+    
+ALIASES
+    None
+    
+
+REMARKS
+    None
+
+
+
+
+
+--
+
+## Get-IMSTokenFromConnectionClient
+
+
+NAME
+    Get-IMSTokenFromConnectionClient
+    
+SYNTAX
+    Get-IMSTokenFromConnectionClient  [<CommonParameters>]
+    
+    
+PARAMETERS
+    <CommonParameters>
+        This cmdlet supports the common parameters: Verbose, Debug,
+        ErrorAction, ErrorVariable, WarningAction, WarningVariable,
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see 
+        about_CommonParameters (https:/go.microsoft.com/fwlink/?LinkID=113216). 
+    
+    
+INPUTS
+    None
+    
+    
+OUTPUTS
+    System.Object
+    
+ALIASES
+    None
+    
+
+REMARKS
+    None
+
+
+
+
+
+--
+

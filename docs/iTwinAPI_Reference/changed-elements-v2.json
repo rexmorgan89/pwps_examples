@@ -1,0 +1,831 @@
+{
+    "openapi": "3.0.1",
+    "info": {
+        "title": "Changed Elements",
+        "description": "# Changed Elements\r\n\r\nThe Changed Elements API provides consumers with the elements that have changed in an iModel between two changesets.\r\n\r\nOperations Include:\r\n\r\n- [Create Comparison Job](operations/create-comparison-job/) Creates a comparison. The comparison will be queued when first created and will progress to completion. When completed, it will contain all the comparison info. Use [Get Comparison Job](operations/get-comparison-job/) for information on comparison.\r\n\r\n- [Delete Comparison Job](operations/delete-comparison-job/) Deletes all stored data relating to comparison. \r\n\r\n- [Get Comparison Job](operations/get-comparison-job/) Gets comparison based on the job id. The comparison will contain the job status, start and end changeset ids, and comparison progress. If the comparison is complete, the response will also include a href to the comparison information.\r\n",
+        "version": "v2"
+    },
+    "servers": [
+        {
+            "url": "https://api.bentley.com/changedelements"
+        }
+    ],
+    "paths": {
+        "/comparisonjob/{jobId}/itwin/{iTwinId}/imodel/{iModelId}": {
+            "delete": {
+                "tags": [
+                    "Changed Elements"
+                ],
+                "summary": "Delete Comparison Job",
+                "description": "---\r\n\r\nDeletes based on the job Id, iTwin Id, and iModel Id. All stored data relating to comparison will be deleted.  \r\n\r\nJob Id: is normally comprised of start changeset id and end changeset id, in the following format: {startChangesetId}-{endChangesetId}\r\n\r\n### Authentication\r\n\r\nRequires `Authorization` header with valid Bearer token for scope `itwin-platform`.\r\n\r\nFor more documentation on authorization and how to get access token visit [OAUTH2 Authorization](https://developer.bentley.com/apis/overview/authorization/) page.\r\n\r\n---\r\n",
+                "operationId": "delete-comparison-job",
+                "parameters": [
+                    {
+                        "name": "jobId",
+                        "in": "path",
+                        "description": "Comprised of start changeset Id and end changeset Id in the following format {startChangesetId}-{endChangesetId}.",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "iTwinId",
+                        "in": "path",
+                        "description": "Id of the iTwin where the iModel resides.",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "iModelId",
+                        "in": "path",
+                        "description": "Id of the iModel to query for status of changesets.",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "OAuth access token with `itwin-platform` scope",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/components/schemas/AuthorizationHeader"
+                        }
+                    },
+                    {
+                        "name": "Accept",
+                        "in": "header",
+                        "description": "Setting to `application/vnd.bentley.itwin-platform.v2+json` is recommended.",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/components/schemas/AcceptHeader"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Comparison deleted successfully."
+                    },
+                    "401": {
+                        "description": "This response indicates that request lacks valid authentication credentials. Access token might not been provided, issued by the wrong issuer, does not have required scopes or request headers were malformed.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                },
+                                "examples": {
+                                    "HeaderNotFound": {
+                                        "value": {
+                                            "error": {
+                                                "code": "HeaderNotFound",
+                                                "message": "Header Authorization was not found in the request. Access denied."
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "The user has insufficient permissions for the requested operation.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                },
+                                "example": {
+                                    "error": {
+                                        "code": "InsufficientPermissions",
+                                        "message": "The user has insufficient permissions for the requested operation."
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "This response indicates that the provided iTwin, iModel, or jobId could not be found.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                },
+                                "example": {
+                                    "error": {
+                                        "code": "ComparisonNotFound",
+                                        "message": "Requested comparison is not available."
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "This response indicates that an URL parameter was malformed or there are missing required URL parameters.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                },
+                                "example": {
+                                    "error": {
+                                        "code": "InvalidChangedElementsRequest",
+                                        "message": "Could not delete comparison.",
+                                        "details": [
+                                            {
+                                                "code": "MissingRequiredParameter",
+                                                "message": "Query parameter must be provided.",
+                                                "target": "iModelId"
+                                            },
+                                            {
+                                                "code": "MissingRequiredParameter",
+                                                "message": "Query parameter must be provided.",
+                                                "target": "iTwinId"
+                                            },
+                                            {
+                                                "code": "MissingRequiredParameter",
+                                                "message": "Query parameter must be provided.",
+                                                "target": "jobId"
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "429": {
+                        "description": "This response indicates that the client sent more requests than allowed by this API for the current tier of the client.",
+                        "headers": {
+                            "retry-after": {
+                                "description": "Number of seconds to wait until client is allowed to make more requests.",
+                                "required": true,
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                },
+                                "example": {
+                                    "error": {
+                                        "code": "RateLimitExceeded",
+                                        "message": "The client sent more requests than allowed by this API for the current tier of the client."
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "get": {
+                "tags": [
+                    "Changed Elements"
+                ],
+                "summary": "Get Comparison Job",
+                "description": "---\r\n\r\nGets comparison based on the job Id, iTwin Id, and iModel Id. The comparison will contain the job status, start and end changeset ids, and comparison progress. If the comparison is complete, the response will also include an href to the comparison information.\r\n\r\nJob Id: is normally comprised of start changeset id and end changeset id, in the following format: {startChangesetId}-{endChangesetId}\r\n\r\n### Understanding Change\r\n\r\nThe comparison job blob, which can be downloaded using the provided link, includes a [ChangedElements](https://www.itwinjs.org/reference/core-common/entities/changedelements/) object. This object comprises several arrays of identical size. Each element across these arrays is identified by a unique index.\r\nmap\r\n\r\nHere are some key arrays that provide insights into the modifications made to an element:\r\n\r\n**opcodes**: This array stores operation codes that indicate whether an element was inserted, updated, or deleted during the change. For more details, refer to [DbOpcode](https://www.itwinjs.org/reference/core-bentley/besqlite/dbopcode/). The relevant values are outlined below:\r\n\r\n| Opcode | Description |\r\n|:------:|-----------|\r\n| 9 | Element was deleted |\r\n| 23 | Element was modified |\r\n| 18 | Element was inserted |\r\n\r\n&nbsp;\r\n&nbsp;\r\n\r\n**type**: Contains the type of change that occurred to the element. This number is a bit-flag and can be used to know whether the element had property changes, geometric changes, placement changes, indirect changes, and hidden property changes. See [TypeOfChange](https://www.itwinjs.org/reference/core-common/entities/typeofchange/) for more information. Below is a table with the values and their meaning:\r\n\r\n| Type | Value | Description |\r\n|------|:-----:|-------------|\r\n| Property | 1 | A property in the element changed |\r\n| Geometry | 2 | The geometry of the element changed |\r\n| Placement | 4 | The placement of the element changed. This means that the element changed its volume, origin or rotation. |\r\n| Indirect | 8 | Indirect change occurred to this element by a related instance that provides properties for it |\r\n| Hidden | 16 | Hidden properties of the element changed |\r\n| Parent | 32 | The top-most parent of the element has changed |\r\n\r\n### Prefer Header\r\n\r\nYou may set the `Prefer` header as `return=minimal` if you want to skip all data related to element properties.\r\n\r\n### Authentication\r\n\r\nRequires `Authorization` header with valid Bearer token for scope `itwin-platform`.\r\n\r\nFor more documentation on authorization and how to get access token visit [OAUTH2 Authorization](https://developer.bentley.com/apis/overview/authorization/) page.\r\n---\r\n",
+                "operationId": "get-comparison-job",
+                "parameters": [
+                    {
+                        "name": "jobId",
+                        "in": "path",
+                        "description": "Comprised of start changeset Id and end changeset Id in the following format {startChangesetId}-{endChangesetId}.",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "iTwinId",
+                        "in": "path",
+                        "description": "Id of the iTwin where the iModel resides.",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "iModelId",
+                        "in": "path",
+                        "description": "Id of the iModel to query for status of changesets.",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "Prefer",
+                        "in": "header",
+                        "description": "Determines whether to provide the comparison job with all data (`return=representation`) or the comparison job data without property values (`return=minimal`). If not provided, behavior defaults to `return=representation`",
+                        "schema": {
+                            "enum": [
+                                "return=representation",
+                                "return=minimal"
+                            ],
+                            "type": "string",
+                            "default": "return=representation"
+                        }
+                    },
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "OAuth access token with `itwin-platform` scope",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/components/schemas/AuthorizationHeader"
+                        }
+                    },
+                    {
+                        "name": "Accept",
+                        "in": "header",
+                        "description": "Setting to `application/vnd.bentley.itwin-platform.v2+json` is recommended.",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/components/schemas/AcceptHeader"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/GetComparisonResponse"
+                                },
+                                "example": {
+                                    "comparisonJob": {
+                                        "comparison": {
+                                            "href": "https://api.bentley.com/path1/path2/id"
+                                        },
+                                        "status": "Completed",
+                                        "jobId": "16063aa71dfbcee75d32a7c5a31ca40e9bb2b094-8968f5c4449d26c0dababf37aed17dcc49d7059f",
+                                        "iTwinId": "1036c64d-7fbe-47fd-b03c-4ed7ad7fc829",
+                                        "iModelId": "0db82dc1-e871-4209-b40a-6753c6a68c19",
+                                        "startChangesetId": "16063aa71dfbcee75d32a7c5a31ca40e9bb2b094",
+                                        "endChangesetId": "8968f5c4449d26c0dababf37aed17dcc49d7059f",
+                                        "currentProgress": 10,
+                                        "maxProgress": 10
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "This response indicates that request lacks valid authentication credentials. Access token might not been provided, issued by the wrong issuer, does not have required scopes or request headers were malformed.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                },
+                                "examples": {
+                                    "HeaderNotFound": {
+                                        "value": {
+                                            "error": {
+                                                "code": "HeaderNotFound",
+                                                "message": "Header Authorization was not found in the request. Access denied."
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "This response indicates that the provided iTwin, iModel, or jobId could not be found.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                },
+                                "example": {
+                                    "error": {
+                                        "code": "ComparisonNotFound",
+                                        "message": "Requested comparison is not available."
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "This response indicates that an URL parameter was malformed or there are missing required URL parameters.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                },
+                                "example": {
+                                    "error": {
+                                        "code": "InvalidChangedElementsRequest",
+                                        "message": "Could retrieve comparison.",
+                                        "details": [
+                                            {
+                                                "code": "MissingRequiredParameter",
+                                                "message": "Query parameter must be provided.",
+                                                "target": "iModelId"
+                                            },
+                                            {
+                                                "code": "MissingRequiredParameter",
+                                                "message": "Query parameter must be provided.",
+                                                "target": "iTwinId"
+                                            },
+                                            {
+                                                "code": "MissingRequiredParameter",
+                                                "message": "Query parameter must be provided.",
+                                                "target": "jobId"
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "429": {
+                        "description": "This response indicates that the client sent more requests than allowed by this API for the current tier of the client.",
+                        "headers": {
+                            "retry-after": {
+                                "description": "Number of seconds to wait until client is allowed to make more requests.",
+                                "required": true,
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                },
+                                "example": {
+                                    "error": {
+                                        "code": "RateLimitExceeded",
+                                        "message": "The client sent more requests than allowed by this API for the current tier of the client."
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/comparisonjob": {
+            "post": {
+                "tags": [
+                    "Changed Elements"
+                ],
+                "summary": "Create Comparison Job",
+                "description": "---\r\n\r\n### Job Creation\r\n\r\nCreates a comparison job. The comparison will be queued when first created and will progress to completion. When completed, you can use [Get Comparison Job](operations/get-comparison-job/) to query the results.\r\n\r\n### Webhooks\r\n\r\nOnce a job is finished, an event is triggered via the [Webhooks API](https://developer.bentley.com/apis/webhooks-v2/overview/). All subscribers of the [changeElements.jobCompleted.v1](https://developer.bentley.com/apis/webhooks-v2/available-events/#Changed%20Elements-events-ref) event type will be notified.\r\n\r\n### Authentication\r\n\r\nRequires `Authorization` header with valid Bearer token for scope `itwin-platform`.\r\n\r\nFor more documentation on authorization and how to get access token visit [OAUTH2 Authorization](https://developer.bentley.com/apis/overview/authorization/) page.\r\n\r\n---\r\n",
+                "operationId": "create-comparison-job",
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "OAuth access token with `itwin-platform` scope",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/components/schemas/AuthorizationHeader"
+                        }
+                    },
+                    {
+                        "name": "Accept",
+                        "in": "header",
+                        "description": "Setting to `application/vnd.bentley.itwin-platform.v2+json` is recommended.",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/components/schemas/AcceptHeader"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ComparisonRequest"
+                            },
+                            "example": {
+                                "iTwinId": "e74dc7ec-bc23-41c9-b838-6833f77dc05f",
+                                "iModelId": "ca3746e1-854c-477c-bde3-e6cd7590d6da",
+                                "startChangesetId": "1ff311f3-ae9d-48f4-b663-9e28fbf1aeaa",
+                                "endChangesetId": "5ea41523-fbfd-46e8-be7f-d30c68343a9e"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "202": {
+                        "description": "Created comparison.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ComparisonResponse"
+                                },
+                                "example": {
+                                    "comparisonJob": {
+                                        "status": "Queued",
+                                        "jobId": "16063aa71dfbcee75d32a7c5a31ca40e9bb2b094-8968f5c4449d26c0dababf37aed17dcc49d7059f",
+                                        "iTwinId": "1036c64d-7fbe-47fd-b03c-4ed7ad7fc829",
+                                        "iModelId": "0db82dc1-e871-4209-b40a-6753c6a68c19",
+                                        "startChangesetId": "16063aa71dfbcee75d32a7c5a31ca40e9bb2b094",
+                                        "endChangesetId": "8968f5c4449d26c0dababf37aed17dcc49d7059f"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "This response indicates that request lacks valid authentication credentials. Access token might not been provided, issued by the wrong issuer, does not have required scopes or request headers were malformed.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                },
+                                "examples": {
+                                    "HeaderNotFound": {
+                                        "value": {
+                                            "error": {
+                                                "code": "HeaderNotFound",
+                                                "message": "Header Authorization was not found in the request. Access denied."
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "The user has insufficient permissions for the requested operation.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                },
+                                "example": {
+                                    "error": {
+                                        "code": "InsufficientPermissions",
+                                        "message": "The user has insufficient permissions for the requested operation."
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "This response indicates that the provided iTwin, iModel, or changeset ids could not be found.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                },
+                                "example": {
+                                    "error": {
+                                        "code": "ComparisonNotFound",
+                                        "message": "Requested comparison is not available."
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "409": {
+                        "description": "Comparison with these start and end changeset ids already exists.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                },
+                                "example": {
+                                    "error": {
+                                        "code": "ComparisonExists",
+                                        "message": "Comparison with these start and end changeset ids already exists."
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Cannot create comparison. Likely due to the request payload having an invalid field(s).",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                },
+                                "example": {
+                                    "error": {
+                                        "code": "InvalidChangedElementsRequest",
+                                        "message": "Can not create comparison.",
+                                        "details": [
+                                            {
+                                                "code": "MissingRequiredProperty",
+                                                "message": "Required property 'iModelId' is missing.",
+                                                "target": "iModelId"
+                                            },
+                                            {
+                                                "code": "MissingRequiredProperty",
+                                                "message": "Required property 'iTwinId' is missing.",
+                                                "target": "iTwinId"
+                                            },
+                                            {
+                                                "code": "MissingRequiredProperty",
+                                                "message": "Required property 'startChangesetId' is missing.",
+                                                "target": "startChangesetId"
+                                            },
+                                            {
+                                                "code": "MissingRequiredProperty",
+                                                "message": "Required property 'endChangesetId' is missing.",
+                                                "target": "endChangesetId"
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "429": {
+                        "description": "This response indicates that the client sent more requests than allowed by this API for the current tier of the client.",
+                        "headers": {
+                            "retry-after": {
+                                "description": "Number of seconds to wait until client is allowed to make more requests.",
+                                "required": true,
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                },
+                                "example": {
+                                    "error": {
+                                        "code": "RateLimitExceeded",
+                                        "message": "The client sent more requests than allowed by this API for the current tier of the client."
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "ComparisonResponse": {
+                "title": "Create Comparison Response",
+                "type": "object",
+                "properties": {
+                    "comparisonJob": {
+                        "$ref": "#/components/schemas/NewComparison"
+                    }
+                },
+                "additionalProperties": false,
+                "description": "A response containing information regarding the newly created comparison."
+            },
+            "GetComparisonResponse": {
+                "title": "Get Comparison Response",
+                "type": "object",
+                "properties": {
+                    "comparisonJob": {
+                        "$ref": "#/components/schemas/Comparison"
+                    }
+                },
+                "additionalProperties": false,
+                "description": "A response containing information regarding the comparison."
+            },
+            "Href": {
+                "type": "object",
+                "properties": {
+                    "href": {
+                        "type": "string",
+                        "description": "Http reference.",
+                        "example": "https://api.bentley.com/path1/path2/id"
+                    }
+                },
+                "additionalProperties": false,
+                "description": "A link to a resource."
+            },
+            "NewComparison": {
+                "type": "object",
+                "properties": {
+                    "status": {
+                        "type": "string",
+                        "description": "A string reflecting the status of the comparison. The statuses are: Queued, Started, Completed, or Failed."
+                    },
+                    "jobId": {
+                        "type": "string",
+                        "description": "Comprised of start changeset Id and end changeset Id in the following format {startChangesetId}-{endChangesetId}."
+                    },
+                    "iTwinId": {
+                        "type": "string",
+                        "description": "Id of the iTwin where the iModel resides."
+                    },
+                    "iModelId": {
+                        "type": "string",
+                        "description": "Id of the iModel to query for status of changesets."
+                    },
+                    "startChangesetId": {
+                        "type": "string",
+                        "description": "Id of the changeset to start from. This changeset must occur before end changeset."
+                    },
+                    "endChangesetId": {
+                        "type": "string",
+                        "description": "Id of the changeset to end at. This changeset must occur after start changeset."
+                    }
+                },
+                "additionalProperties": false,
+                "description": "Information related to the new comparison."
+            },
+            "Comparison": {
+                "type": "object",
+                "properties": {
+                    "comparison": {
+                        "$ref": "#/components/schemas/Href"
+                    },
+                    "status": {
+                        "type": "string",
+                        "description": "A string reflecting the status of the comparison. The statuses are: Queued, Started, Completed, or Failed."
+                    },
+                    "jobId": {
+                        "type": "string",
+                        "description": "Comprised of start changeset Id and end changeset Id in the following format {startChangesetId}-{endChangesetId}."
+                    },
+                    "iTwinId": {
+                        "type": "string",
+                        "description": "Id of the iTwin where the iModel resides."
+                    },
+                    "iModelId": {
+                        "type": "string",
+                        "description": "Id of the iModel to query for status of changesets."
+                    },
+                    "startChangesetId": {
+                        "type": "string",
+                        "description": "Id of the changeset to start from. This changeset must occur before end changeset."
+                    },
+                    "endChangesetId": {
+                        "type": "string",
+                        "description": "Id of the changeset to end at. This changeset must occur after start changeset."
+                    },
+                    "currentProgress": {
+                        "type": "number",
+                        "description": "Comparison processing progress. Approaches the value of 'maxProgress'."
+                    },
+                    "maxProgress": {
+                        "type": "number",
+                        "description": "The maximum value that 'currentProgress' will reach."
+                    }
+                },
+                "additionalProperties": false,
+                "description": "Information related to the comparison."
+            },
+            "ComparisonRequest": {
+                "required": [
+                    "iTwinId",
+                    "iModelId",
+                    "startChangesetId",
+                    "endChangesetId"
+                ],
+                "type": "object",
+                "properties": {
+                    "iTwinId": {
+                        "type": "string",
+                        "description": "Id of the iTwin where the iModel resides."
+                    },
+                    "iModelId": {
+                        "type": "string",
+                        "description": "Id of the iModel to query for status of changesets."
+                    },
+                    "startChangesetId": {
+                        "type": "string",
+                        "description": "Id of the changeset to start from. This changeset must occur before end changeset."
+                    },
+                    "endChangesetId": {
+                        "type": "string",
+                        "description": "Id of the changeset to end at. This changeset must occur after start changeset."
+                    }
+                },
+                "additionalProperties": false,
+                "description": "A payload for creating a new comparison. The comparison payload must have an iTwinId, iModelId, startChangesetId, endChangesetId."
+            },
+            "DetailedError": {
+                "required": [
+                    "code",
+                    "message",
+                    "details"
+                ],
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "string",
+                        "description": "One of a server-defined set of error codes."
+                    },
+                    "message": {
+                        "type": "string",
+                        "description": "A human-readable representation of the error."
+                    },
+                    "target": {
+                        "type": "string",
+                        "description": "The target of the error.",
+                        "nullable": true
+                    },
+                    "details": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Error"
+                        },
+                        "description": "Optional array of more specific errors."
+                    }
+                },
+                "description": "Contains error information and an array of more specific errors."
+            },
+            "DetailedErrorResponse": {
+                "title": "Detailed Error Response",
+                "required": [
+                    "error"
+                ],
+                "type": "object",
+                "properties": {
+                    "error": {
+                        "$ref": "#/components/schemas/DetailedError"
+                    }
+                },
+                "additionalProperties": false,
+                "description": "Gives details for an error that occurred while handling the request. Note that clients MUST NOT assume that every failed request will produce an object of this schema, or that all of the properties in the response will be non-null, as the error may have prevented this response from being constructed."
+            },
+            "Error": {
+                "required": [
+                    "code",
+                    "message"
+                ],
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "string",
+                        "description": "One of a server-defined set of error codes."
+                    },
+                    "message": {
+                        "type": "string",
+                        "description": "A human-readable representation of the error."
+                    },
+                    "target": {
+                        "type": "string",
+                        "description": "The target of the error.",
+                        "nullable": true
+                    }
+                },
+                "description": "Contains error information."
+            },
+            "ErrorResponse": {
+                "title": "Error Response",
+                "required": [
+                    "error"
+                ],
+                "type": "object",
+                "properties": {
+                    "error": {
+                        "$ref": "#/components/schemas/Error"
+                    }
+                },
+                "additionalProperties": false,
+                "description": "Gives details for an error that occurred while handling the request. Note that clients MUST NOT assume that every failed request will produce an object of this schema, or that all of the properties in the response will be non-null, as the error may have prevented this response from being constructed."
+            },
+            "AcceptHeader": {
+                "type": "string",
+                "default": "application/vnd.bentley.itwin-platform.v2+json"
+            },
+            "AuthorizationHeader": {
+                "pattern": "^Bearer .*$",
+                "type": "string"
+            },
+            "PreferHeader": {
+                "enum": [
+                    "return=representation",
+                    "return=minimal"
+                ],
+                "type": "string"
+            }
+        },
+        "securitySchemes": {
+            "apiKeyHeader": {
+                "type": "apiKey",
+                "name": "X-Api-Subscription-Key",
+                "in": "header"
+            },
+            "apiKeyQuery": {
+                "type": "apiKey",
+                "name": "subscription-key",
+                "in": "query"
+            }
+        }
+    },
+    "security": [
+        {
+            "apiKeyHeader": []
+        },
+        {
+            "apiKeyQuery": []
+        }
+    ]
+}

@@ -1,0 +1,2382 @@
+{
+    "openapi": "3.0.1",
+    "info": {
+        "title": "Export",
+        "description": "Export API is a cloud-based API meant to export the data from iModels to various formats. It allows users to export data from iModels which are hosted in Bentley's iModelHub to an IFC or PDF file.",
+        "version": "v1"
+    },
+    "servers": [
+        {
+            "url": "https://api.bentley.com/export"
+        }
+    ],
+    "paths": {
+        "/authorizationinformation": {
+            "get": {
+                "tags": [
+                    "Authorization"
+                ],
+                "summary": "Get Authorization Information",
+                "description": "---\r\n\r\nRetrieves the calling user's Authorization Information.\r\n\r\n### Authentication\r\n\r\nRequires `Authorization` header with valid Bearer token for scope `itwin-platform`.\r\n\r\nFor more documentation on authorization and how to get access token visit [OAUTH2 Authorization](https://developer.bentley.com/apis/overview/authorization/) page.\r\n\r\n---",
+                "operationId": "get-authorizationinformation",
+                "parameters": [
+                    {
+                        "name": "redirectUrl",
+                        "in": "query",
+                        "description": "URL to redirect back to after authorization",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "OAuth access token with `itwin-platform` scope",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/components/schemas/AuthorizationHeader.schema"
+                        }
+                    },
+                    {
+                        "name": "Accept",
+                        "in": "header",
+                        "description": "Setting to `application/vnd.bentley.itwin-platform.v1+json` is recommended.",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/components/schemas/AcceptHeader.schema"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/authorization-information-response"
+                                },
+                                "example": {
+                                    "authorizationInformation": {
+                                        "isUserAuthorized": false,
+                                        "_links": {
+                                            "authorizationUrl": {
+                                                "href": "https://connect-itwinbridgeportal.bentley.com/authenticate?redirect_url=https://myUrl.com"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "This response indicates that request lacks valid authentication credentials. Access token might not been provided, issued by the wrong issuer, does not have required scopes or request headers were malformed.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                },
+                                "examples": {
+                                    "HeaderNotFound": {
+                                        "value": {
+                                            "error": {
+                                                "code": "HeaderNotFound",
+                                                "message": "Header Authorization was not found in the request. Access denied."
+                                            }
+                                        }
+                                    },
+                                    "InvalidApplicationTier": {
+                                        "value": {
+                                            "error": {
+                                                "code": "InvalidApplicationTier",
+                                                "message": "The application is not allowed to access this API."
+                                            }
+                                        }
+                                    },
+                                    "InvalidAuthorizationScheme": {
+                                        "value": {
+                                            "error": {
+                                                "code": "InvalidAuthorizationScheme",
+                                                "message": "Authorization scheme 'Baerer' is not valid."
+                                            }
+                                        }
+                                    },
+                                    "InvalidHeaderValue": {
+                                        "value": {
+                                            "error": {
+                                                "code": "InvalidHeaderValue",
+                                                "message": "Authorization header is empty."
+                                            }
+                                        }
+                                    },
+                                    "RequiredScopeMissing": {
+                                        "value": {
+                                            "error": {
+                                                "code": "RequiredScopeMissing",
+                                                "message": "Access denied due to invalid access_token. One or more required scopes are missing. Make sure to provide a valid token for this API endpoint."
+                                            }
+                                        }
+                                    },
+                                    "Unauthorized": {
+                                        "value": {
+                                            "error": {
+                                                "code": "Unauthorized",
+                                                "message": "Access denied due to invalid client. Make sure that client was registered on https://developer.bentley.com."
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "This response indicates that the requested operation or resource could not be found.",
+                        "content": {
+                            "application/json;ResourceNotFound": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                },
+                                "examples": {
+                                    "ResourceNotFound": {
+                                        "value": {
+                                            "error": {
+                                                "code": "ResourceNotFound",
+                                                "message": "The requested resource was not found. Verify the API URL and the Accept header.",
+                                                "details": [
+                                                    {
+                                                        "code": "OperationNotFound",
+                                                        "message": "Unable to match incoming request to an operation."
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Invalid request to get authorization information.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                },
+                                "example": {
+                                    "error": {
+                                        "code": "InvalidAuthorizationInformationRequest",
+                                        "message": "Cannot perform operation.",
+                                        "details": [
+                                            {
+                                                "code": "InvalidValue",
+                                                "message": "redirectUrl must be a valid URL.",
+                                                "target": "$redirectUrl"
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "429": {
+                        "description": "This response indicates that the client sent more requests than allowed by this API for the current tier of the client.",
+                        "headers": {
+                            "retry-after": {
+                                "description": "Number of seconds to wait until client is allowed to make more requests.",
+                                "required": true,
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                },
+                                "example": {
+                                    "error": {
+                                        "code": "RateLimitExceeded",
+                                        "message": "The client sent more requests than allowed by this API for the current tier of the client."
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/connections": {
+            "get": {
+                "tags": [
+                    "ExportConnections"
+                ],
+                "summary": "Get Export Connections",
+                "description": "---\r\n\r\nRetrieves export connections for the specified iModel.\r\n\r\n### Authentication\r\n\r\nRequires `Authorization` header with valid Bearer token for scope `itwin-platform`.\r\n\r\nFor more documentation on authorization and how to get access token visit [OAUTH2 Authorization](https://developer.bentley.com/apis/overview/authorization/) page.\r\n\r\n---",
+                "operationId": "get-export-connections",
+                "parameters": [
+                    {
+                        "name": "imodelId",
+                        "in": "query",
+                        "description": "iModel Id",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "$top",
+                        "in": "query",
+                        "description": "The [$top](https://www.odata.org/getting-started/basic-tutorial/#topskip) system query option requests the number of items in the queried collection to be included in the result.",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "$skip",
+                        "in": "query",
+                        "description": "The [$skip](https://www.odata.org/getting-started/basic-tutorial/#topskip) query option requests the number of items in the queried collection that are to be skipped and not included in the result.",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "OAuth access token with `itwin-platform` scope",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/components/schemas/AuthorizationHeader.schema"
+                        }
+                    },
+                    {
+                        "name": "Accept",
+                        "in": "header",
+                        "description": "Setting to `application/vnd.bentley.itwin-platform.v1+json` is recommended.",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/components/schemas/AcceptHeader.schema"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/export-connections-response"
+                                },
+                                "example": {
+                                    "connections": [
+                                        {
+                                            "iModelId": "a0471655-6b18-419e-ab01-ebf4fbff9dff",
+                                            "iTwinId": "1db84556-49ba-41fd-8500-3657784c7752",
+                                            "authenticationType": "User",
+                                            "_links": {
+                                                "iModel": {
+                                                    "href": "https://api.bentley.com/imodels/5db42812-ebb8-4c58-98a4-2eaa99e0d8b6"
+                                                },
+                                                "iTwin": {
+                                                    "href": "https://api.bentley.com/itwins/4tb42812-ebb8-4c58-98a4-2eaa99e0d8b6"
+                                                },
+                                                "lastRun": {
+                                                    "href": "https://api.bentley.com/export/connections/fc226d0d-1647-48d7-8c11-f1f74f2d9808/runs/de626d0d-1647-48d7-8c11-f1f74f2d4523"
+                                                }
+                                            },
+                                            "id": "VRZHoBhrnkGrAev0-_-d_xwvyrzjgaVGka5wU967Q7M",
+                                            "displayName": "30"
+                                        }
+                                    ],
+                                    "_links": {
+                                        "self": {
+                                            "href": "https://api.bentley.com/export/connections?$skip=50&$top=50"
+                                        },
+                                        "prev": {
+                                            "href": "https://api.bentley.com/export/connections?$skip=0&$top=50"
+                                        },
+                                        "next": {
+                                            "href": "https://api.bentley.com/export/connections?$skip=200&$top=50"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "This response indicates that request lacks valid authentication credentials. Access token might not been provided, issued by the wrong issuer, does not have required scopes or request headers were malformed.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                },
+                                "examples": {
+                                    "HeaderNotFound": {
+                                        "value": {
+                                            "error": {
+                                                "code": "HeaderNotFound",
+                                                "message": "Header Authorization was not found in the request. Access denied."
+                                            }
+                                        }
+                                    },
+                                    "InvalidApplicationTier": {
+                                        "value": {
+                                            "error": {
+                                                "code": "InvalidApplicationTier",
+                                                "message": "The application is not allowed to access this API."
+                                            }
+                                        }
+                                    },
+                                    "InvalidAuthorizationScheme": {
+                                        "value": {
+                                            "error": {
+                                                "code": "InvalidAuthorizationScheme",
+                                                "message": "Authorization scheme 'Baerer' is not valid."
+                                            }
+                                        }
+                                    },
+                                    "InvalidHeaderValue": {
+                                        "value": {
+                                            "error": {
+                                                "code": "InvalidHeaderValue",
+                                                "message": "Authorization header is empty."
+                                            }
+                                        }
+                                    },
+                                    "RequiredScopeMissing": {
+                                        "value": {
+                                            "error": {
+                                                "code": "RequiredScopeMissing",
+                                                "message": "Access denied due to invalid access_token. One or more required scopes are missing. Make sure to provide a valid token for this API endpoint."
+                                            }
+                                        }
+                                    },
+                                    "Unauthorized": {
+                                        "value": {
+                                            "error": {
+                                                "code": "Unauthorized",
+                                                "message": "Access denied due to invalid client. Make sure that client was registered on https://developer.bentley.com."
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "This response indicates that user does not have required permissions to get specified connections.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                },
+                                "example": {
+                                    "error": {
+                                        "code": "InsufficientPermissions",
+                                        "message": "The user has insufficient permissions for the requested operation."
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "This response indicates that the specified connection was not found.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                },
+                                "example": {
+                                    "error": {
+                                        "code": "ConnectionNotFound",
+                                        "message": "Requested iModelId is not available."
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Invalid request to get connections.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                },
+                                "example": {
+                                    "error": {
+                                        "code": "InvalidConnectionsRequest",
+                                        "message": "Cannot perform operation.",
+                                        "details": [
+                                            {
+                                                "code": "InvalidValue",
+                                                "message": "Page size is out of limits.",
+                                                "target": "$top"
+                                            },
+                                            {
+                                                "code": "InvalidValue",
+                                                "message": "Provided imodelId value is not valid.",
+                                                "target": "imodelId"
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "429": {
+                        "description": "This response indicates that the client sent more requests than allowed by this API for the current tier of the client.",
+                        "headers": {
+                            "retry-after": {
+                                "description": "Number of seconds to wait until client is allowed to make more requests.",
+                                "required": true,
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                },
+                                "example": {
+                                    "error": {
+                                        "code": "RateLimitExceeded",
+                                        "message": "The client sent more requests than allowed by this API for the current tier of the client."
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "ExportConnections"
+                ],
+                "summary": "Create Export Connection",
+                "description": "---\r\n\r\nCreate a ExportConnection that describes which iModel's data is to be exported.\r\n\r\n### Authentication\r\n\r\nRequires `Authorization` header with valid Bearer token for scope `itwin-platform`.\r\n\r\nFor more documentation on authorization and how to get access token visit [OAUTH2 Authorization](https://developer.bentley.com/apis/overview/authorization/) page.\r\n\r\n### Associated entities\r\n\r\nA connection is linked with an iModel. An iModel ID is required to be set when creating a ExportConnection.\r\n\r\n---\r\n",
+                "operationId": "create-export-connection",
+                "parameters": [
+                    {
+                        "name": "Content-Type",
+                        "in": "header",
+                        "description": "Indicates request body content type. Supported media type is `application/json`.",
+                        "schema": {
+                            "enum": [
+                                "application/json"
+                            ],
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "OAuth access token with `itwin-platform` scope",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/components/schemas/AuthorizationHeader.schema"
+                        }
+                    },
+                    {
+                        "name": "Accept",
+                        "in": "header",
+                        "description": "Setting to `application/vnd.bentley.itwin-platform.v1+json` is recommended.",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/components/schemas/AcceptHeader.schema"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/export-connection-create"
+                            },
+                            "example": {
+                                "displayName": "30",
+                                "iModelId": "7dbd531d-6967-47b2-8945-a722a437ad7a",
+                                "authenticationType": "User"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Connection successfully created.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/export-connection-response"
+                                },
+                                "example": {
+                                    "connection": {
+                                        "id": "fc226d0d-1647-48d7-8c11-f1f74f2d9808",
+                                        "displayName": "30",
+                                        "iModelId": "7dbd531d-6967-47b2-8945-a722a437ad7a",
+                                        "iTwinId": "7dbd531d-6967-47b2-8945-a722a437ad7a",
+                                        "authenticationType": "User",
+                                        "_links": {
+                                            "iModel": {
+                                                "href": "https://api.bentley.com/imodels/5db42812-ebb8-4c58-98a4-2eaa99e0d8b6"
+                                            },
+                                            "iTwin": {
+                                                "href": "https://api.bentley.com/itwins/4tb42812-ebb8-4c58-98a4-2eaa99e0d8b6"
+                                            },
+                                            "lastRun": {
+                                                "href": "https://api.bentley.com/export/connections/fc226d0d-1647-48d7-8c11-f1f74f2d9808/runs/de626d0d-1647-48d7-8c11-f1f74f2d4523"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "This response indicates that request lacks valid authentication credentials. Access token might not been provided, issued by the wrong issuer, does not have required scopes or request headers were malformed.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                },
+                                "examples": {
+                                    "HeaderNotFound": {
+                                        "value": {
+                                            "error": {
+                                                "code": "HeaderNotFound",
+                                                "message": "Header Authorization was not found in the request. Access denied."
+                                            }
+                                        }
+                                    },
+                                    "InvalidApplicationTier": {
+                                        "value": {
+                                            "error": {
+                                                "code": "InvalidApplicationTier",
+                                                "message": "The application is not allowed to access this API."
+                                            }
+                                        }
+                                    },
+                                    "InvalidAuthorizationScheme": {
+                                        "value": {
+                                            "error": {
+                                                "code": "InvalidAuthorizationScheme",
+                                                "message": "Authorization scheme 'Baerer' is not valid."
+                                            }
+                                        }
+                                    },
+                                    "InvalidHeaderValue": {
+                                        "value": {
+                                            "error": {
+                                                "code": "InvalidHeaderValue",
+                                                "message": "Authorization header is empty."
+                                            }
+                                        }
+                                    },
+                                    "RequiredScopeMissing": {
+                                        "value": {
+                                            "error": {
+                                                "code": "RequiredScopeMissing",
+                                                "message": "Access denied due to invalid access_token. One or more required scopes are missing. Make sure to provide a valid token for this API endpoint."
+                                            }
+                                        }
+                                    },
+                                    "Unauthorized": {
+                                        "value": {
+                                            "error": {
+                                                "code": "Unauthorized",
+                                                "message": "Access denied due to invalid client. Make sure that client was registered on https://developer.bentley.com."
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "This response indicates that the requested operation or resource could not be found.",
+                        "content": {
+                            "application/json;ResourceNotFound": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                },
+                                "examples": {
+                                    "ResourceNotFound": {
+                                        "value": {
+                                            "error": {
+                                                "code": "ResourceNotFound",
+                                                "message": "The requested resource was not found. Verify the API URL and the Accept header.",
+                                                "details": [
+                                                    {
+                                                        "code": "OperationNotFound",
+                                                        "message": "Unable to match incoming request to an operation."
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Invalid request to create connection. Request payload might be missing some of the required properties.",
+                        "content": {
+                            "application/json;InvalidExportConnectionRequest": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                },
+                                "examples": {
+                                    "InvalidExportConnectionRequest": {
+                                        "value": {
+                                            "error": {
+                                                "code": "InvalidExportConnectionRequest",
+                                                "message": "Cannot perform operation.",
+                                                "details": [
+                                                    {
+                                                        "code": "InvalidRequestBody",
+                                                        "message": "Error parsing JSON, malformed JSON."
+                                                    },
+                                                    {
+                                                        "code": "MissingRequiredProperty",
+                                                        "message": "imodelId was not provided.",
+                                                        "target": "imodelId"
+                                                    },
+                                                    {
+                                                        "code": "InvalidValue",
+                                                        "message": "Provided imodelId value is not valid.",
+                                                        "target": "imodelId"
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            "application/json;MissingRequestBody": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                },
+                                "examples": {
+                                    "MissingRequestBody": {
+                                        "value": {
+                                            "error": {
+                                                "code": "MissingRequestBody",
+                                                "message": "Request body was not provided."
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "429": {
+                        "description": "This response indicates that the client sent more requests than allowed by this API for the current tier of the client.",
+                        "headers": {
+                            "retry-after": {
+                                "description": "Number of seconds to wait until client is allowed to make more requests.",
+                                "required": true,
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                },
+                                "example": {
+                                    "error": {
+                                        "code": "RateLimitExceeded",
+                                        "message": "The client sent more requests than allowed by this API for the current tier of the client."
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/connections/{connectionId}": {
+            "delete": {
+                "tags": [
+                    "ExportConnections"
+                ],
+                "summary": "Delete Export Connection",
+                "description": "---\r\n\r\nDelete connection\r\n\r\n### Authentication\r\n\r\nRequires `Authorization` header with valid Bearer token for scope `itwin-platform`.\r\n\r\nFor more documentation on authorization and how to get access token visit [OAUTH2 Authorization](https://developer.bentley.com/apis/overview/authorization/) page.\r\n\r\n\r\n---\r\n",
+                "operationId": "delete-export-connection",
+                "parameters": [
+                    {
+                        "name": "connectionId",
+                        "in": "path",
+                        "description": "Connection Id",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "OAuth access token with `itwin-platform` scope",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/components/schemas/AuthorizationHeader.schema"
+                        }
+                    },
+                    {
+                        "name": "Accept",
+                        "in": "header",
+                        "description": "Setting to `application/vnd.bentley.itwin-platform.v1+json` is recommended.",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/components/schemas/AcceptHeader.schema"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    },
+                    "401": {
+                        "description": "This response indicates that request lacks valid authentication credentials. Access token might not been provided, issued by the wrong issuer, does not have required scopes or request headers were malformed.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                },
+                                "examples": {
+                                    "HeaderNotFound": {
+                                        "value": {
+                                            "error": {
+                                                "code": "HeaderNotFound",
+                                                "message": "Header Authorization was not found in the request. Access denied."
+                                            }
+                                        }
+                                    },
+                                    "InvalidApplicationTier": {
+                                        "value": {
+                                            "error": {
+                                                "code": "InvalidApplicationTier",
+                                                "message": "The application is not allowed to access this API."
+                                            }
+                                        }
+                                    },
+                                    "InvalidAuthorizationScheme": {
+                                        "value": {
+                                            "error": {
+                                                "code": "InvalidAuthorizationScheme",
+                                                "message": "Authorization scheme 'Baerer' is not valid."
+                                            }
+                                        }
+                                    },
+                                    "InvalidHeaderValue": {
+                                        "value": {
+                                            "error": {
+                                                "code": "InvalidHeaderValue",
+                                                "message": "Authorization header is empty."
+                                            }
+                                        }
+                                    },
+                                    "RequiredScopeMissing": {
+                                        "value": {
+                                            "error": {
+                                                "code": "RequiredScopeMissing",
+                                                "message": "Access denied due to invalid access_token. One or more required scopes are missing. Make sure to provide a valid token for this API endpoint."
+                                            }
+                                        }
+                                    },
+                                    "Unauthorized": {
+                                        "value": {
+                                            "error": {
+                                                "code": "Unauthorized",
+                                                "message": "Access denied due to invalid client. Make sure that client was registered on https://developer.bentley.com."
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "This response indicates that the specified connection was not found.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                },
+                                "example": {
+                                    "error": {
+                                        "code": "ConnectionNotFound",
+                                        "message": "Requested Connection is not available."
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "409": {
+                        "description": "Connection is already being processed.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                },
+                                "example": {
+                                    "error": {
+                                        "code": "ConnectionAlreadyInUse",
+                                        "message": "Connection is already being processed."
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Invalid request to delete connection.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                },
+                                "example": {
+                                    "error": {
+                                        "code": "InvalidExportConnectionRequest",
+                                        "message": "Cannot perform operation.",
+                                        "details": [
+                                            {
+                                                "code": "InvalidValue",
+                                                "message": "Provided connectionId value is not valid.",
+                                                "target": "connectionId"
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "429": {
+                        "description": "This response indicates that the client sent more requests than allowed by this API for the current tier of the client.",
+                        "headers": {
+                            "retry-after": {
+                                "description": "Number of seconds to wait until client is allowed to make more requests.",
+                                "required": true,
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                },
+                                "example": {
+                                    "error": {
+                                        "code": "RateLimitExceeded",
+                                        "message": "The client sent more requests than allowed by this API for the current tier of the client."
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "get": {
+                "tags": [
+                    "ExportConnections"
+                ],
+                "summary": "Get Export Connection",
+                "description": "---\r\n\r\nRetrieves a ExportConnection with the specified ID.\r\n\r\n### Authentication\r\n\r\nRequires `Authorization` header with valid Bearer token for scope `itwin-platform`.\r\n\r\nFor more documentation on authorization and how to get access token visit [OAUTH2 Authorization](https://developer.bentley.com/apis/overview/authorization/) page.\r\n\r\n---",
+                "operationId": "get-export-connection",
+                "parameters": [
+                    {
+                        "name": "connectionId",
+                        "in": "path",
+                        "description": "Connection Id",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "OAuth access token with `itwin-platform` scope",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/components/schemas/AuthorizationHeader.schema"
+                        }
+                    },
+                    {
+                        "name": "Accept",
+                        "in": "header",
+                        "description": "Setting to `application/vnd.bentley.itwin-platform.v1+json` is recommended.",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/components/schemas/AcceptHeader.schema"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/export-connection-response"
+                                },
+                                "example": {
+                                    "connection": {
+                                        "id": "fc226d0d-1647-48d7-8c11-f1f74f2d9808",
+                                        "iModelId": "7dbd531d-6967-47b2-8945-a722a437ad7a",
+                                        "iTwinId": "7dbd531d-6967-47b2-8945-a722a437ad7a",
+                                        "displayName": "30",
+                                        "authenticationType": "User",
+                                        "_links": {
+                                            "iModel": {
+                                                "href": "https://api.bentley.com/imodels/5db42812-ebb8-4c58-98a4-2eaa99e0d8b6"
+                                            },
+                                            "iTwin": {
+                                                "href": "https://api.bentley.com/itwins/4tb42812-ebb8-4c58-98a4-2eaa99e0d8b6"
+                                            },
+                                            "lastRun": {
+                                                "href": "https://api.bentley.com/export/connections/fc226d0d-1647-48d7-8c11-f1f74f2d9808/runs/de626d0d-1647-48d7-8c11-f1f74f2d4523"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "This response indicates that request lacks valid authentication credentials. Access token might not been provided, issued by the wrong issuer, does not have required scopes or request headers were malformed.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                },
+                                "examples": {
+                                    "HeaderNotFound": {
+                                        "value": {
+                                            "error": {
+                                                "code": "HeaderNotFound",
+                                                "message": "Header Authorization was not found in the request. Access denied."
+                                            }
+                                        }
+                                    },
+                                    "InvalidApplicationTier": {
+                                        "value": {
+                                            "error": {
+                                                "code": "InvalidApplicationTier",
+                                                "message": "The application is not allowed to access this API."
+                                            }
+                                        }
+                                    },
+                                    "InvalidAuthorizationScheme": {
+                                        "value": {
+                                            "error": {
+                                                "code": "InvalidAuthorizationScheme",
+                                                "message": "Authorization scheme 'Baerer' is not valid."
+                                            }
+                                        }
+                                    },
+                                    "InvalidHeaderValue": {
+                                        "value": {
+                                            "error": {
+                                                "code": "InvalidHeaderValue",
+                                                "message": "Authorization header is empty."
+                                            }
+                                        }
+                                    },
+                                    "RequiredScopeMissing": {
+                                        "value": {
+                                            "error": {
+                                                "code": "RequiredScopeMissing",
+                                                "message": "Access denied due to invalid access_token. One or more required scopes are missing. Make sure to provide a valid token for this API endpoint."
+                                            }
+                                        }
+                                    },
+                                    "Unauthorized": {
+                                        "value": {
+                                            "error": {
+                                                "code": "Unauthorized",
+                                                "message": "Access denied due to invalid client. Make sure that client was registered on https://developer.bentley.com."
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "This response indicates that user does not have required permissions to get specified connection.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                },
+                                "example": {
+                                    "error": {
+                                        "code": "InsufficientPermissions",
+                                        "message": "The user has insufficient permissions for the requested operation."
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "This response indicates that the specified connection was not found.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                },
+                                "example": {
+                                    "error": {
+                                        "code": "ConnectionNotFound",
+                                        "message": "Requested Connection is not available."
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "429": {
+                        "description": "This response indicates that the client sent more requests than allowed by this API for the current tier of the client.",
+                        "headers": {
+                            "retry-after": {
+                                "description": "Number of seconds to wait until client is allowed to make more requests.",
+                                "required": true,
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                },
+                                "example": {
+                                    "error": {
+                                        "code": "RateLimitExceeded",
+                                        "message": "The client sent more requests than allowed by this API for the current tier of the client."
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/connections/{connectionId}/runs": {
+            "get": {
+                "tags": [
+                    "ExportConnections"
+                ],
+                "summary": "Get ExportConnection Runs",
+                "description": "---\r\n\r\nRetrieves all ExportConnection Runs for the specified connection.\r\n\r\n### Authentication\r\n\r\nRequires `Authorization` header with valid Bearer token for scope `itwin-platform`.\r\n\r\nFor more documentation on authorization and how to get access token visit [OAUTH2 Authorization](https://developer.bentley.com/apis/overview/authorization/) page.\r\n\r\n---",
+                "operationId": "get-export-connection-runs",
+                "parameters": [
+                    {
+                        "name": "connectionId",
+                        "in": "path",
+                        "description": "Connection Id",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "OAuth access token with `itwin-platform` scope",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/components/schemas/AuthorizationHeader.schema"
+                        }
+                    },
+                    {
+                        "name": "Accept",
+                        "in": "header",
+                        "description": "Setting to `application/vnd.bentley.itwin-platform.v1+json` is recommended.",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/components/schemas/AcceptHeader.schema"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/export-runs-response"
+                                },
+                                "example": {
+                                    "runs": [
+                                        {
+                                            "id": "75d94fca-4a9b-4ff0-8f3a-eeedbc1fea97",
+                                            "state": "Completed",
+                                            "result": "Success",
+                                            "startDateTime": "2023-09-14T12:00:06.0000000+00:00",
+                                            "endDateTime": "2023-09-14T12:07:11.0000000+00:00",
+                                            "jobs": [
+                                                {
+                                                    "id": "899537ea-2945-4c98-9737-3bb4891fe8da",
+                                                    "startDateTime": "2023-09-14T12:00:09.0000000+00:00",
+                                                    "endDateTime": "2023-09-14T12:06:31.0000000+00:00",
+                                                    "state": "Completed",
+                                                    "result": "Error",
+                                                    "tasks": [
+                                                        {
+                                                            "id": "fe2f628d-1beb-453f-bf49-2468ca48b9a8",
+                                                            "startDateTime": "2023-09-14T12:06:03.0000000+00:00",
+                                                            "endDateTime": "2023-09-14T12:06:31.0000000+00:00",
+                                                            "retryAttempts": 0,
+                                                            "state": "Completed",
+                                                            "result": "Error",
+                                                            "exportOutputFileId": "fa310a48-d89c-493a-8124-80406ac46f66",
+                                                            "error": {
+                                                                "errorCode": "TAE_BRW_1000",
+                                                                "message": "Failed to orchestrate file processing.",
+                                                                "details": "Error exit code received from bridge wrapper. Details from wrapper: ''.",
+                                                                "bridgeExitCode": -7002,
+                                                                "system": "Exporter",
+                                                                "phase": "export_file",
+                                                                "category": "other",
+                                                                "descriptionKey": "FailedToExport",
+                                                                "description": "Failed to export your file.",
+                                                                "kbArticleLink": "",
+                                                                "canUserFix": false
+                                                            }
+                                                        }
+                                                    ]
+                                                }
+                                            ]
+                                        }
+                                    ],
+                                    "_links": {
+                                        "self": {
+                                            "href": "https://api.bentley.com/export/connections/VRZHoBhrnkGrAev0-_-d_xwvyrzjgaVGka5wU967Q7M/runs&$skip=0&$top=50"
+                                        },
+                                        "next": {
+                                            "href": "https://api.bentley.com/export/connections/VRZHoBhrnkGrAev0-_-d_xwvyrzjgaVGka5wU967Q7M/runs&$skip=50&$top=50"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "This response indicates that request lacks valid authentication credentials. Access token might not been provided, issued by the wrong issuer, does not have required scopes or request headers were malformed.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                },
+                                "examples": {
+                                    "HeaderNotFound": {
+                                        "value": {
+                                            "error": {
+                                                "code": "HeaderNotFound",
+                                                "message": "Header Authorization was not found in the request. Access denied."
+                                            }
+                                        }
+                                    },
+                                    "InvalidApplicationTier": {
+                                        "value": {
+                                            "error": {
+                                                "code": "InvalidApplicationTier",
+                                                "message": "The application is not allowed to access this API."
+                                            }
+                                        }
+                                    },
+                                    "InvalidAuthorizationScheme": {
+                                        "value": {
+                                            "error": {
+                                                "code": "InvalidAuthorizationScheme",
+                                                "message": "Authorization scheme 'Baerer' is not valid."
+                                            }
+                                        }
+                                    },
+                                    "InvalidHeaderValue": {
+                                        "value": {
+                                            "error": {
+                                                "code": "InvalidHeaderValue",
+                                                "message": "Authorization header is empty."
+                                            }
+                                        }
+                                    },
+                                    "RequiredScopeMissing": {
+                                        "value": {
+                                            "error": {
+                                                "code": "RequiredScopeMissing",
+                                                "message": "Access denied due to invalid access_token. One or more required scopes are missing. Make sure to provide a valid token for this API endpoint."
+                                            }
+                                        }
+                                    },
+                                    "Unauthorized": {
+                                        "value": {
+                                            "error": {
+                                                "code": "Unauthorized",
+                                                "message": "Access denied due to invalid client. Make sure that client was registered on https://developer.bentley.com."
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "This response indicates that user does not have required permissions to get specified connection runs.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                },
+                                "example": {
+                                    "error": {
+                                        "code": "InsufficientPermissions",
+                                        "message": "The user has insufficient permissions for the requested operation."
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "This response indicates that the requested operation or resource could not be found.",
+                        "content": {
+                            "application/json;ResourceNotFound": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                },
+                                "examples": {
+                                    "ResourceNotFound": {
+                                        "value": {
+                                            "error": {
+                                                "code": "ResourceNotFound",
+                                                "message": "The requested resource was not found. Verify the API URL and the Accept header.",
+                                                "details": [
+                                                    {
+                                                        "code": "OperationNotFound",
+                                                        "message": "Unable to match incoming request to an operation."
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Invalid request to get connection.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                },
+                                "example": {
+                                    "error": {
+                                        "code": "InvalidConnectionRunsRequest",
+                                        "message": "Cannot perform operation.",
+                                        "details": [
+                                            {
+                                                "code": "MissingRequiredParameter",
+                                                "message": "imodelId was not provided.",
+                                                "target": "imodelId"
+                                            },
+                                            {
+                                                "code": "InvalidValue",
+                                                "message": "Page size is out of limits.",
+                                                "target": "$top"
+                                            },
+                                            {
+                                                "code": "InvalidValue",
+                                                "message": "Provided imodelId value is not valid.",
+                                                "target": "imodelId"
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "429": {
+                        "description": "This response indicates that the client sent more requests than allowed by this API for the current tier of the client.",
+                        "headers": {
+                            "retry-after": {
+                                "description": "Number of seconds to wait until client is allowed to make more requests.",
+                                "required": true,
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                },
+                                "example": {
+                                    "error": {
+                                        "code": "RateLimitExceeded",
+                                        "message": "The client sent more requests than allowed by this API for the current tier of the client."
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "ExportConnections"
+                ],
+                "summary": "Create ExportConnection Run",
+                "description": "---\r\n\r\nRuns the specified ExportConnection.\r\n\r\n### Notes\r\n\r\n1. The export process usually takes time and is performed in the background. For that, we need to store the user's refresh token. The refresh token needs to be stored before calling the 'Create ExportConnection Run' end-point. You can get authorization information by using [Get Authorization Information API](https://developer.bentley.com/apis/export/operations/get-authorizationinformation/). This API will return the current status and a redirect URL if the token has to be renewed.\r\n\r\n2. When a run is successfully created, the operation returns HTTP status code 202/accepted - the request is accepted for processing and will execute in background. The response will include a location header pointing to the created run. If an existing active run already exists for the iModel, a new run is not initiated, instead 303/see other is returned along with location header pointing to that existing active run. \r\nIn the rare event that multiple create run requests are being made simultaneously, only the first request is processed and 409/conflict is returned for others.\r\n\r\n### Authentication\r\n\r\nRequires `Authorization` header with valid Bearer token for scope `itwin-platform`.\r\n\r\nFor more documentation on authorization and how to get access token visit [OAUTH2 Authorization](https://developer.bentley.com/apis/overview/authorization/) page.\r\n\r\n---",
+                "operationId": "create-export-connection-run",
+                "parameters": [
+                    {
+                        "name": "connectionId",
+                        "in": "path",
+                        "description": "Connection Id",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "OAuth access token with `itwin-platform` scope",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/components/schemas/AuthorizationHeader.schema"
+                        }
+                    },
+                    {
+                        "name": "Accept",
+                        "in": "header",
+                        "description": "Setting to `application/vnd.bentley.itwin-platform.v1+json` is recommended.",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/components/schemas/AcceptHeader.schema"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/export-run-create"
+                            },
+                            "example": {
+                                "exportType": "IFC",
+                                "ifcVersion": "IFC4.3",
+                                "inputOptions": {
+                                    "mappingFileId": "0000000000000000000000000000000000000000",
+                                    "changesetId": "0000000000000000000000000000000000000000",
+                                    "savedViewId": "0000000000000000000000000000000000000000",
+                                    "mappingfileBlobUrl": "https://example.com"
+                                },
+                                "outputOptions": {
+                                    "location": "USER_BLOB_STORAGE",
+                                    "outputSasUrl": "https://abc.com",
+                                    "logsSasUrl": "https://abc.com",
+                                    "folderId": "0000000000000000000000000000000000000000",
+                                    "fileName": "example.ifc",
+                                    "replaceOlderFile": true,
+                                    "saveLogs": true
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "202": {
+                        "description": "Accepted",
+                        "headers": {
+                            "Location": {
+                                "description": "The resource location",
+                                "required": true,
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "303": {
+                        "description": "This response indicates that an active run is in progress and link is provided in location header.",
+                        "headers": {
+                            "Location": {
+                                "description": "The resource location",
+                                "required": true,
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "This response indicates that request lacks valid authentication credentials. Access token might not been provided, issued by the wrong issuer, does not have required scopes or request headers were malformed.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                },
+                                "examples": {
+                                    "HeaderNotFound": {
+                                        "value": {
+                                            "error": {
+                                                "code": "HeaderNotFound",
+                                                "message": "Header Authorization was not found in the request. Access denied."
+                                            }
+                                        }
+                                    },
+                                    "InvalidApplicationTier": {
+                                        "value": {
+                                            "error": {
+                                                "code": "InvalidApplicationTier",
+                                                "message": "The application is not allowed to access this API."
+                                            }
+                                        }
+                                    },
+                                    "InvalidAuthorizationScheme": {
+                                        "value": {
+                                            "error": {
+                                                "code": "InvalidAuthorizationScheme",
+                                                "message": "Authorization scheme 'Baerer' is not valid."
+                                            }
+                                        }
+                                    },
+                                    "InvalidHeaderValue": {
+                                        "value": {
+                                            "error": {
+                                                "code": "InvalidHeaderValue",
+                                                "message": "Authorization header is empty."
+                                            }
+                                        }
+                                    },
+                                    "RequiredScopeMissing": {
+                                        "value": {
+                                            "error": {
+                                                "code": "RequiredScopeMissing",
+                                                "message": "Access denied due to invalid access_token. One or more required scopes are missing. Make sure to provide a valid token for this API endpoint."
+                                            }
+                                        }
+                                    },
+                                    "Unauthorized": {
+                                        "value": {
+                                            "error": {
+                                                "code": "Unauthorized",
+                                                "message": "Access denied due to invalid client. Make sure that client was registered on https://developer.bentley.com."
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "This response indicates that user does not have required permissions to run specified connection.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                },
+                                "example": {
+                                    "error": {
+                                        "code": "InsufficientPermissions",
+                                        "message": "The user has insufficient permissions for the requested operation."
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "This response indicates that the specified connection not found.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                },
+                                "example": {
+                                    "error": {
+                                        "code": "ConnectionNotFound",
+                                        "message": "Requested Connection is not available."
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "409": {
+                        "description": "A run request is already being processed.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                },
+                                "example": {
+                                    "error": {
+                                        "code": "ConflictWithAnotherIModelRequest",
+                                        "message": "This request is already being processed for this iModel."
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Invalid request to create a connection run.",
+                        "content": {
+                            "application/json;InvalidConnectionRunRequest": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                },
+                                "examples": {
+                                    "InvalidConnectionRunRequest": {
+                                        "value": {
+                                            "error": {
+                                                "code": "InvalidConnectionRunRequest",
+                                                "message": "Cannot perform operation.",
+                                                "details": [
+                                                    {
+                                                        "code": "MissingRequiredParameter",
+                                                        "message": "imodelId was not provided.",
+                                                        "target": "imodelId"
+                                                    },
+                                                    {
+                                                        "code": "InvalidValue",
+                                                        "message": "Provided imodelId value is not valid.",
+                                                        "target": "imodelId"
+                                                    },
+                                                    {
+                                                        "code": "InvalidValue",
+                                                        "message": "Provided connectionId value is not valid.",
+                                                        "target": "connectionId"
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            "application/json;MissingRequestBody": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                },
+                                "examples": {
+                                    "MissingRequestBody": {
+                                        "value": {
+                                            "error": {
+                                                "code": "MissingRequestBody",
+                                                "message": "Request body was not provided."
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "429": {
+                        "description": "This response indicates that the client sent more requests than allowed by this API for the current tier of the client.",
+                        "headers": {
+                            "retry-after": {
+                                "description": "Number of seconds to wait until client is allowed to make more requests.",
+                                "required": true,
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                },
+                                "example": {
+                                    "error": {
+                                        "code": "RateLimitExceeded",
+                                        "message": "The client sent more requests than allowed by this API for the current tier of the client."
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/connections/{connectionId}/runs/{runId}": {
+            "get": {
+                "tags": [
+                    "ExportConnections"
+                ],
+                "summary": "Get ExportConnection Run",
+                "description": "---\r\n\r\nRetrieves a ExportConnection Run with the specified ID.\r\n\r\n### Authentication\r\n\r\nRequires `Authorization` header with valid Bearer token for scope `itwin-platform`.\r\n\r\nFor more documentation on authorization and how to get access token visit [OAUTH2 Authorization](https://developer.bentley.com/apis/overview/authorization/) page.\r\n\r\n---",
+                "operationId": "get-export-connection-run",
+                "parameters": [
+                    {
+                        "name": "connectionId",
+                        "in": "path",
+                        "description": "Connection Id",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "runId",
+                        "in": "path",
+                        "description": "Run Id",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "OAuth access token with `itwin-platform` scope",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/components/schemas/AuthorizationHeader.schema"
+                        }
+                    },
+                    {
+                        "name": "Accept",
+                        "in": "header",
+                        "description": "Setting to `application/vnd.bentley.itwin-platform.v1+json` is recommended.",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/components/schemas/AcceptHeader.schema"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/export-run-response"
+                                },
+                                "example": {
+                                    "run": {
+                                        "id": "a1ecbdc8c4f6173004f9f881914a57c5511a362b",
+                                        "connectionId": "bc38cd8a-fd9f-4abf-9ad7-0c3b3d28720e",
+                                        "startDateTime": "2020-10-24T02:44:13.0000000+00:00",
+                                        "endDateTime": "2020-10-24T02:47:13.0000000+00:00",
+                                        "state": "Completed",
+                                        "result": "PartialSuccess",
+                                        "jobs": [
+                                            {
+                                                "id": "d6ecbdc8c4f6173004f9f881914a57c5511a362b",
+                                                "startDateTime": "2020-10-24T02:44:13.0000000+00:00",
+                                                "endDateTime": "2020-10-24T02:44:13.0000000+00:00",
+                                                "state": "Completed",
+                                                "result": "PartialSuccess",
+                                                "tasks": [
+                                                    {
+                                                        "id": "f5ecbdc8c4f6173004f9f881914a57c5511a362b",
+                                                        "startDateTime": "2020-10-24T02:44:13.0000000+00:00",
+                                                        "endDateTime": "2020-10-24T02:44:13.0000000+00:00",
+                                                        "retryAttempts": 0,
+                                                        "state": "Completed",
+                                                        "result": "Success",
+                                                        "exportOutputFileId": "fa310a48-d89c-493a-8124-80406ac46f66",
+                                                        "error": {
+                                                            "errorCode": "TAE_BRG_1000",
+                                                            "message": "Failed to process.",
+                                                            "details": "Error exit code received from bridge wrapper.",
+                                                            "bridgeExitCode": 4294967295,
+                                                            "system": "cloud_orchestrator",
+                                                            "phase": "internal_server_error",
+                                                            "category": "other",
+                                                            "descriptionKey": "RunOrchestrationError",
+                                                            "description": "Failed to orchestrate Run.",
+                                                            "kbArticleLink": "",
+                                                            "canUserFix": false
+                                                        }
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "This response indicates that request lacks valid authentication credentials. Access token might not been provided, issued by the wrong issuer, does not have required scopes or request headers were malformed.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                },
+                                "examples": {
+                                    "HeaderNotFound": {
+                                        "value": {
+                                            "error": {
+                                                "code": "HeaderNotFound",
+                                                "message": "Header Authorization was not found in the request. Access denied."
+                                            }
+                                        }
+                                    },
+                                    "InvalidApplicationTier": {
+                                        "value": {
+                                            "error": {
+                                                "code": "InvalidApplicationTier",
+                                                "message": "The application is not allowed to access this API."
+                                            }
+                                        }
+                                    },
+                                    "InvalidAuthorizationScheme": {
+                                        "value": {
+                                            "error": {
+                                                "code": "InvalidAuthorizationScheme",
+                                                "message": "Authorization scheme 'Baerer' is not valid."
+                                            }
+                                        }
+                                    },
+                                    "InvalidHeaderValue": {
+                                        "value": {
+                                            "error": {
+                                                "code": "InvalidHeaderValue",
+                                                "message": "Authorization header is empty."
+                                            }
+                                        }
+                                    },
+                                    "RequiredScopeMissing": {
+                                        "value": {
+                                            "error": {
+                                                "code": "RequiredScopeMissing",
+                                                "message": "Access denied due to invalid access_token. One or more required scopes are missing. Make sure to provide a valid token for this API endpoint."
+                                            }
+                                        }
+                                    },
+                                    "Unauthorized": {
+                                        "value": {
+                                            "error": {
+                                                "code": "Unauthorized",
+                                                "message": "Access denied due to invalid client. Make sure that client was registered on https://developer.bentley.com."
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "This response indicates that user does not have required permissions to get specified connection run.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                },
+                                "example": {
+                                    "error": {
+                                        "code": "InsufficientPermissions",
+                                        "message": "The user has insufficient permissions for the requested operation."
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "This response indicates that the specified connection run not found.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                },
+                                "example": {
+                                    "error": {
+                                        "code": "ConnectionRunNotFound",
+                                        "message": "Requested Connection Run is not available."
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Invalid request to get connection run.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                },
+                                "example": {
+                                    "error": {
+                                        "code": "InvalidConnectionRunRequest",
+                                        "message": "Cannot perform operation.",
+                                        "details": [
+                                            {
+                                                "code": "MissingRequiredParameter",
+                                                "message": "imodelId was not provided.",
+                                                "target": "imodelId"
+                                            },
+                                            {
+                                                "code": "InvalidValue",
+                                                "message": "Provided imodelId value is not valid.",
+                                                "target": "imodelId"
+                                            },
+                                            {
+                                                "code": "InvalidValue",
+                                                "message": "Provided connectionId value is not valid.",
+                                                "target": "connectionId"
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "429": {
+                        "description": "This response indicates that the client sent more requests than allowed by this API for the current tier of the client.",
+                        "headers": {
+                            "retry-after": {
+                                "description": "Number of seconds to wait until client is allowed to make more requests.",
+                                "required": true,
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                },
+                                "example": {
+                                    "error": {
+                                        "code": "RateLimitExceeded",
+                                        "message": "The client sent more requests than allowed by this API for the current tier of the client."
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "AuthorizationHeader.schema": {
+                "pattern": "^Bearer .*$",
+                "type": "string"
+            },
+            "AcceptHeader.schema": {
+                "type": "string",
+                "default": "application/vnd.bentley.itwin-platform.v1+json"
+            },
+            "Link": {
+                "type": "object",
+                "properties": {
+                    "href": {
+                        "type": "string"
+                    }
+                },
+                "additionalProperties": false
+            },
+            "authorization-information-links": {
+                "title": "Authorization Information Links",
+                "type": "object",
+                "properties": {
+                    "authorizationUrl": {
+                        "$ref": "#/components/schemas/Link"
+                    }
+                },
+                "additionalProperties": false
+            },
+            "AuthorizationInformation": {
+                "title": "Authorization Information",
+                "type": "object",
+                "properties": {
+                    "isUserAuthorized": {
+                        "type": "boolean",
+                        "description": "True if user is already authorized."
+                    },
+                    "_links": {
+                        "$ref": "#/components/schemas/authorization-information-links"
+                    }
+                },
+                "additionalProperties": false
+            },
+            "authorization-information-response": {
+                "title": "AuthorizationInformation Response",
+                "type": "object",
+                "properties": {
+                    "authorizationInformation": {
+                        "$ref": "#/components/schemas/AuthorizationInformation"
+                    }
+                },
+                "additionalProperties": false
+            },
+            "Error": {
+                "required": [
+                    "code",
+                    "message"
+                ],
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "string",
+                        "description": "One of a server-defined set of error codes."
+                    },
+                    "message": {
+                        "type": "string",
+                        "description": "A human-readable representation of the error."
+                    },
+                    "target": {
+                        "type": "string",
+                        "description": "The target of the error.",
+                        "nullable": true
+                    }
+                },
+                "description": "Contains error information."
+            },
+            "ErrorResponse": {
+                "title": "Error Response",
+                "required": [
+                    "error"
+                ],
+                "type": "object",
+                "properties": {
+                    "error": {
+                        "$ref": "#/components/schemas/Error"
+                    }
+                },
+                "additionalProperties": false,
+                "description": "Gives details for an error that occurred while handling the request. Note that clients MUST NOT assume that every failed request will produce an object of this schema, or that all of the properties in the response will be non-null, as the error may have prevented this response from being constructed."
+            },
+            "authenticationType": {
+                "title": "Authentication Type",
+                "enum": [
+                    "User",
+                    "Service"
+                ],
+                "type": "string",
+                "description": "One of 'User' or 'Service'"
+            },
+            "connection-links": {
+                "title": "Connection Links",
+                "type": "object",
+                "properties": {
+                    "iModel": {
+                        "$ref": "#/components/schemas/Link"
+                    },
+                    "iTwin": {
+                        "$ref": "#/components/schemas/Link"
+                    },
+                    "lastRun": {
+                        "$ref": "#/components/schemas/Link"
+                    }
+                },
+                "additionalProperties": false
+            },
+            "ExportConnection": {
+                "title": "Export Connection",
+                "type": "object",
+                "properties": {
+                    "authenticationType": {
+                        "$ref": "#/components/schemas/authenticationType"
+                    },
+                    "id": {
+                        "type": "string"
+                    },
+                    "displayName": {
+                        "type": "string"
+                    },
+                    "iModelId": {
+                        "type": "string"
+                    },
+                    "iTwinId": {
+                        "type": "string"
+                    },
+                    "_links": {
+                        "$ref": "#/components/schemas/connection-links"
+                    }
+                },
+                "additionalProperties": false
+            },
+            "Links": {
+                "type": "object",
+                "properties": {
+                    "self": {
+                        "$ref": "#/components/schemas/Link"
+                    },
+                    "next": {
+                        "$ref": "#/components/schemas/Link"
+                    },
+                    "prev": {
+                        "$ref": "#/components/schemas/Link"
+                    }
+                },
+                "additionalProperties": false
+            },
+            "export-connections-response": {
+                "title": "Export Connections Response",
+                "type": "object",
+                "properties": {
+                    "connections": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/ExportConnection"
+                        }
+                    },
+                    "_links": {
+                        "$ref": "#/components/schemas/Links"
+                    }
+                },
+                "additionalProperties": false
+            },
+            "export-connection-create": {
+                "title": "Export Connection (create)",
+                "required": [
+                    "iModelId"
+                ],
+                "type": "object",
+                "properties": {
+                    "authenticationType": {
+                        "$ref": "#/components/schemas/authenticationType"
+                    },
+                    "displayName": {
+                        "type": "string"
+                    },
+                    "iModelId": {
+                        "type": "string"
+                    }
+                },
+                "additionalProperties": false
+            },
+            "export-connection-response": {
+                "title": "Export Connection Response",
+                "type": "object",
+                "properties": {
+                    "connection": {
+                        "$ref": "#/components/schemas/ExportConnection"
+                    }
+                },
+                "additionalProperties": false
+            },
+            "execution-state": {
+                "title": "Execution State",
+                "enum": [
+                    "NotStarted",
+                    "Idle",
+                    "WaitingToExecute",
+                    "WaitingToRetry",
+                    "Executing",
+                    "Finalizing",
+                    "Completed",
+                    "Queued"
+                ],
+                "type": "string",
+                "description": "One of 'NotStarted', 'Idle', 'WaitingToExecute', 'WaitingToRetry', 'Executing', 'Finalizing', 'Completed', 'Queued'."
+            },
+            "execution-result": {
+                "title": "Execution Result",
+                "enum": [
+                    "Undetermined",
+                    "Success",
+                    "Error",
+                    "PartialSuccess",
+                    "Skipped",
+                    "Canceled",
+                    "TimedOut"
+                ],
+                "type": "string",
+                "description": "One of 'Undetermined', 'Success', 'Error', 'PartialSuccess', 'Skipped', 'Canceled', 'TimedOut'."
+            },
+            "task-error": {
+                "type": "object",
+                "properties": {
+                    "errorCode": {
+                        "type": "string"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "details": {
+                        "type": "string"
+                    },
+                    "bridgeExitCode": {
+                        "type": "integer"
+                    },
+                    "system": {
+                        "type": "string"
+                    },
+                    "phase": {
+                        "type": "string"
+                    },
+                    "category": {
+                        "type": "string"
+                    },
+                    "descriptionKey": {
+                        "type": "string"
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "kbArticleLink": {
+                        "type": "string"
+                    },
+                    "canUserFix": {
+                        "type": "boolean"
+                    }
+                },
+                "additionalProperties": false
+            },
+            "export-task": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "string"
+                    },
+                    "startDateTime": {
+                        "type": "string"
+                    },
+                    "endDateTime": {
+                        "type": "string"
+                    },
+                    "retryAttempts": {
+                        "type": "integer"
+                    },
+                    "state": {
+                        "type": "string"
+                    },
+                    "result": {
+                        "type": "string"
+                    },
+                    "exportOutputFileId": {
+                        "type": "string"
+                    },
+                    "error": {
+                        "$ref": "#/components/schemas/task-error"
+                    }
+                },
+                "additionalProperties": false
+            },
+            "export-job": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "string"
+                    },
+                    "startDateTime": {
+                        "type": "string"
+                    },
+                    "endDateTime": {
+                        "type": "string"
+                    },
+                    "state": {
+                        "type": "string"
+                    },
+                    "result": {
+                        "type": "string"
+                    },
+                    "tasks": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/export-task"
+                        }
+                    }
+                },
+                "additionalProperties": false
+            },
+            "export-run": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "string"
+                    },
+                    "connectionId": {
+                        "type": "string"
+                    },
+                    "startDateTime": {
+                        "type": "string"
+                    },
+                    "endDateTime": {
+                        "type": "string"
+                    },
+                    "state": {
+                        "$ref": "#/components/schemas/execution-state"
+                    },
+                    "result": {
+                        "$ref": "#/components/schemas/execution-result"
+                    },
+                    "jobs": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/export-job"
+                        }
+                    }
+                },
+                "additionalProperties": false
+            },
+            "export-runs-response": {
+                "title": "Export Runs Response",
+                "type": "object",
+                "properties": {
+                    "runs": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/export-run"
+                        }
+                    },
+                    "_links": {
+                        "$ref": "#/components/schemas/Links"
+                    }
+                },
+                "additionalProperties": false
+            },
+            "export-type": {
+                "title": "Export Type",
+                "enum": [
+                    "IFC",
+                    "PDF"
+                ],
+                "type": "string",
+                "description": "Name of the file type to export to. PDF export is currently in technology preview."
+            },
+            "ifc-version": {
+                "title": "IFC Version",
+                "enum": [
+                    "IFC4.3",
+                    "IFC2x3",
+                    "IFC2x3 CV 2.0",
+                    "IFC4 RV 1.2",
+                    "IFC4.3 ABV"
+                ],
+                "type": "string",
+                "description": "If the exportType is 'IFC', ifcVersion must be one of 'IFC4.3' (IFC4.3_ADD2), 'IFC2x3', 'IFC2x3 CV 2.0', 'IFC4 RV 1.2', 'IFC4.3 ABV'."
+            },
+            "export-run-input-options": {
+                "title": "Export Run Input Options",
+                "type": "object",
+                "properties": {
+                    "changesetId": {
+                        "type": "string",
+                        "description": "Changeset Id if specific changeset is to be exported. By default the latest version of the iModel will be exported."
+                    },
+                    "mappingFileId": {
+                        "type": "string",
+                        "description": "User-Defined mapping file Id for IFC export (Storage API can be used to create/get files). By default, default mapping file will be used."
+                    },
+                    "savedViewId": {
+                        "type": "string",
+                        "description": "SavedView Id of the specific SavedView to be exported. (Note - For 'Service' authenticationType, the SavedView must be shared)"
+                    },
+                    "mappingfileBlobUrl": {
+                        "type": "string",
+                        "description": "User-Defined mapping file SASUrl for IFC export. If not specified by default, default mapping file will be used."
+                    },
+                    "modelIds": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "description": "Array of Model Ids to be exported. An empty array is not accepted."
+                    }
+                },
+                "additionalProperties": false
+            },
+            "location": {
+                "title": "Location",
+                "enum": [
+                    "USER_BLOB_STORAGE",
+                    "STORAGE"
+                ],
+                "type": "string",
+                "description": "One of 'USER_BLOB_STORAGE', 'STORAGE'. Type of location to export to. Default is 'STORAGE' (Storage API)."
+            },
+            "export-run-output-options": {
+                "title": "Export Run Output Options",
+                "type": "object",
+                "properties": {
+                    "location": {
+                        "$ref": "#/components/schemas/location"
+                    },
+                    "outputSasUrl": {
+                        "type": "string",
+                        "description": "SASUrl to upload the output file to when the location is of type 'USER_BLOB_STORAGE'."
+                    },
+                    "logsSasUrl": {
+                        "type": "string",
+                        "description": "SASUrl to upload the output log file to when the location is of type 'USER_BLOB_STORAGE' and 'saveLogs' is set."
+                    },
+                    "folderId": {
+                        "type": "string",
+                        "description": "Folder Id to store the output file (Storage API can be used to create/get folders). By default, the file will be stored at the root folder of the project."
+                    },
+                    "fileName": {
+                        "type": "string",
+                        "description": "File name for the output file. By default, the file name would look like - 'iModelName_SavedViewName_IFCFormat_TimeStamp.ifc'"
+                    },
+                    "replaceOlderFile": {
+                        "type": "boolean",
+                        "description": "Set to replace the older file for same imodel."
+                    },
+                    "saveLogs": {
+                        "type": "boolean",
+                        "description": "Set to save the logs of export."
+                    }
+                },
+                "additionalProperties": false
+            },
+            "export-run-create": {
+                "title": "Export Connection Run (Create)",
+                "required": [
+                    "exportType"
+                ],
+                "type": "object",
+                "properties": {
+                    "exportType": {
+                        "$ref": "#/components/schemas/export-type"
+                    },
+                    "ifcVersion": {
+                        "$ref": "#/components/schemas/ifc-version"
+                    },
+                    "inputOptions": {
+                        "$ref": "#/components/schemas/export-run-input-options"
+                    },
+                    "outputOptions": {
+                        "$ref": "#/components/schemas/export-run-output-options"
+                    }
+                },
+                "additionalProperties": false
+            },
+            "export-run-response": {
+                "title": "Run response",
+                "type": "object",
+                "properties": {
+                    "run": {
+                        "$ref": "#/components/schemas/export-run"
+                    }
+                },
+                "additionalProperties": false
+            }
+        },
+        "securitySchemes": {
+            "apiKeyHeader": {
+                "type": "apiKey",
+                "name": "X-Api-Subscription-Key",
+                "in": "header"
+            },
+            "apiKeyQuery": {
+                "type": "apiKey",
+                "name": "subscription-key",
+                "in": "query"
+            }
+        }
+    },
+    "security": [
+        {
+            "apiKeyHeader": []
+        },
+        {
+            "apiKeyQuery": []
+        }
+    ]
+}

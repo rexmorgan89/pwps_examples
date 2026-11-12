@@ -1,0 +1,2224 @@
+{
+    "openapi": "3.0.1",
+    "info": {
+        "title": "Reality Conversion",
+        "description": "Convert to web-friendly format.",
+        "license": {
+            "name": "iTwin Platform License",
+            "url": "https://developer.bentley.com/terms-of-service/"
+        },
+        "version": "v2"
+    },
+    "servers": [
+        {
+            "url": "https://api.bentley.com/reality-conversion"
+        }
+    ],
+    "paths": {
+        "/jobs": {
+            "get": {
+                "tags": [
+                    "Jobs",
+                    "Technology Preview"
+                ],
+                "summary": "Get jobs",
+                "description": "---\r\nRetrieve list of jobs matching provided filter.\r\n\r\nThe `iTwinId` in filter is optional. If it is not provided, this will return jobs created by the same user. However, if the iTwinId is provided and the user has access to it, this will return jobs associated with that specific iTwin.\r\n\r\n### Authentication\r\n\r\nRequires `Authorization` header with valid Bearer token for scope `itwin-platform`.\r\n\r\nFor more documentation on authorization and how to get access token visit [OAUTH2 Authorization](https://developer.bentley.com/apis/overview/authorization/) page.\r\n\r\n---",
+                "operationId": "jobs-get-all",
+                "parameters": [
+                    {
+                        "name": "$filter",
+                        "in": "query",
+                        "description": "The $filter query option requests a specific set of jobs.\nThe given filter is evaluated for each job and only job where the filter evaluates to true are returned.\nProperties supported for filtering: `id`, `iTwinId`, `name`, `email`, `type`, `state`, `createdDateTime`, `inputId`, `outputId`.\nSupported operators: `eq`, `lt`, `le`, `gt`, `ge`, `ne`, `in`, `and`, `or`.\n\n\n\n Samples of $filter values:\n`$filter=iTwinId eq dc720f05-e5f7-448b-ae06-765de46f0af1`\n`$filter=inputId in ('482b2968-6a85-4e50-b05c-8acbf828c1bd', '14c03448-bea0-4d76-b53b-4b20bd3f4cbc')`\n`$filter=id eq 9e2d27cf-b695-47e9-b7f0-0d47dc3b88ad`\n`$filter=createdDateTime gt 2024-06-24T13:00:00Z`\n",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "continuationToken",
+                        "in": "query",
+                        "description": "Parameter that enables continuing to the next page of the previous paged query. This must be passed exactly as it is in the response body's _links.next property.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "$top",
+                        "in": "query",
+                        "description": "The number of reality conversion jobs to get in each page. Max 1000, but 100 is the default if this parameter is not included.",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "OAuth access token with `itwin-platform` scope",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/components/schemas/AuthorizationHeader.schema"
+                        }
+                    },
+                    {
+                        "name": "Accept",
+                        "in": "header",
+                        "description": "Setting to `application/vnd.bentley.itwin-platform.v2+json` is recommended.",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/components/schemas/AcceptHeader.schema"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/jobs-response"
+                                },
+                                "example": {
+                                    "jobs": [
+                                        {
+                                            "id": "eba823ca-f8e3-4ebb-be5f-6bc77aadbe14",
+                                            "state": "Success",
+                                            "userId": "e263a543-db55-4fa5-8a4e-69b9cfcf6c59",
+                                            "executionInfo": {
+                                                "startedDateTime": "2026-04-01T09:56:14.0000000+00:00",
+                                                "endedDateTime": "2026-04-01T10:07:49.0000000+00:00",
+                                                "createdDateTime": "2026-04-01T09:48:28.0000000+00:00",
+                                                "processingUnits": 0
+                                            },
+                                            "specifications": {
+                                                "inputs": {
+                                                    "pointcloud": "b8bdeba4-a4a6-42d7-b81a-a22f892707a2"
+                                                },
+                                                "output": "4a770816-f9b0-45e5-9b8c-143269d687ac",
+                                                "options": {
+                                                    "outputFormat": "opc"
+                                                }
+                                            },
+                                            "name": "Unified Job- PC Conversion",
+                                            "type": "PointCloudConversion",
+                                            "iTwinId": "2c8e4988-eb9b-4e5f-a903-8c7c18f3030a"
+                                        },
+                                        {
+                                            "id": "f2257da7-1c9d-4599-811d-db8aa139c1ac",
+                                            "state": "Failed",
+                                            "userId": "e263a543-db55-4fa5-8a4e-69b9cfcf6c59",
+                                            "executionInfo": {
+                                                "startedDateTime": "2026-04-01T09:56:14.0000000+00:00",
+                                                "endedDateTime": "2026-04-01T10:02:00.0000000+00:00",
+                                                "createdDateTime": "2026-04-01T09:50:33.0000000+00:00",
+                                                "processingUnits": 0
+                                            },
+                                            "specifications": {
+                                                "inputs": {
+                                                    "pointclouds": [
+                                                        "fc2746d5-7b62-4f00-9a88-1bfaa22475d7"
+                                                    ]
+                                                },
+                                                "output": "62869765-1031-470f-9730-15ef7aac8adb",
+                                                "options": {
+                                                    "outputFormat": "3DTilesPNTS"
+                                                }
+                                            },
+                                            "name": "Unified Job- PCOptimization",
+                                            "type": "PointCloudOptimization",
+                                            "iTwinId": "2c8e4988-eb9b-4e5f-a903-8c7c18f3030a"
+                                        }
+                                    ],
+                                    "_links": {
+                                        "next": {
+                                            "href": "https://api.bentley.com/reality-conversion/jobs?$filter=iTwinId%20eq%203fa85f64-5717-4562-b3fc-2c963f66afa6&continuationToken=MzY3ZmY1ZDEtNDEzOS00ZGU1LTg0MjMtN2I5NmVkZDAyN2M0"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "The 400 (Bad Request) status code indicates that the request cannot be processed by the server due to a client error (e.g. malformed request syntax).",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/DetailedErrorResponse"
+                                },
+                                "example": {
+                                    "error": {
+                                        "code": "InvalidRealityConversionRequest",
+                                        "message": "Cannot find jobs.",
+                                        "details": [
+                                            {
+                                                "code": "InvalidParameter",
+                                                "message": "The $top query parameter value must be a positive integer that does not exceed 1000.",
+                                                "target": "$top"
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "This response indicates that request lacks valid authentication credentials. Access token might not been provided, issued by the wrong issuer, does not have required scopes or request headers were malformed.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                },
+                                "examples": {
+                                    "HeaderNotFound": {
+                                        "value": {
+                                            "error": {
+                                                "code": "HeaderNotFound",
+                                                "message": "Header Authorization was not found in the request. Access denied."
+                                            }
+                                        }
+                                    },
+                                    "InvalidApplicationTier": {
+                                        "value": {
+                                            "error": {
+                                                "code": "InvalidApplicationTier",
+                                                "message": "The application is not allowed to access this API."
+                                            }
+                                        }
+                                    },
+                                    "InvalidAuthorizationScheme": {
+                                        "value": {
+                                            "error": {
+                                                "code": "InvalidAuthorizationScheme",
+                                                "message": "Authorization scheme 'Baerer' is not valid."
+                                            }
+                                        }
+                                    },
+                                    "InvalidHeaderValue": {
+                                        "value": {
+                                            "error": {
+                                                "code": "InvalidHeaderValue",
+                                                "message": "Authorization header is empty."
+                                            }
+                                        }
+                                    },
+                                    "RequiredScopeMissing": {
+                                        "value": {
+                                            "error": {
+                                                "code": "RequiredScopeMissing",
+                                                "message": "Access denied due to invalid access_token. One or more required scopes are missing. Make sure to provide a valid token for this API endpoint."
+                                            }
+                                        }
+                                    },
+                                    "Unauthorized": {
+                                        "value": {
+                                            "error": {
+                                                "code": "Unauthorized",
+                                                "message": "Access denied due to invalid client. Make sure that client was registered on https://developer.bentley.com."
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                },
+                                "example": {
+                                    "error": {
+                                        "code": "iTwinNotFound",
+                                        "message": "Requested iTwin is not available."
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "429": {
+                        "description": "This response indicates that the client sent more requests than allowed by this API for the current tier of the client.",
+                        "headers": {
+                            "retry-after": {
+                                "description": "Number of seconds to wait until client is allowed to make more requests.",
+                                "required": true,
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                },
+                                "example": {
+                                    "error": {
+                                        "code": "RateLimitExceeded",
+                                        "message": "The client sent more requests than allowed by this API for the current tier of the client."
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Jobs",
+                    "Technology Preview"
+                ],
+                "summary": "Create a job",
+                "description": "---\r\nCreate a new job.\r\n\r\n### Authentication\r\n\r\nRequires `Authorization` header with valid Bearer token for scope `itwin-platform`.\r\n\r\nFor more documentation on authorization and how to get access token visit [OAUTH2 Authorization](https://developer.bentley.com/apis/overview/authorization/) page.\r\n\r\n---",
+                "operationId": "jobs-create",
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "OAuth access token with `itwin-platform` scope",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/components/schemas/AuthorizationHeader.schema"
+                        }
+                    },
+                    {
+                        "name": "Accept",
+                        "in": "header",
+                        "description": "Setting to `application/vnd.bentley.itwin-platform.v2+json` is recommended.",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/components/schemas/AcceptHeader.schema"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/JobCreation"
+                            },
+                            "example": {
+                                "specifications": {
+                                    "inputs": {
+                                        "pointCloud": "df091f39-377c-48fb-a9c9-9fd0998e151a"
+                                    },
+                                    "options": {
+                                        "outputFormat": "3DTilesPNTS"
+                                    }
+                                },
+                                "name": "My first PC Conversion job",
+                                "type": "PointCloudConversion",
+                                "iTwinId": "019b18b4-e4c1-4211-b8bb-1bd26b8e955e"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/JobResponse"
+                                },
+                                "example": {
+                                    "job": {
+                                        "id": "86e93558-7dbd-40da-8604-245ed345c57a",
+                                        "state": "Active",
+                                        "userId": "654e3c44-9a1a-4c72-8f8c-e1245bfcebf3",
+                                        "executionInfo": {
+                                            "createdDateTime": "2026-04-04T01:57:24.0000000+00:00"
+                                        },
+                                        "specifications": {
+                                            "inputs": {
+                                                "pointCloud": "df091f39-377c-48fb-a9c9-9fd0998e151a"
+                                            },
+                                            "output": "407f2733-75cf-4aa3-bd3d-3cb85221ac43",
+                                            "options": {
+                                                "outputFormat": "3DTilesPNTS"
+                                            }
+                                        },
+                                        "name": "My first PC Conversion job",
+                                        "type": "PointCloudConversion",
+                                        "iTwinId": "019b18b4-e4c1-4211-b8bb-1bd26b8e955e"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "The 400 (Bad Request) status code indicates that the request cannot be processed by the server due to a client error (e.g. malformed request syntax).",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/DetailedErrorResponse"
+                                },
+                                "example": {
+                                    "error": {
+                                        "code": "InvalidRealityConversionRequest",
+                                        "message": "Invalid request to Reality Conversion.",
+                                        "details": [
+                                            {
+                                                "code": "InvalidProperty",
+                                                "message": "Invalid value 'PCConversion' for property 'type', line 15, position 34.",
+                                                "target": "type"
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "This response indicates that request lacks valid authentication credentials. Access token might not been provided, issued by the wrong issuer, does not have required scopes or request headers were malformed.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                },
+                                "examples": {
+                                    "HeaderNotFound": {
+                                        "value": {
+                                            "error": {
+                                                "code": "HeaderNotFound",
+                                                "message": "Header Authorization was not found in the request. Access denied."
+                                            }
+                                        }
+                                    },
+                                    "InvalidApplicationTier": {
+                                        "value": {
+                                            "error": {
+                                                "code": "InvalidApplicationTier",
+                                                "message": "The application is not allowed to access this API."
+                                            }
+                                        }
+                                    },
+                                    "InvalidAuthorizationScheme": {
+                                        "value": {
+                                            "error": {
+                                                "code": "InvalidAuthorizationScheme",
+                                                "message": "Authorization scheme 'Baerer' is not valid."
+                                            }
+                                        }
+                                    },
+                                    "InvalidHeaderValue": {
+                                        "value": {
+                                            "error": {
+                                                "code": "InvalidHeaderValue",
+                                                "message": "Authorization header is empty."
+                                            }
+                                        }
+                                    },
+                                    "RequiredScopeMissing": {
+                                        "value": {
+                                            "error": {
+                                                "code": "RequiredScopeMissing",
+                                                "message": "Access denied due to invalid access_token. One or more required scopes are missing. Make sure to provide a valid token for this API endpoint."
+                                            }
+                                        }
+                                    },
+                                    "Unauthorized": {
+                                        "value": {
+                                            "error": {
+                                                "code": "Unauthorized",
+                                                "message": "Access denied due to invalid client. Make sure that client was registered on https://developer.bentley.com."
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "429": {
+                        "description": "This response indicates that the client sent more requests than allowed by this API for the current tier of the client.",
+                        "headers": {
+                            "retry-after": {
+                                "description": "Number of seconds to wait until client is allowed to make more requests.",
+                                "required": true,
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                },
+                                "example": {
+                                    "error": {
+                                        "code": "RateLimitExceeded",
+                                        "message": "The client sent more requests than allowed by this API for the current tier of the client."
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/jobs/{id}": {
+            "delete": {
+                "tags": [
+                    "Jobs",
+                    "Technology Preview"
+                ],
+                "summary": "Cancel a job",
+                "description": "---\r\nCancel a job.\r\n\r\n### Authentication\r\n\r\nRequires `Authorization` header with valid Bearer token for scope `itwin-platform`.\r\n\r\nFor more documentation on authorization and how to get access token visit [OAUTH2 Authorization](https://developer.bentley.com/apis/overview/authorization/) page.\r\n\r\n---",
+                "operationId": "jobs-cancel",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Job Id",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "OAuth access token with `itwin-platform` scope",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/components/schemas/AuthorizationHeader.schema"
+                        }
+                    },
+                    {
+                        "name": "Accept",
+                        "in": "header",
+                        "description": "Setting to `application/vnd.bentley.itwin-platform.v2+json` is recommended.",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/components/schemas/AcceptHeader.schema"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/JobResponse"
+                                },
+                                "example": {
+                                    "job": {
+                                        "id": "5e315451-564e-4e8b-a952-45b14e6a9c90",
+                                        "state": "TerminatingOnCancel",
+                                        "userId": "3a8670f9-b69f-4a60-b958-f103d580755f",
+                                        "executionInfo": {
+                                            "createdDateTime": "2026-04-05T02:04:56.0000000+00:00"
+                                        },
+                                        "specifications": {
+                                            "inputs": {
+                                                "pointCloud": "40a8142e-3277-4c65-922f-e1f3759b904b"
+                                            },
+                                            "output": "f4cc6131-a9c8-4833-8d2a-cd0a11b8b778",
+                                            "options": {
+                                                "outputFormat": "3DTilesPNTS"
+                                            }
+                                        },
+                                        "name": "PointCloudConversion Job",
+                                        "type": "PointCloudConversion",
+                                        "iTwinId": "ce54f773-67db-4b4f-a98b-368329107429"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "This response indicates that request lacks valid authentication credentials. Access token might not been provided, issued by the wrong issuer, does not have required scopes or request headers were malformed.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                },
+                                "examples": {
+                                    "HeaderNotFound": {
+                                        "value": {
+                                            "error": {
+                                                "code": "HeaderNotFound",
+                                                "message": "Header Authorization was not found in the request. Access denied."
+                                            }
+                                        }
+                                    },
+                                    "InvalidApplicationTier": {
+                                        "value": {
+                                            "error": {
+                                                "code": "InvalidApplicationTier",
+                                                "message": "The application is not allowed to access this API."
+                                            }
+                                        }
+                                    },
+                                    "InvalidAuthorizationScheme": {
+                                        "value": {
+                                            "error": {
+                                                "code": "InvalidAuthorizationScheme",
+                                                "message": "Authorization scheme 'Baerer' is not valid."
+                                            }
+                                        }
+                                    },
+                                    "InvalidHeaderValue": {
+                                        "value": {
+                                            "error": {
+                                                "code": "InvalidHeaderValue",
+                                                "message": "Authorization header is empty."
+                                            }
+                                        }
+                                    },
+                                    "RequiredScopeMissing": {
+                                        "value": {
+                                            "error": {
+                                                "code": "RequiredScopeMissing",
+                                                "message": "Access denied due to invalid access_token. One or more required scopes are missing. Make sure to provide a valid token for this API endpoint."
+                                            }
+                                        }
+                                    },
+                                    "Unauthorized": {
+                                        "value": {
+                                            "error": {
+                                                "code": "Unauthorized",
+                                                "message": "Access denied due to invalid client. Make sure that client was registered on https://developer.bentley.com."
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "This response indicates that the specified job was not found.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                },
+                                "example": {
+                                    "error": {
+                                        "code": "JobNotFound",
+                                        "message": "Requested job is not available."
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "The 422 (Unprocessable Entity) status code indicates that the request cannot be processed by the server due to a client error (e.g. malformed request syntax)",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/DetailedErrorResponse"
+                                },
+                                "example": {
+                                    "error": {
+                                        "code": "InvalidRealityConversionRequest",
+                                        "message": "Invalid request to Reality Conversion.",
+                                        "details": [
+                                            {
+                                                "code": "InvalidChange",
+                                                "message": "The job is about to complete. It is saving the data. Cancellation is not allowed during this period.",
+                                                "target": ""
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "429": {
+                        "description": "This response indicates that the client sent more requests than allowed by this API for the current tier of the client.",
+                        "headers": {
+                            "retry-after": {
+                                "description": "Number of seconds to wait until client is allowed to make more requests.",
+                                "required": true,
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                },
+                                "example": {
+                                    "error": {
+                                        "code": "RateLimitExceeded",
+                                        "message": "The client sent more requests than allowed by this API for the current tier of the client."
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "get": {
+                "tags": [
+                    "Jobs",
+                    "Technology Preview"
+                ],
+                "summary": "Get a job",
+                "description": "---\r\nRetrieve job details.\r\n\r\n### Authentication\r\n\r\nRequires `Authorization` header with valid Bearer token for scope `itwin-platform`.\r\n\r\nFor more documentation on authorization and how to get access token visit [OAUTH2 Authorization](https://developer.bentley.com/apis/overview/authorization/) page.\r\n\r\n---",
+                "operationId": "jobs-get",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Job Id.",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "OAuth access token with `itwin-platform` scope",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/components/schemas/AuthorizationHeader.schema"
+                        }
+                    },
+                    {
+                        "name": "Accept",
+                        "in": "header",
+                        "description": "Setting to `application/vnd.bentley.itwin-platform.v2+json` is recommended.",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/components/schemas/AcceptHeader.schema"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/JobResponse"
+                                },
+                                "examples": {
+                                    "PCConversion": {
+                                        "value": {
+                                            "job": {
+                                                "id": "535d7f39-34cd-45a2-8b4c-e79486252355",
+                                                "state": "Cancelled",
+                                                "userId": "2c5f9681-62dc-4502-b03d-1a23adee2168",
+                                                "executionInfo": {
+                                                    "startedDateTime": "2026-04-05T12:58:15.0000000+00:00",
+                                                    "endedDateTime": "2026-04-05T12:58:15.0000000+00:00",
+                                                    "createdDateTime": "2026-04-05T12:55:42.0000000+00:00",
+                                                    "processingUnits": 0
+                                                },
+                                                "specifications": {
+                                                    "inputs": {
+                                                        "pointCloud": "56dfc9f9-91be-472d-9e81-114429b382b6"
+                                                    },
+                                                    "output": "8805bab6-af30-43f8-a1bc-dca122b7ac84",
+                                                    "options": {
+                                                        "outputFormat": "OPC"
+                                                    }
+                                                },
+                                                "name": "PC Conversion Job",
+                                                "type": "PointCloudConversion",
+                                                "iTwinId": "31bcc0d0-b5ab-4a36-8be7-ab84aa472726"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "This response indicates that request lacks valid authentication credentials. Access token might not been provided, issued by the wrong issuer, does not have required scopes or request headers were malformed.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                },
+                                "examples": {
+                                    "HeaderNotFound": {
+                                        "value": {
+                                            "error": {
+                                                "code": "HeaderNotFound",
+                                                "message": "Header Authorization was not found in the request. Access denied."
+                                            }
+                                        }
+                                    },
+                                    "InvalidApplicationTier": {
+                                        "value": {
+                                            "error": {
+                                                "code": "InvalidApplicationTier",
+                                                "message": "The application is not allowed to access this API."
+                                            }
+                                        }
+                                    },
+                                    "InvalidAuthorizationScheme": {
+                                        "value": {
+                                            "error": {
+                                                "code": "InvalidAuthorizationScheme",
+                                                "message": "Authorization scheme 'Baerer' is not valid."
+                                            }
+                                        }
+                                    },
+                                    "InvalidHeaderValue": {
+                                        "value": {
+                                            "error": {
+                                                "code": "InvalidHeaderValue",
+                                                "message": "Authorization header is empty."
+                                            }
+                                        }
+                                    },
+                                    "RequiredScopeMissing": {
+                                        "value": {
+                                            "error": {
+                                                "code": "RequiredScopeMissing",
+                                                "message": "Access denied due to invalid access_token. One or more required scopes are missing. Make sure to provide a valid token for this API endpoint."
+                                            }
+                                        }
+                                    },
+                                    "Unauthorized": {
+                                        "value": {
+                                            "error": {
+                                                "code": "Unauthorized",
+                                                "message": "Access denied due to invalid client. Make sure that client was registered on https://developer.bentley.com."
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "This response indicates that the specified job was not found.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                },
+                                "example": {
+                                    "error": {
+                                        "code": "JobNotFound",
+                                        "message": "Requested job is not available."
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "429": {
+                        "description": "This response indicates that the client sent more requests than allowed by this API for the current tier of the client.",
+                        "headers": {
+                            "retry-after": {
+                                "description": "Number of seconds to wait until client is allowed to make more requests.",
+                                "required": true,
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                },
+                                "example": {
+                                    "error": {
+                                        "code": "RateLimitExceeded",
+                                        "message": "The client sent more requests than allowed by this API for the current tier of the client."
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/jobs/{id}/messages": {
+            "get": {
+                "tags": [
+                    "Jobs",
+                    "Technology Preview"
+                ],
+                "summary": "Get job messages",
+                "description": "---\r\n\r\nRetrieve the error and warning messages if any, once the job is completed.\r\n\r\n### Authentication\r\n\r\nRequires `Authorization` header with valid Bearer token for scope `itwin-platform`.\r\n\r\nFor more documentation on authorization and how to get access token visit [OAUTH2 Authorization](https://developer.bentley.com/apis/overview/authorization/) page.\r\n\r\n---",
+                "operationId": "jobs-messages",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Job Id.",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "OAuth access token with `itwin-platform` scope",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/components/schemas/AuthorizationHeader.schema"
+                        }
+                    },
+                    {
+                        "name": "Accept",
+                        "in": "header",
+                        "description": "Setting to `application/vnd.bentley.itwin-platform.v2+json` is recommended.",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/components/schemas/AcceptHeader.schema"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/JobMessagesResponse"
+                                },
+                                "example": {
+                                    "messages": {
+                                        "errors": [
+                                            {
+                                                "code": "InputData_Invalid",
+                                                "message": "Invalid input data. Please check the documentation. (\"%1\")",
+                                                "title": "Invalid input data",
+                                                "params": [
+                                                    "PointCloud"
+                                                ]
+                                            }
+                                        ],
+                                        "warnings": []
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "This response indicates that request lacks valid authentication credentials. Access token might not been provided, issued by the wrong issuer, does not have required scopes or request headers were malformed.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                },
+                                "examples": {
+                                    "HeaderNotFound": {
+                                        "value": {
+                                            "error": {
+                                                "code": "HeaderNotFound",
+                                                "message": "Header Authorization was not found in the request. Access denied."
+                                            }
+                                        }
+                                    },
+                                    "InvalidApplicationTier": {
+                                        "value": {
+                                            "error": {
+                                                "code": "InvalidApplicationTier",
+                                                "message": "The application is not allowed to access this API."
+                                            }
+                                        }
+                                    },
+                                    "InvalidAuthorizationScheme": {
+                                        "value": {
+                                            "error": {
+                                                "code": "InvalidAuthorizationScheme",
+                                                "message": "Authorization scheme 'Baerer' is not valid."
+                                            }
+                                        }
+                                    },
+                                    "InvalidHeaderValue": {
+                                        "value": {
+                                            "error": {
+                                                "code": "InvalidHeaderValue",
+                                                "message": "Authorization header is empty."
+                                            }
+                                        }
+                                    },
+                                    "RequiredScopeMissing": {
+                                        "value": {
+                                            "error": {
+                                                "code": "RequiredScopeMissing",
+                                                "message": "Access denied due to invalid access_token. One or more required scopes are missing. Make sure to provide a valid token for this API endpoint."
+                                            }
+                                        }
+                                    },
+                                    "Unauthorized": {
+                                        "value": {
+                                            "error": {
+                                                "code": "Unauthorized",
+                                                "message": "Access denied due to invalid client. Make sure that client was registered on https://developer.bentley.com."
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                },
+                                "examples": {
+                                    "JobNotFound": {
+                                        "value": {
+                                            "error": {
+                                                "code": "JobNotFound",
+                                                "message": "Requested job is not available."
+                                            }
+                                        }
+                                    },
+                                    "JobMessagesNotFound": {
+                                        "value": {
+                                            "error": {
+                                                "code": "JobMessagesNotFound",
+                                                "message": "Requested job messages are not available."
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "429": {
+                        "description": "This response indicates that the client sent more requests than allowed by this API for the current tier of the client.",
+                        "headers": {
+                            "retry-after": {
+                                "description": "Number of seconds to wait until client is allowed to make more requests.",
+                                "required": true,
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                },
+                                "example": {
+                                    "error": {
+                                        "code": "RateLimitExceeded",
+                                        "message": "The client sent more requests than allowed by this API for the current tier of the client."
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/jobs/{id}/progress": {
+            "get": {
+                "tags": [
+                    "Jobs",
+                    "Technology Preview"
+                ],
+                "summary": "Get job progress",
+                "description": "---\r\n\r\nRetrieve job progress.\r\n\r\n### Authentication\r\n\r\nRequires `Authorization` header with valid Bearer token for scope `itwin-platform`.\r\n\r\nFor more documentation on authorization and how to get access token visit [OAUTH2 Authorization](https://developer.bentley.com/apis/overview/authorization/) page.\r\n\r\n---",
+                "operationId": "jobs-progress",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Job Id",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "OAuth access token with `itwin-platform` scope",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/components/schemas/AuthorizationHeader.schema"
+                        }
+                    },
+                    {
+                        "name": "Accept",
+                        "in": "header",
+                        "description": "Setting to `application/vnd.bentley.itwin-platform.v2+json` is recommended.",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/components/schemas/AcceptHeader.schema"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/JobProgressResponse"
+                                },
+                                "example": {
+                                    "progress": {
+                                        "percentage": 5,
+                                        "state": "Active"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "This response indicates that request lacks valid authentication credentials. Access token might not been provided, issued by the wrong issuer, does not have required scopes or request headers were malformed.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                },
+                                "examples": {
+                                    "HeaderNotFound": {
+                                        "value": {
+                                            "error": {
+                                                "code": "HeaderNotFound",
+                                                "message": "Header Authorization was not found in the request. Access denied."
+                                            }
+                                        }
+                                    },
+                                    "InvalidApplicationTier": {
+                                        "value": {
+                                            "error": {
+                                                "code": "InvalidApplicationTier",
+                                                "message": "The application is not allowed to access this API."
+                                            }
+                                        }
+                                    },
+                                    "InvalidAuthorizationScheme": {
+                                        "value": {
+                                            "error": {
+                                                "code": "InvalidAuthorizationScheme",
+                                                "message": "Authorization scheme 'Baerer' is not valid."
+                                            }
+                                        }
+                                    },
+                                    "InvalidHeaderValue": {
+                                        "value": {
+                                            "error": {
+                                                "code": "InvalidHeaderValue",
+                                                "message": "Authorization header is empty."
+                                            }
+                                        }
+                                    },
+                                    "RequiredScopeMissing": {
+                                        "value": {
+                                            "error": {
+                                                "code": "RequiredScopeMissing",
+                                                "message": "Access denied due to invalid access_token. One or more required scopes are missing. Make sure to provide a valid token for this API endpoint."
+                                            }
+                                        }
+                                    },
+                                    "Unauthorized": {
+                                        "value": {
+                                            "error": {
+                                                "code": "Unauthorized",
+                                                "message": "Access denied due to invalid client. Make sure that client was registered on https://developer.bentley.com."
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "This response indicates that the specified job progress was not found.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                },
+                                "examples": {
+                                    "JobNotFound": {
+                                        "value": {
+                                            "error": {
+                                                "code": "JobNotFound",
+                                                "message": "Requested job is not available."
+                                            }
+                                        }
+                                    },
+                                    "JobProgressNotFound": {
+                                        "value": {
+                                            "error": {
+                                                "code": "JobProgressNotFound",
+                                                "message": "Requested job progress is not available."
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "429": {
+                        "description": "This response indicates that the client sent more requests than allowed by this API for the current tier of the client.",
+                        "headers": {
+                            "retry-after": {
+                                "description": "Number of seconds to wait until client is allowed to make more requests.",
+                                "required": true,
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                },
+                                "example": {
+                                    "error": {
+                                        "code": "RateLimitExceeded",
+                                        "message": "The client sent more requests than allowed by this API for the current tier of the client."
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "AuthorizationHeader.schema": {
+                "pattern": "^Bearer .*$",
+                "type": "string"
+            },
+            "AcceptHeader.schema": {
+                "type": "string",
+                "default": "application/vnd.bentley.itwin-platform.v2+json"
+            },
+            "JobState": {
+                "title": "Job State",
+                "enum": [
+                    "Queued",
+                    "Active",
+                    "TerminatingOnCancel",
+                    "TerminatingOnFailure",
+                    "Cancelled",
+                    "Failed",
+                    "Success"
+                ],
+                "type": "string",
+                "description": "Job current state."
+            },
+            "ExecutionInformation": {
+                "title": "Execution Information",
+                "required": [
+                    "createdDateTime"
+                ],
+                "type": "object",
+                "properties": {
+                    "createdDateTime": {
+                        "type": "string",
+                        "description": "Creation time of the job.",
+                        "format": "date-time"
+                    },
+                    "startedDateTime": {
+                        "type": "string",
+                        "description": "Start time of the job.",
+                        "format": "date-time",
+                        "default": null,
+                        "nullable": true
+                    },
+                    "endedDateTime": {
+                        "type": "string",
+                        "description": "End time of the job.",
+                        "format": "date-time",
+                        "default": null,
+                        "nullable": true
+                    },
+                    "processingUnits": {
+                        "type": "number",
+                        "description": "The number of processing units consumed by the job.",
+                        "default": null,
+                        "nullable": true
+                    }
+                },
+                "additionalProperties": false,
+                "description": "Execution information of a job."
+            },
+            "PCConversionInputs": {
+                "title": "PointCloud Conversion Inputs",
+                "required": [
+                    "pointCloud"
+                ],
+                "type": "object",
+                "properties": {
+                    "pointCloud": {
+                        "title": "pointCloud",
+                        "type": "string",
+                        "description": "Reality data Id of point cloud to convert"
+                    }
+                },
+                "additionalProperties": false
+            },
+            "PCConversionFormat": {
+                "title": "PointCloud Conversion Format",
+                "enum": [
+                    "OPC",
+                    "3DTilesPNTS",
+                    "3DTilesGLBC",
+                    "LAS",
+                    "LAZ",
+                    "E57",
+                    "POD"
+                ],
+                "type": "string"
+            },
+            "PCConversionOptions": {
+                "title": "PointCloud Conversion Options",
+                "type": "object",
+                "properties": {
+                    "outputFormat": {
+                        "type": "string",
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/PCConversionFormat"
+                            }
+                        ],
+                        "description": "Output format for the conversion.",
+                        "nullable": true
+                    },
+                    "inputCrs": {
+                        "type": "string",
+                        "description": "CRS for the input data",
+                        "nullable": true
+                    },
+                    "outputCrs": {
+                        "type": "string",
+                        "description": "CRS for the output data",
+                        "nullable": true
+                    }
+                },
+                "additionalProperties": false
+            },
+            "PointCloudConversionSpecifications": {
+                "title": "PointCloud Conversion Specifications",
+                "required": [
+                    "inputs",
+                    "output"
+                ],
+                "type": "object",
+                "properties": {
+                    "inputs": {
+                        "$ref": "#/components/schemas/PCConversionInputs"
+                    },
+                    "output": {
+                        "title": "output",
+                        "type": "string",
+                        "description": "Reality Data id of the converted point cloud"
+                    },
+                    "options": {
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/PCConversionOptions"
+                            }
+                        ],
+                        "description": "Options",
+                        "nullable": true
+                    }
+                },
+                "additionalProperties": false,
+                "description": "Specifications for PointCloud Conversion."
+            },
+            "PCOptimizationInputs": {
+                "title": "PointCloud Optimization Inputs",
+                "required": [
+                    "pointClouds"
+                ],
+                "type": "object",
+                "properties": {
+                    "pointClouds": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "description": "Reality data Ids of point cloud(s) to convert"
+                    }
+                },
+                "additionalProperties": false
+            },
+            "PCOptimizationFormat": {
+                "title": "PointCloud Optimization Format",
+                "enum": [
+                    "OPC",
+                    "3DTilesPNTS",
+                    "3DTilesGLBC",
+                    "LAS",
+                    "LAZ",
+                    "E57",
+                    "POD"
+                ],
+                "type": "string"
+            },
+            "PCOptimizationOptions": {
+                "title": "PointCloud Optimization Options",
+                "type": "object",
+                "properties": {
+                    "outputFormat": {
+                        "type": "string",
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/PCOptimizationFormat"
+                            }
+                        ],
+                        "description": "Output format for the conversion.",
+                        "nullable": true
+                    },
+                    "inputCrs": {
+                        "type": "string",
+                        "description": "CRS for the input data",
+                        "nullable": true
+                    },
+                    "outputCrs": {
+                        "type": "string",
+                        "description": "CRS for the output data",
+                        "nullable": true
+                    }
+                },
+                "additionalProperties": false
+            },
+            "PointCloudOptimizationSpecifications": {
+                "title": "PointCloud Optimization Specifications",
+                "required": [
+                    "inputs",
+                    "output"
+                ],
+                "type": "object",
+                "properties": {
+                    "inputs": {
+                        "$ref": "#/components/schemas/PCOptimizationInputs"
+                    },
+                    "output": {
+                        "title": "output",
+                        "type": "string",
+                        "description": "Reality Data id of the converted point cloud"
+                    },
+                    "options": {
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/PCOptimizationOptions"
+                            }
+                        ],
+                        "description": "Options",
+                        "nullable": true
+                    }
+                },
+                "additionalProperties": false,
+                "description": "Specifications for PointCloud Optimization."
+            },
+            "TileMapOptimizationInputs": {
+                "title": "TileMap Optimization Inputs",
+                "required": [
+                    "tileMaps"
+                ],
+                "type": "object",
+                "properties": {
+                    "tileMaps": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "description": "Reality data Ids of tile maps to convert"
+                    }
+                },
+                "additionalProperties": false
+            },
+            "TileMapOptimizationFormat": {
+                "title": "TileMap Optimization Format",
+                "enum": [
+                    "XYZTileMap"
+                ],
+                "type": "string"
+            },
+            "TileMapImageFormat": {
+                "title": "TileMap Image Format",
+                "enum": [
+                    "JPG",
+                    "PNG"
+                ],
+                "type": "string"
+            },
+            "TileMapOptimizationOptions": {
+                "title": "TileMap Optimization Options",
+                "type": "object",
+                "properties": {
+                    "outputFormat": {
+                        "type": "string",
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/TileMapOptimizationFormat"
+                            }
+                        ],
+                        "description": "Output format for the conversion.",
+                        "nullable": true
+                    },
+                    "inputCrs": {
+                        "type": "string",
+                        "description": "CRS for the input data",
+                        "nullable": true
+                    },
+                    "outputCrs": {
+                        "type": "string",
+                        "description": "CRS for the output data",
+                        "nullable": true
+                    },
+                    "topLevel": {
+                        "type": "integer",
+                        "description": "Top level of the tile map to generate.",
+                        "nullable": true
+                    },
+                    "bottomLevel": {
+                        "type": "integer",
+                        "description": "Bottom level of the tile map to generate.",
+                        "nullable": true
+                    },
+                    "imageFormat": {
+                        "type": "string",
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/TileMapImageFormat"
+                            }
+                        ],
+                        "description": "Image format",
+                        "nullable": true
+                    },
+                    "jpgQuality": {
+                        "maximum": 99,
+                        "minimum": 10,
+                        "type": "integer",
+                        "description": "Quality of JPG tiles to generate",
+                        "nullable": true
+                    },
+                    "backgroundColor": {
+                        "pattern": "^#[a-fA-F0-9]{6}$",
+                        "type": "string",
+                        "description": "Background color to use for tiles",
+                        "nullable": true
+                    }
+                },
+                "additionalProperties": false
+            },
+            "TileMapOptimizationSpecifications": {
+                "title": "TileMap Optimization Specifications",
+                "required": [
+                    "inputs",
+                    "output"
+                ],
+                "type": "object",
+                "properties": {
+                    "inputs": {
+                        "$ref": "#/components/schemas/TileMapOptimizationInputs"
+                    },
+                    "output": {
+                        "title": "output",
+                        "type": "string",
+                        "description": "Reality Data id of the tile map"
+                    },
+                    "options": {
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/TileMapOptimizationOptions"
+                            }
+                        ],
+                        "description": "Options",
+                        "nullable": true
+                    }
+                },
+                "additionalProperties": false,
+                "description": "Specifications for TileMap Optimization."
+            },
+            "VectorOptimizationInputs": {
+                "title": "Vector Optimization Inputs",
+                "required": [
+                    "vectors"
+                ],
+                "type": "object",
+                "properties": {
+                    "vectors": {
+                        "title": "vectors",
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "description": "Reality data Ids of vectors to consolidate"
+                    }
+                },
+                "additionalProperties": false
+            },
+            "VectorOptimizationFormat": {
+                "title": "Vector Optimization Format",
+                "enum": [
+                    "GeoJSON",
+                    "FeatureDB"
+                ],
+                "type": "string"
+            },
+            "VectorOptimizationOptions": {
+                "title": "Vector Optimization Options",
+                "type": "object",
+                "properties": {
+                    "outputFormat": {
+                        "type": "string",
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/VectorOptimizationFormat"
+                            }
+                        ],
+                        "description": "Output format for the conversion.",
+                        "nullable": true
+                    },
+                    "inputCrs": {
+                        "type": "string",
+                        "description": "CRS for the input data",
+                        "nullable": true
+                    },
+                    "outputCrs": {
+                        "type": "string",
+                        "description": "CRS for the output data",
+                        "nullable": true
+                    },
+                    "featureClassDisplayName": {
+                        "type": "string",
+                        "description": "Feature class name",
+                        "nullable": true
+                    }
+                },
+                "additionalProperties": false
+            },
+            "VectorOptimizationSpecifications": {
+                "title": "Vector Optimization Specifications",
+                "required": [
+                    "inputs",
+                    "output"
+                ],
+                "type": "object",
+                "properties": {
+                    "inputs": {
+                        "$ref": "#/components/schemas/VectorOptimizationInputs"
+                    },
+                    "output": {
+                        "title": "output",
+                        "type": "string",
+                        "description": "Reality Data id of the vector data or Feature DB index (fdb:)"
+                    },
+                    "options": {
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/VectorOptimizationOptions"
+                            }
+                        ],
+                        "description": "Options",
+                        "nullable": true
+                    }
+                },
+                "additionalProperties": false,
+                "description": "Specifications for Vector Optimization."
+            },
+            "MeshSamplingInputs": {
+                "title": "Mesh Sampling Inputs",
+                "required": [
+                    "meshes"
+                ],
+                "type": "object",
+                "properties": {
+                    "meshes": {
+                        "title": "meshes",
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "description": "Reality data Ids of meshes to sample"
+                    }
+                },
+                "additionalProperties": false
+            },
+            "MeshSamplingFormat": {
+                "title": "MeshSamplingFormat",
+                "enum": [
+                    "OPC",
+                    "3DTilesPNTS",
+                    "3DTilesGLBC",
+                    "LAS",
+                    "LAZ",
+                    "E57",
+                    "POD"
+                ],
+                "type": "string"
+            },
+            "MeshSamplingOptions": {
+                "title": "Mesh Sampling Options",
+                "type": "object",
+                "properties": {
+                    "outputFormat": {
+                        "type": "string",
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/MeshSamplingFormat"
+                            }
+                        ],
+                        "description": "Output format for the conversion.",
+                        "nullable": true
+                    },
+                    "inputCrs": {
+                        "type": "string",
+                        "description": "CRS for the input data",
+                        "nullable": true
+                    },
+                    "outputCrs": {
+                        "type": "string",
+                        "description": "CRS for the output data",
+                        "nullable": true
+                    },
+                    "sampling": {
+                        "type": "number",
+                        "description": "Sampling value in meter",
+                        "nullable": true
+                    }
+                },
+                "additionalProperties": false
+            },
+            "MeshSamplingSpecifications": {
+                "title": "Mesh Sampling Specifications",
+                "required": [
+                    "inputs",
+                    "output"
+                ],
+                "type": "object",
+                "properties": {
+                    "inputs": {
+                        "$ref": "#/components/schemas/MeshSamplingInputs"
+                    },
+                    "output": {
+                        "title": "output",
+                        "type": "string",
+                        "description": "Reality Data id of the sampled point cloud"
+                    },
+                    "options": {
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/MeshSamplingOptions"
+                            }
+                        ],
+                        "description": "Options",
+                        "nullable": true
+                    }
+                },
+                "additionalProperties": false,
+                "description": "Specifications for Mesh Sampling."
+            },
+            "JobTypes": {
+                "title": "Job Types",
+                "enum": [
+                    "PointCloudConversion",
+                    "PointCloudOptimization",
+                    "TileMapOptimization",
+                    "VectorOptimization",
+                    "MeshSampling"
+                ],
+                "description": "Supported job types"
+            },
+            "Job": {
+                "title": "Job",
+                "required": [
+                    "iTwinId",
+                    "specifications",
+                    "type",
+                    "executionInfo",
+                    "id",
+                    "state",
+                    "userId"
+                ],
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "description": "Unique id of the job."
+                    },
+                    "state": {
+                        "$ref": "#/components/schemas/JobState"
+                    },
+                    "userId": {
+                        "type": "string",
+                        "description": "Identifier of the user that created the job."
+                    },
+                    "executionInfo": {
+                        "$ref": "#/components/schemas/ExecutionInformation"
+                    },
+                    "specifications": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/components/schemas/PointCloudConversionSpecifications"
+                            },
+                            {
+                                "$ref": "#/components/schemas/PointCloudOptimizationSpecifications"
+                            },
+                            {
+                                "$ref": "#/components/schemas/TileMapOptimizationSpecifications"
+                            },
+                            {
+                                "$ref": "#/components/schemas/VectorOptimizationSpecifications"
+                            },
+                            {
+                                "$ref": "#/components/schemas/MeshSamplingSpecifications"
+                            }
+                        ],
+                        "description": "List of inputs, outputs and options for the job, must be in sync with the type."
+                    },
+                    "name": {
+                        "maxLength": 256,
+                        "minLength": 3,
+                        "pattern": "^([^\"<>|:*?\\\\/\\u0000-\\u001f])+$",
+                        "type": "string",
+                        "description": "Name of the job.",
+                        "default": null,
+                        "nullable": true
+                    },
+                    "type": {
+                        "$ref": "#/components/schemas/JobTypes"
+                    },
+                    "iTwinId": {
+                        "type": "string",
+                        "description": "iTwin Id for the job."
+                    }
+                },
+                "additionalProperties": false,
+                "description": "Job information."
+            },
+            "Link": {
+                "required": [
+                    "href"
+                ],
+                "type": "object",
+                "properties": {
+                    "href": {
+                        "type": "string",
+                        "description": "The URL."
+                    }
+                },
+                "additionalProperties": false
+            },
+            "next-page-link": {
+                "title": "Next Page Link",
+                "type": "object",
+                "properties": {
+                    "next": {
+                        "$ref": "#/components/schemas/Link"
+                    }
+                },
+                "additionalProperties": false,
+                "description": "URL for getting the next page of data, if applicable."
+            },
+            "jobs-response": {
+                "title": " Reality Conversion Jobs",
+                "type": "object",
+                "properties": {
+                    "jobs": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Job"
+                        },
+                        "description": "Array of jobs"
+                    },
+                    "_links": {
+                        "$ref": "#/components/schemas/next-page-link"
+                    }
+                },
+                "additionalProperties": false,
+                "description": "Jobs"
+            },
+            "Error": {
+                "required": [
+                    "code",
+                    "message"
+                ],
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "string",
+                        "description": "One of a server-defined set of error codes."
+                    },
+                    "message": {
+                        "type": "string",
+                        "description": "A human-readable representation of the error."
+                    },
+                    "target": {
+                        "type": "string",
+                        "description": "The target of the error.",
+                        "nullable": true
+                    }
+                },
+                "description": "Contains error information."
+            },
+            "DetailedError": {
+                "required": [
+                    "code",
+                    "message",
+                    "details"
+                ],
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "string",
+                        "description": "One of a server-defined set of error codes."
+                    },
+                    "message": {
+                        "type": "string",
+                        "description": "A human-readable representation of the error."
+                    },
+                    "target": {
+                        "type": "string",
+                        "description": "The target of the error.",
+                        "nullable": true
+                    },
+                    "details": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Error"
+                        },
+                        "description": "Optional array of more specific errors."
+                    }
+                },
+                "description": "Contains error information and an array of more specific errors."
+            },
+            "DetailedErrorResponse": {
+                "title": "Detailed Error Response",
+                "required": [
+                    "error"
+                ],
+                "type": "object",
+                "properties": {
+                    "error": {
+                        "$ref": "#/components/schemas/DetailedError"
+                    }
+                },
+                "additionalProperties": false,
+                "description": "Gives details for an error that occurred while handling the request. Note that clients MUST NOT assume that every failed request will produce an object of this schema, or that all of the properties in the response will be non-null, as the error may have prevented this response from being constructed."
+            },
+            "ErrorResponse": {
+                "title": "Error Response",
+                "required": [
+                    "error"
+                ],
+                "type": "object",
+                "properties": {
+                    "error": {
+                        "$ref": "#/components/schemas/Error"
+                    }
+                },
+                "additionalProperties": false,
+                "description": "Gives details for an error that occurred while handling the request. Note that clients MUST NOT assume that every failed request will produce an object of this schema, or that all of the properties in the response will be non-null, as the error may have prevented this response from being constructed."
+            },
+            "PointCloudConversionSpecificationsCreate": {
+                "title": "PointCloud Conversion Specifications for Creation",
+                "required": [
+                    "inputs"
+                ],
+                "type": "object",
+                "properties": {
+                    "inputs": {
+                        "$ref": "#/components/schemas/PCConversionInputs"
+                    },
+                    "options": {
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/PCConversionOptions"
+                            }
+                        ],
+                        "description": "Options for the job.",
+                        "nullable": true
+                    }
+                },
+                "additionalProperties": false,
+                "description": "Specifications for PointCloud Conversion job creation."
+            },
+            "PointCloudOptimizationSpecificationsCreate": {
+                "title": "PointCloud Optimization Specifications for Creation",
+                "required": [
+                    "inputs"
+                ],
+                "type": "object",
+                "properties": {
+                    "inputs": {
+                        "$ref": "#/components/schemas/PCOptimizationInputs"
+                    },
+                    "options": {
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/PCOptimizationOptions"
+                            }
+                        ],
+                        "description": "Options",
+                        "nullable": true
+                    }
+                },
+                "additionalProperties": false,
+                "description": "Specifications for PointCloud Optimization job creation."
+            },
+            "TileMapOptimizationSpecificationsCreate": {
+                "title": "TileMap Optimization Specifications for Creation",
+                "required": [
+                    "inputs"
+                ],
+                "type": "object",
+                "properties": {
+                    "inputs": {
+                        "$ref": "#/components/schemas/TileMapOptimizationInputs"
+                    },
+                    "options": {
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/TileMapOptimizationOptions"
+                            }
+                        ],
+                        "description": "Options",
+                        "nullable": true
+                    }
+                },
+                "additionalProperties": false,
+                "description": "Specifications for TileMap Optimization job creation."
+            },
+            "VectorOptimizationSpecificationsCreate": {
+                "title": "Vector Optimization Specifications for Creation",
+                "required": [
+                    "inputs"
+                ],
+                "type": "object",
+                "properties": {
+                    "inputs": {
+                        "$ref": "#/components/schemas/VectorOptimizationInputs"
+                    },
+                    "options": {
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/VectorOptimizationOptions"
+                            }
+                        ],
+                        "description": "Options",
+                        "nullable": true
+                    }
+                },
+                "additionalProperties": false,
+                "description": "Specifications for Vector Optimization job creation."
+            },
+            "MeshSamplingSpecificationsCreate": {
+                "title": "Mesh Sampling Specifications for Creation",
+                "required": [
+                    "inputs"
+                ],
+                "type": "object",
+                "properties": {
+                    "inputs": {
+                        "$ref": "#/components/schemas/MeshSamplingInputs"
+                    },
+                    "options": {
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/MeshSamplingOptions"
+                            }
+                        ],
+                        "description": "Options",
+                        "nullable": true
+                    }
+                },
+                "additionalProperties": false,
+                "description": "Specifications for Mesh Sampling job creation."
+            },
+            "JobCreation": {
+                "title": "Job Creation",
+                "required": [
+                    "iTwinId",
+                    "specifications",
+                    "type"
+                ],
+                "type": "object",
+                "properties": {
+                    "specifications": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/components/schemas/PointCloudConversionSpecificationsCreate"
+                            },
+                            {
+                                "$ref": "#/components/schemas/PointCloudOptimizationSpecificationsCreate"
+                            },
+                            {
+                                "$ref": "#/components/schemas/TileMapOptimizationSpecificationsCreate"
+                            },
+                            {
+                                "$ref": "#/components/schemas/VectorOptimizationSpecificationsCreate"
+                            },
+                            {
+                                "$ref": "#/components/schemas/MeshSamplingSpecificationsCreate"
+                            }
+                        ],
+                        "description": "List of inputs, outputs and options for the job, must be in sync with type."
+                    },
+                    "name": {
+                        "maxLength": 256,
+                        "minLength": 3,
+                        "pattern": "^([^\"<>|:*?\\\\/\\u0000-\\u001f])+$",
+                        "type": "string",
+                        "description": "Name of the job.",
+                        "default": null,
+                        "nullable": true
+                    },
+                    "type": {
+                        "$ref": "#/components/schemas/JobTypes"
+                    },
+                    "iTwinId": {
+                        "type": "string",
+                        "description": "iTwin Id for the job."
+                    }
+                },
+                "additionalProperties": false,
+                "description": "Model for creating a new job."
+            },
+            "JobResponse": {
+                "title": "Job Response",
+                "required": [
+                    "job"
+                ],
+                "type": "object",
+                "properties": {
+                    "job": {
+                        "$ref": "#/components/schemas/Job"
+                    }
+                },
+                "additionalProperties": false
+            },
+            "JobMessage": {
+                "title": "Job Message",
+                "required": [
+                    "code",
+                    "title",
+                    "message",
+                    "params"
+                ],
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "string",
+                        "description": "Unique identifier for the error or warning."
+                    },
+                    "title": {
+                        "type": "string",
+                        "description": "Title of the error or warning."
+                    },
+                    "message": {
+                        "type": "string",
+                        "description": "Message of the error or warning."
+                    },
+                    "params": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "description": "Parameters to be placed in the message. Can be used for localization effort."
+                    }
+                },
+                "additionalProperties": false,
+                "description": "Details of an error or a warning message."
+            },
+            "JobMessages": {
+                "title": "Job Messages",
+                "required": [
+                    "errors",
+                    "warnings"
+                ],
+                "type": "object",
+                "properties": {
+                    "errors": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/JobMessage"
+                        },
+                        "description": "List of potential errors from the job execution."
+                    },
+                    "warnings": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/JobMessage"
+                        },
+                        "description": "List of potential warnings from the job execution."
+                    }
+                },
+                "additionalProperties": false,
+                "description": "List of errors or warnings."
+            },
+            "JobMessagesResponse": {
+                "title": "Job Messages Response",
+                "required": [
+                    "messages"
+                ],
+                "type": "object",
+                "properties": {
+                    "messages": {
+                        "$ref": "#/components/schemas/JobMessages"
+                    }
+                },
+                "additionalProperties": false
+            },
+            "JobProgress": {
+                "title": "Job Progress",
+                "required": [
+                    "percentage",
+                    "state"
+                ],
+                "type": "object",
+                "properties": {
+                    "percentage": {
+                        "type": "number",
+                        "description": "Job progress percentage."
+                    },
+                    "state": {
+                        "$ref": "#/components/schemas/JobState"
+                    }
+                },
+                "additionalProperties": false,
+                "description": "Job progress percentage and job state."
+            },
+            "JobProgressResponse": {
+                "title": "Job Progress Response",
+                "required": [
+                    "progress"
+                ],
+                "type": "object",
+                "properties": {
+                    "progress": {
+                        "$ref": "#/components/schemas/JobProgress"
+                    }
+                },
+                "additionalProperties": false
+            }
+        },
+        "securitySchemes": {
+            "apiKeyHeader": {
+                "type": "apiKey",
+                "name": "X-Api-Subscription-Key",
+                "in": "header"
+            },
+            "apiKeyQuery": {
+                "type": "apiKey",
+                "name": "subscription-key",
+                "in": "query"
+            }
+        }
+    },
+    "security": [
+        {
+            "apiKeyHeader": []
+        },
+        {
+            "apiKeyQuery": []
+        }
+    ]
+}

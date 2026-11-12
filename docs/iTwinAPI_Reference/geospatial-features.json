@@ -1,0 +1,1020 @@
+{
+    "openapi": "3.0.1",
+    "info": {
+        "title": "Geospatial Features",
+        "description": "OGC API Feature Service.",
+        "version": "v1"
+    },
+    "servers": [
+        {
+            "url": "https://api.bentley.com/geospatial-features"
+        }
+    ],
+    "paths": {
+        "/itwins/{iTwinId}/ogc/collections": {
+            "get": {
+                "tags": [
+                    "Technology Preview",
+                    "OGC API Features"
+                ],
+                "summary": "Get Collections",
+                "description": "---\r\n\r\nRetrieve all Collections (Feature Classes) that contain features within an iTwin.\r\n\r\n---",
+                "operationId": "get-collections",
+                "parameters": [
+                    {
+                        "name": "iTwinId",
+                        "in": "path",
+                        "description": "iTwin id",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "OAuth access token with `itwin-platform` scope",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/components/schemas/AuthorizationHeader"
+                        }
+                    },
+                    {
+                        "name": "Accept",
+                        "in": "header",
+                        "description": "Setting to `application/vnd.bentley.itwin-platform.v1+json` is recommended.",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/components/schemas/AcceptHeader"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Collections"
+                                },
+                                "example": {
+                                    "links": [
+                                        {
+                                            "href": "https//example.com/9169a6b2-9680-40d8-9669-b5c0a6d96014/ogc/collections",
+                                            "rel": "self",
+                                            "type": "application/json"
+                                        }
+                                    ],
+                                    "collections": [
+                                        {
+                                            "id": "90442b2b-a7e6-4471-b093-cb002a37762a",
+                                            "title": "Title",
+                                            "description": "Description",
+                                            "links": [
+                                                {
+                                                    "href": "https//example.com/9169a6b2-9680-40d8-9669-b5c0a6d96014/ogc/collections/90442b2b-a7e6-4471-b093-cb002a37762a",
+                                                    "rel": "self",
+                                                    "type": "application/json",
+                                                    "title": "Title"
+                                                },
+                                                {
+                                                    "href": "https//example.com/9169a6b2-9680-40d8-9669-b5c0a6d96014/ogc/collections/90442b2b-a7e6-4471-b093-cb002a37762a/items",
+                                                    "rel": "items",
+                                                    "type": "application/geo+json",
+                                                    "title": "title"
+                                                }
+                                            ],
+                                            "extent": {
+                                                "spatial": {
+                                                    "bbox": [
+                                                        [
+                                                            -50.088768855484,
+                                                            50.9448757054177,
+                                                            0.000339684093177084,
+                                                            -50.088301491422,
+                                                            50.9452153895109,
+                                                            0.000467364062004094
+                                                        ]
+                                                    ],
+                                                    "crs": "https://www.opengis.net/def/crs/OGC/1.3/CRS84"
+                                                }
+                                            },
+                                            "crs": [
+                                                "https://www.opengis.net/def/crs/EPSG/0/32615"
+                                            ],
+                                            "storageCrs": "https://www.opengis.net/def/crs/EPSG/0/32615"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "This response indicates that request lacks valid authentication credentials. Access token might not been provided, issued by the wrong issuer, does not have required scopes or request headers were malformed.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                },
+                                "examples": {
+                                    "HeaderNotFound": {
+                                        "value": {
+                                            "error": {
+                                                "code": "HeaderNotFound",
+                                                "message": "Header Authorization was not found in the request. Access denied."
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "This response indicates that user does not have required permissions to get specified connection.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                },
+                                "example": {
+                                    "error": {
+                                        "code": "InsufficientPermissions",
+                                        "message": "The user has insufficient permissions for the requested operation."
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "UnprocessableEntity",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                },
+                                "examples": {
+                                    "InvalidITwinId": {
+                                        "value": {
+                                            "error": {
+                                                "code": "InvalidGeospatialFeaturesRequest",
+                                                "message": "Invalid iTwinId."
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "429": {
+                        "description": "This response indicates that the client sent more requests than allowed by this API for the current tier of the client.",
+                        "headers": {
+                            "retry-after": {
+                                "description": "Number of seconds to wait until client is allowed to make more requests.",
+                                "required": true,
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                },
+                                "example": {
+                                    "error": {
+                                        "code": "RateLimitExceeded",
+                                        "message": "The client sent more requests than allowed by this API for the current tier of the client."
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/itwins/{iTwinId}/ogc/collections/{collectionId}/items": {
+            "get": {
+                "tags": [
+                    "Technology Preview",
+                    "OGC API Features"
+                ],
+                "summary": "Get Features",
+                "description": "---\r\n\r\nGet features from a collection of geographic features from a specified dataset. This endpoint is part of the OGC API - Features (OAPIF) 3.0 standard, which provides a RESTful interface for accessing geospatial data.\r\n\r\n---",
+                "operationId": "get-features",
+                "parameters": [
+                    {
+                        "name": "iTwinId",
+                        "in": "path",
+                        "description": "iTwin id",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "collectionId",
+                        "in": "path",
+                        "description": "Collection id",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "description": "Limits the number of items returned.",
+                        "schema": {
+                            "type": "integer",
+                            "default": 10
+                        }
+                    },
+                    {
+                        "name": "bbox",
+                        "in": "query",
+                        "description": "Return only features in the supplied bounding box coordinates. The CRS of the values is WGS 84 longitude/latitude unless a different CRS is specifed in the parameter bbox-crs.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "bbox-crs",
+                        "in": "query",
+                        "description": "Parameter may be used to assert the CRS used for the coordinate values of the bbox parameter.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "crs",
+                        "in": "query",
+                        "description": "The coordinates of the geometries in the response document will be transformed into the requested CRS.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "continuationToken",
+                        "in": "query",
+                        "description": "A token provided by the service to retrieve the next set of features in a paginated response.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "OAuth access token with `itwin-platform` scope",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/components/schemas/AuthorizationHeader"
+                        }
+                    },
+                    {
+                        "name": "Accept",
+                        "in": "header",
+                        "description": "Setting to `application/vnd.bentley.itwin-platform.v1+json` is recommended.",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/components/schemas/AcceptHeader"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/geo+json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/FeatureCollectionGeoJSON"
+                                },
+                                "example": {
+                                    "type": "FeatureCollection",
+                                    "features": [
+                                        {
+                                            "type": "Feature",
+                                            "id": 1,
+                                            "geometry": {
+                                                "type": "LineString",
+                                                "coordinates": [
+                                                    [
+                                                        0,
+                                                        0,
+                                                        0
+                                                    ],
+                                                    [
+                                                        0,
+                                                        0,
+                                                        0
+                                                    ]
+                                                ]
+                                            },
+                                            "properties": {
+                                                "prop1": 0,
+                                                "prop2": ""
+                                            }
+                                        }
+                                    ],
+                                    "links": [
+                                        {
+                                            "href": "https//example.com/items?limit=1&continuationToken=token",
+                                            "rel": "next",
+                                            "type": "application/geo+json"
+                                        },
+                                        {
+                                            "href": "https//example.com/items",
+                                            "rel": "self",
+                                            "type": "application/geo+json"
+                                        }
+                                    ],
+                                    "numberMatched": 10,
+                                    "numberReturned": 1
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "This response indicates that request lacks valid authentication credentials. Access token might not been provided, issued by the wrong issuer, does not have required scopes or request headers were malformed.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                },
+                                "examples": {
+                                    "HeaderNotFound": {
+                                        "value": {
+                                            "error": {
+                                                "code": "HeaderNotFound",
+                                                "message": "Header Authorization was not found in the request. Access denied."
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "This response indicates that user does not have required permissions to get specified connection.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                },
+                                "example": {
+                                    "error": {
+                                        "code": "InsufficientPermissions",
+                                        "message": "The user has insufficient permissions for the requested operation."
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "UnprocessableEntity",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                },
+                                "examples": {
+                                    "InvalidITwinId": {
+                                        "value": {
+                                            "error": {
+                                                "code": "InvalidGeospatialFeaturesRequest",
+                                                "message": "Invalid iTwinId."
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "429": {
+                        "description": "This response indicates that the client sent more requests than allowed by this API for the current tier of the client.",
+                        "headers": {
+                            "retry-after": {
+                                "description": "Number of seconds to wait until client is allowed to make more requests.",
+                                "required": true,
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                },
+                                "example": {
+                                    "error": {
+                                        "code": "RateLimitExceeded",
+                                        "message": "The client sent more requests than allowed by this API for the current tier of the client."
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "FeatureCollectionGeoJSON": {
+                "title": "Feature Collection",
+                "type": "object",
+                "properties": {
+                    "type": {
+                        "enum": [
+                            "FeatureCollection"
+                        ],
+                        "type": "string",
+                        "description": "Specifies the GeoJSON object type as a Feature Collection."
+                    },
+                    "features": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/FeatureGeoJSON"
+                        },
+                        "description": "An array of GeoJSON features contained in the collection."
+                    },
+                    "links": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Link"
+                        },
+                        "description": "A list of links related to the feature collection, provided by the server."
+                    },
+                    "numberMatched": {
+                        "type": "integer",
+                        "description": "The total number of features found in the collection."
+                    },
+                    "numberReturned": {
+                        "type": "integer",
+                        "description": "The number of features returned in the current request."
+                    }
+                },
+                "additionalProperties": false,
+                "description": "A valid GeoJSON Feature Collection containing multiple features."
+            },
+            "FeatureGeoJSON": {
+                "title": "Feature",
+                "type": "object",
+                "properties": {
+                    "type": {
+                        "enum": [
+                            "Feature"
+                        ],
+                        "type": "string",
+                        "description": "Specifies the GeoJSON object type as a Feature."
+                    },
+                    "geometry": {
+                        "$ref": "#/components/schemas/GeometryGeoJSON"
+                    },
+                    "properties": {
+                        "type": "array",
+                        "items": {
+                            "type": "object"
+                        },
+                        "additionalProperties": false,
+                        "description": "A collection of properties associated with the feature."
+                    },
+                    "id": {
+                        "oneOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "integer"
+                            }
+                        ],
+                        "description": "A unique identifier for the feature, which can be either a string or an integer."
+                    }
+                },
+                "additionalProperties": false,
+                "description": "A valid GeoJSON Feature object."
+            },
+            "GeometryGeoJSON": {
+                "title": "GeoJSON Geometry",
+                "type": "object",
+                "oneOf": [
+                    {
+                        "$ref": "#/components/schemas/PointGeoJSON"
+                    },
+                    {
+                        "$ref": "#/components/schemas/MultiPointGeoJSON"
+                    },
+                    {
+                        "$ref": "#/components/schemas/LineStringGeoJSON"
+                    },
+                    {
+                        "$ref": "#/components/schemas/MultiLineStringGeoJSON"
+                    },
+                    {
+                        "$ref": "#/components/schemas/PolygonGeoJSON"
+                    },
+                    {
+                        "$ref": "#/components/schemas/MultiPolygonGeoJSON"
+                    }
+                ],
+                "additionalProperties": false,
+                "description": "A valid GeoJSON Geometry object, which can be one of several geometry types."
+            },
+            "PointGeoJSON": {
+                "title": "Point Geometry",
+                "required": [
+                    "coordinates",
+                    "type"
+                ],
+                "type": "object",
+                "properties": {
+                    "type": {
+                        "enum": [
+                            "Point"
+                        ],
+                        "type": "string",
+                        "description": "Specifies the GeoJSON object type as a Point."
+                    },
+                    "coordinates": {
+                        "minItems": 2,
+                        "type": "array",
+                        "items": {
+                            "type": "number"
+                        },
+                        "description": "An array of coordinates representing the point."
+                    }
+                },
+                "additionalProperties": false,
+                "description": "A Point Geometry object in GeoJSON format."
+            },
+            "MultiPointGeoJSON": {
+                "title": "MultiPoint Geometry",
+                "required": [
+                    "coordinates",
+                    "type"
+                ],
+                "type": "object",
+                "properties": {
+                    "type": {
+                        "enum": [
+                            "MultiPoint"
+                        ],
+                        "type": "string",
+                        "description": "Specifies the GeoJSON object type as a MultiPoint."
+                    },
+                    "coordinates": {
+                        "type": "array",
+                        "items": {
+                            "minItems": 2,
+                            "type": "array",
+                            "items": {
+                                "type": "number"
+                            }
+                        },
+                        "description": "An array of coordinate arrays representing multiple points."
+                    }
+                },
+                "additionalProperties": false,
+                "description": "A MultiPoint Geometry object in GeoJSON format."
+            },
+            "LineStringGeoJSON": {
+                "title": "Line Geometry",
+                "required": [
+                    "coordinates",
+                    "type"
+                ],
+                "type": "object",
+                "properties": {
+                    "type": {
+                        "enum": [
+                            "LineString"
+                        ],
+                        "type": "string",
+                        "description": "Specifies the GeoJSON object type as a LineString."
+                    },
+                    "coordinates": {
+                        "minItems": 2,
+                        "type": "array",
+                        "items": {
+                            "minItems": 2,
+                            "type": "array",
+                            "items": {
+                                "type": "number"
+                            }
+                        },
+                        "description": "An array of coordinate arrays representing the line."
+                    }
+                },
+                "additionalProperties": false,
+                "description": "A LineString Geometry object in GeoJSON format."
+            },
+            "MultiLineStringGeoJSON": {
+                "title": "MultiLine Geometry",
+                "required": [
+                    "coordinates",
+                    "type"
+                ],
+                "type": "object",
+                "properties": {
+                    "type": {
+                        "enum": [
+                            "MultiLineString"
+                        ],
+                        "type": "string",
+                        "description": "Specifies the GeoJSON object type as a MultiLineString."
+                    },
+                    "coordinates": {
+                        "type": "array",
+                        "items": {
+                            "minItems": 2,
+                            "type": "array",
+                            "items": {
+                                "minItems": 2,
+                                "type": "array",
+                                "items": {
+                                    "type": "number"
+                                }
+                            }
+                        },
+                        "description": "An array of coordinate arrays representing multiple lines."
+                    }
+                },
+                "additionalProperties": false,
+                "description": "A MultiLineString Geometry object in GeoJSON format."
+            },
+            "PolygonGeoJSON": {
+                "title": "Polygon Geometry",
+                "required": [
+                    "coordinates",
+                    "type"
+                ],
+                "type": "object",
+                "properties": {
+                    "type": {
+                        "enum": [
+                            "Polygon"
+                        ],
+                        "type": "string",
+                        "description": "Specifies the GeoJSON object type as a Polygon."
+                    },
+                    "coordinates": {
+                        "type": "array",
+                        "items": {
+                            "minItems": 4,
+                            "type": "array",
+                            "items": {
+                                "minItems": 2,
+                                "type": "array",
+                                "items": {
+                                    "type": "number"
+                                }
+                            }
+                        },
+                        "description": "An array of coordinate arrays representing the polygon."
+                    }
+                },
+                "additionalProperties": false,
+                "description": "A Polygon Geometry object in GeoJSON format."
+            },
+            "MultiPolygonGeoJSON": {
+                "title": "MultiPolygon Geometry",
+                "required": [
+                    "coordinates",
+                    "type"
+                ],
+                "type": "object",
+                "properties": {
+                    "type": {
+                        "enum": [
+                            "MultiPolygon"
+                        ],
+                        "type": "string",
+                        "description": "Specifies the GeoJSON object type as a MultiPolygon."
+                    },
+                    "coordinates": {
+                        "type": "array",
+                        "items": {
+                            "type": "array",
+                            "items": {
+                                "minItems": 4,
+                                "type": "array",
+                                "items": {
+                                    "minItems": 2,
+                                    "type": "array",
+                                    "items": {
+                                        "type": "number"
+                                    }
+                                }
+                            }
+                        },
+                        "description": "An array of coordinate arrays representing multiple polygons."
+                    }
+                },
+                "additionalProperties": false,
+                "description": "A MultiPolygon Geometry object in GeoJSON format."
+            },
+            "Link": {
+                "title": "Link",
+                "required": [
+                    "href"
+                ],
+                "type": "object",
+                "properties": {
+                    "href": {
+                        "type": "string",
+                        "description": "The URL of the linked resource."
+                    },
+                    "rel": {
+                        "type": "string",
+                        "description": "The relationship type of the link."
+                    },
+                    "type": {
+                        "type": "string",
+                        "description": "The media type of the linked resource."
+                    },
+                    "title": {
+                        "type": "string",
+                        "description": "A human-readable title for the link."
+                    }
+                },
+                "additionalProperties": false,
+                "description": "A link object to express relationships between resources."
+            },
+            "Collections": {
+                "required": [
+                    "links",
+                    "collections"
+                ],
+                "type": "object",
+                "properties": {
+                    "links": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Link"
+                        },
+                        "description": "An array of metadata links related to the collections."
+                    },
+                    "collections": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Collection"
+                        },
+                        "description": "An array of individual feature collections, each containing its own metadata and links."
+                    }
+                },
+                "additionalProperties": false,
+                "description": "Represents a collection of OGC feature collections. This object contains metadata links and an array of individual feature collections."
+            },
+            "Collection": {
+                "required": [
+                    "id",
+                    "links"
+                ],
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "description": "A unique identifier for the feature collection."
+                    },
+                    "title": {
+                        "type": "string",
+                        "description": "The title of the feature collection."
+                    },
+                    "description": {
+                        "type": "string",
+                        "description": "A brief description of the feature collection.",
+                        "nullable": true
+                    },
+                    "links": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Link"
+                        },
+                        "description": "An array of metadata links related to the feature collection."
+                    },
+                    "extent": {
+                        "$ref": "#/components/schemas/Extent"
+                    },
+                    "itemType": {
+                        "type": "string",
+                        "description": "The type of items contained in the feature collection."
+                    },
+                    "crs": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "description": "An array of coordinate reference systems used by the feature collection."
+                    },
+                    "storageCrs": {
+                        "type": "string",
+                        "description": "The coordinate reference system used for storage."
+                    },
+                    "storageCrsCoordinateEpoch": {
+                        "type": "string",
+                        "description": "The epoch of the storage coordinate reference system, if applicable.",
+                        "nullable": true
+                    }
+                },
+                "additionalProperties": false,
+                "description": "Represents an individual OGC feature collection. This object contains metadata such as the collection's ID, title, description, links, extent, item type, and coordinate reference systems."
+            },
+            "Extent": {
+                "type": "object",
+                "properties": {
+                    "spatial": {
+                        "$ref": "#/components/schemas/SpatialExtent"
+                    },
+                    "temporal": {
+                        "$ref": "#/components/schemas/TemporalExtent"
+                    }
+                },
+                "additionalProperties": false,
+                "description": "Represents the extents of a collection."
+            },
+            "SpatialExtent": {
+                "type": "object",
+                "properties": {
+                    "bbox": {
+                        "type": "array",
+                        "items": {
+                            "type": "array",
+                            "items": {
+                                "type": "number"
+                            }
+                        }
+                    },
+                    "crs": {
+                        "type": "string"
+                    }
+                },
+                "additionalProperties": false,
+                "description": "Spatial extent defines the geographic area covered by the collection."
+            },
+            "TemporalExtent": {
+                "type": "object",
+                "properties": {
+                    "interval": {
+                        "type": "array",
+                        "items": {
+                            "type": "array",
+                            "items": {
+                                "type": "number"
+                            }
+                        }
+                    },
+                    "trs": {
+                        "type": "string"
+                    }
+                },
+                "additionalProperties": false,
+                "description": "Temporal extent defines the time period covered by the collection."
+            },
+            "ProblemDetails": {
+                "type": "object",
+                "properties": {
+                    "type": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "title": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "status": {
+                        "type": "integer",
+                        "format": "int32",
+                        "nullable": true
+                    },
+                    "detail": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "instance": {
+                        "type": "string",
+                        "nullable": true
+                    }
+                },
+                "additionalProperties": false
+            },
+            "DetailedError": {
+                "required": [
+                    "code",
+                    "message",
+                    "details"
+                ],
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "string",
+                        "description": "One of a server-defined set of error codes."
+                    },
+                    "message": {
+                        "type": "string",
+                        "description": "A human-readable representation of the error."
+                    },
+                    "target": {
+                        "type": "string",
+                        "description": "The target of the error.",
+                        "nullable": true
+                    },
+                    "details": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Error"
+                        },
+                        "description": "Optional array of more specific errors."
+                    }
+                },
+                "description": "Contains error information and an array of more specific errors."
+            },
+            "DetailedErrorResponse": {
+                "title": "Detailed Error Response",
+                "required": [
+                    "error"
+                ],
+                "type": "object",
+                "properties": {
+                    "error": {
+                        "$ref": "#/components/schemas/DetailedError"
+                    }
+                },
+                "additionalProperties": false,
+                "description": "Gives details for an error that occurred while handling the request. Note that clients MUST NOT assume that every failed request will produce an object of this schema, or that all of the properties in the response will be non-null, as the error may have prevented this response from being constructed."
+            },
+            "Error": {
+                "required": [
+                    "code",
+                    "message"
+                ],
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "string",
+                        "description": "One of a server-defined set of error codes."
+                    },
+                    "message": {
+                        "type": "string",
+                        "description": "A human-readable representation of the error."
+                    },
+                    "target": {
+                        "type": "string",
+                        "description": "The target of the error.",
+                        "nullable": true
+                    }
+                },
+                "description": "Contains error information."
+            },
+            "ErrorResponse": {
+                "title": "Error Response",
+                "required": [
+                    "error"
+                ],
+                "type": "object",
+                "properties": {
+                    "error": {
+                        "$ref": "#/components/schemas/Error"
+                    }
+                },
+                "additionalProperties": false,
+                "description": "Gives details for an error that occurred while handling the request. Note that clients MUST NOT assume that every failed request will produce an object of this schema, or that all of the properties in the response will be non-null, as the error may have prevented this response from being constructed."
+            },
+            "AcceptHeader": {
+                "type": "string",
+                "default": "application/vnd.bentley.itwin-platform.v1+json"
+            },
+            "AuthorizationHeader": {
+                "pattern": "^Bearer .*$",
+                "type": "string"
+            },
+            "PreferHeader": {
+                "enum": [
+                    "return=representation",
+                    "return=minimal"
+                ],
+                "type": "string"
+            }
+        },
+        "securitySchemes": {
+            "apiKeyHeader": {
+                "type": "apiKey",
+                "name": "X-Api-Subscription-Key",
+                "in": "header"
+            },
+            "apiKeyQuery": {
+                "type": "apiKey",
+                "name": "subscription-key",
+                "in": "query"
+            }
+        }
+    },
+    "security": [
+        {
+            "apiKeyHeader": []
+        },
+        {
+            "apiKeyQuery": []
+        }
+    ]
+}

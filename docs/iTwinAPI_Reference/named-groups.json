@@ -1,0 +1,1964 @@
+{
+    "openapi": "3.0.1",
+    "info": {
+        "title": "Named Groups",
+        "description": "Named Groups define subsets of iModel data for downstream applications like clash detection or carbon analysis.",
+        "version": "v1"
+    },
+    "servers": [
+        {
+            "url": "https://api.bentley.com/named-groups"
+        }
+    ],
+    "paths": {
+        "/": {
+            "get": {
+                "tags": [
+                    "Technology Preview",
+                    "Groups"
+                ],
+                "summary": "Get iTwin Groups",
+                "description": "---\r\n\r\nGets all groups of an iTwin.\r\n\r\n### Notes\r\n\r\nThe `Prefer` header can be used to specify how much result metadata is desired by the client. The `Prefer` request header field is used to indicate that particular server behaviors are preferred by the client but are not required for successful completion of the request.\r\n\r\nThis operation supports `\"return=representation\"` and `\"return=minimal\"` preferences.\r\n\r\nThe `\"return=representation\"` preference indicates that the client prefers that the server include an entity representing the current state of the resource in the response to a successful request.\r\nThe `\"return=minimal\"` preference indicates that the client wishes the server to return only a minimal response to a successful request. This is the default preference if `Prefer` header is not specified.\r\n\r\n### Group Query\r\n\r\nThe `query` parameter of a Group must be a valid ECSQL query.\r\n\r\nIf a valid ECSQL query is given and the selected class is `bis.Element`, or if it is a descendant of the class `bis.Element`, the only required column is `ECInstanceId`. However, it is recommended to always select at least `ECInstanceId` and `ECClassId` columns.\r\n\r\n- `SELECT * FROM bis.Element` is a valid query\r\n- Assuming that class `Building.Beam` is a descendant of the class `bis.Element`, the query `SELECT * FROM Building.Beam` is a valid query\r\n- `SELECT ECInstanceId, ECClassId FROM bis.Element` is a valid query\r\n- Assuming that class `Building.Beam` is a descendant of the class `bis.Element`, the query `SELECT ECInstanceId, ECClassId FROM Building.Beam` is valid\r\n- `SELECT ECClassId FROM bis.Element` is _not_ a valid query because ECInstanceId column is missing\r\n- Assuming that class `Building.Beam` is a descendant of the class `bis.Element`, the query `SELECT ECClassId FROM Building.Beam` is _not_ valid because ECInstanceId column is missing\r\n- Assuming that `Building.BeamAspect` is an aspect, the query `SELECT A.ECInstanceId ECInstanceId FROM bis.Element E JOIN Building.BeamAspect A ON A.Element.id = E.ECInstanceId` is _not_ valid because the selected `ECInstanceId` is of the aspect, not the element\r\n- Assuming that `Building.BeamAspect` is an aspect, the query `SELECT Element.id FROM Building.BeamAspect` is _not_ valid because the selected column's name is not `ECInstanceId`\r\n- Assuming that `Building.BeamAspect` is an aspect, the query `SELECT Element.id ECInstanceId FROM Building.BeamAspect` is valid\r\n\r\nIn all other cases the provided ECSQL query is required to select `ECInstanceId` and `ECClassId`. If `ECClassId` is omitted, the service assumes that query selects elements from the `bis.Element` class or its descendants. In some cases the results might be unexpected, e.g., you assume that you are querying `bis.ElementAspect` but you only select `ECInstanceId` so the service only selects the elements that have a matching `ECInstanceId`. Because of this it is always recommended to select both `ECInstanceId` and `ECClassId`.\r\n\r\n### Authentication\r\n\r\nRequires `Authorization` header with valid Bearer token for scope `itwin-platform`.\r\n\r\nFor more documentation on authorization and how to get access token visit [OAUTH2 Authorization](https://developer.bentley.com/apis/overview/authorization/) page.\r\n\r\n### Authorization\r\n\r\nUser must have `insights_view` permission(s) assigned at the iTwin level.\r\n\r\nAlternatively the user should be an Organization Administrator for the Organization that owns a given iTwin or iModel.\r\n\r\nAn Organization Administrator must have at least one of the following roles assigned in User Management: Account Administrator, Co-Administrator, or CONNECT Services Administrator. For more information about User Management please visit our Bentley Communities [Licensing, Cloud, and Web Services](https://bentleysystems.service-now.com/community?id=kb_article_view&sys_kb_id=1e5410491b7d8a90f3fc5287624bcb57) wiki page.\r\n\r\n### Rate limits\r\n\r\nAll iTwin Platform API operations have a rate limit. For more documentation on that visit [Rate limits and quotas](https://developer.bentley.com/apis/overview/rate-limits/) page.\r\n\r\n---\r\n",
+                "operationId": "get-itwin-groups",
+                "parameters": [
+                    {
+                        "name": "iTwinId",
+                        "in": "query",
+                        "description": "The iTwin Id.",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "$top",
+                        "in": "query",
+                        "description": "Optional max items to be sent in response.",
+                        "schema": {
+                            "type": "number"
+                        }
+                    },
+                    {
+                        "name": "$continuationToken",
+                        "in": "query",
+                        "description": "Optional token to retrieve next page in paginated response.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "tag",
+                        "in": "query",
+                        "description": "Filter groups by tag. Case-insensitive match.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "OAuth access token with `itwin-platform` scope",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/components/schemas/AuthorizationHeader.schema"
+                        }
+                    },
+                    {
+                        "name": "Accept",
+                        "in": "header",
+                        "description": "Setting to `application/vnd.bentley.itwin-platform.v1+json` is recommended.",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/components/schemas/AcceptHeader.schema"
+                        }
+                    },
+                    {
+                        "name": "Prefer",
+                        "in": "header",
+                        "description": "Indicates a level of details in the response.",
+                        "schema": {
+                            "$ref": "#/components/schemas/PreferHeader.schema"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json;Minimal": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/GroupsMinimalResponse"
+                                },
+                                "examples": {
+                                    "Minimal": {
+                                        "value": {
+                                            "groups": [
+                                                {
+                                                    "id": "08f252c4-ee78-4e2b-9280-f7365400b932",
+                                                    "displayName": "PhysicalElements",
+                                                    "description": "A group of physical elements",
+                                                    "query": "SELECT ECInstanceId, ECClassId FROM BisCore.PhysicalElement",
+                                                    "tags": [
+                                                        "Structural",
+                                                        "Phase-1"
+                                                    ],
+                                                    "createdDateTime": "2021-09-03T10:48:45.0000000+00:00",
+                                                    "modifiedDateTime": "2022-01-10T01:44:56.0000000+00:00",
+                                                    "_links": {
+                                                        "iTwin": {
+                                                            "href": "https://api.bentley.com/itwins/3fa85f64-5717-4562-b3fc-2c963f66afa6"
+                                                        }
+                                                    }
+                                                }
+                                            ],
+                                            "_links": {
+                                                "next": {
+                                                    "href": "https://api.bentley.com/named-groups?iTwinId=3fa85f64-5717-4562-b3fc-2c963f66afa6&$top=100&$continuationToken=ddac51e3-3d37-4407-816e-52b9fc80d70a"
+                                                },
+                                                "self": {
+                                                    "href": "https://api.bentley.com/named-groups?iTwinId=3fa85f64-5717-4562-b3fc-2c963f66afa6&$top=100"
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            "application/json;Representation": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/GroupsResponse"
+                                },
+                                "examples": {
+                                    "Representation": {
+                                        "value": {
+                                            "groups": [
+                                                {
+                                                    "id": "08f252c4-ee78-4e2b-9280-f7365400b932",
+                                                    "displayName": "PhysicalElements",
+                                                    "description": "A group of physical elements",
+                                                    "query": "SELECT ECInstanceId, ECClassId FROM BisCore.PhysicalElement",
+                                                    "metadata": [
+                                                        {
+                                                            "key": "key1",
+                                                            "value": "value1"
+                                                        },
+                                                        {
+                                                            "key": "key2",
+                                                            "value": "value2"
+                                                        }
+                                                    ],
+                                                    "tags": [
+                                                        "Structural",
+                                                        "Phase-1"
+                                                    ],
+                                                    "createdDateTime": "2021-09-03T10:48:45.0000000+00:00",
+                                                    "modifiedDateTime": "2022-01-10T01:44:56.0000000+00:00",
+                                                    "_links": {
+                                                        "iTwin": {
+                                                            "href": "https://api.bentley.com/itwins/3fa85f64-5717-4562-b3fc-2c963f66afa6"
+                                                        }
+                                                    }
+                                                }
+                                            ],
+                                            "_links": {
+                                                "next": {
+                                                    "href": "https://api.bentley.com/named-groups?iTwinId=3fa85f64-5717-4562-b3fc-2c963f66afa6&$top=100&$continuationToken=ddac51e3-3d37-4407-816e-52b9fc80d70a"
+                                                },
+                                                "self": {
+                                                    "href": "https://api.bentley.com/named-groups?iTwinId=3fa85f64-5717-4562-b3fc-2c963f66afa6&$top=100"
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "This response indicates that request lacks valid authentication credentials. Access token might not been provided, issued by the wrong issuer, does not have required scopes or request headers were malformed.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                },
+                                "examples": {
+                                    "HeaderNotFound": {
+                                        "value": {
+                                            "error": {
+                                                "code": "HeaderNotFound",
+                                                "message": "Header Authorization was not found in the request. Access denied."
+                                            }
+                                        }
+                                    },
+                                    "InvalidApplicationTier": {
+                                        "value": {
+                                            "error": {
+                                                "code": "InvalidApplicationTier",
+                                                "message": "The application is not allowed to access this API."
+                                            }
+                                        }
+                                    },
+                                    "InvalidAuthorizationScheme": {
+                                        "value": {
+                                            "error": {
+                                                "code": "InvalidAuthorizationScheme",
+                                                "message": "Authorization scheme 'Baerer' is not valid."
+                                            }
+                                        }
+                                    },
+                                    "InvalidHeaderValue": {
+                                        "value": {
+                                            "error": {
+                                                "code": "InvalidHeaderValue",
+                                                "message": "Authorization header is empty."
+                                            }
+                                        }
+                                    },
+                                    "RequiredScopeMissing": {
+                                        "value": {
+                                            "error": {
+                                                "code": "RequiredScopeMissing",
+                                                "message": "Access denied due to invalid access_token. One or more required scopes are missing. Make sure to provide a valid token for this API endpoint."
+                                            }
+                                        }
+                                    },
+                                    "Unauthorized": {
+                                        "value": {
+                                            "error": {
+                                                "code": "Unauthorized",
+                                                "message": "Access denied due to invalid client. Make sure that client was registered on https://developer.bentley.com."
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "This response indicates that the requested operation or resource could not be found.",
+                        "content": {
+                            "application/json;ResourceNotFound": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                },
+                                "examples": {
+                                    "ResourceNotFound": {
+                                        "value": {
+                                            "error": {
+                                                "code": "ResourceNotFound",
+                                                "message": "The requested resource was not found. Verify the API URL and the Accept header.",
+                                                "details": [
+                                                    {
+                                                        "code": "OperationNotFound",
+                                                        "message": "Unable to match incoming request to an operation."
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "The 422 (Unprocessable Entity) status code indicates that the request cannot be processed by the server due to a client error (e.g. malformed request syntax)",
+                        "content": {
+                            "application/json;MultipleTop": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/DetailedErrorResponse"
+                                },
+                                "examples": {
+                                    "MultipleTop": {
+                                        "value": {
+                                            "error": {
+                                                "code": "InvalidNamedGroupsRequest",
+                                                "message": "Cannot retrieve Groups.",
+                                                "details": [
+                                                    {
+                                                        "code": "InvalidParameter",
+                                                        "message": "Provided '$top' query parameter value is not valid. A single value must be provided.",
+                                                        "target": "$top"
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            "application/json;EmptyTop": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/DetailedErrorResponse"
+                                },
+                                "examples": {
+                                    "EmptyTop": {
+                                        "value": {
+                                            "error": {
+                                                "code": "InvalidNamedGroupsRequest",
+                                                "message": "Cannot retrieve Groups.",
+                                                "details": [
+                                                    {
+                                                        "code": "InvalidParameter",
+                                                        "message": "Provided '$top' query parameter value is not valid. The value cannot be empty or consist only of whitespace characters.",
+                                                        "target": "$top"
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            "application/json;InvalidTop": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/DetailedErrorResponse"
+                                },
+                                "examples": {
+                                    "InvalidTop": {
+                                        "value": {
+                                            "error": {
+                                                "code": "InvalidNamedGroupsRequest",
+                                                "message": "Cannot retrieve Groups.",
+                                                "details": [
+                                                    {
+                                                        "code": "InvalidParameter",
+                                                        "message": "Provided '$top' query parameter value is not valid. Expected a value of type 'number'.",
+                                                        "target": "$top"
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            "application/json;TopOutOfRange": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/DetailedErrorResponse"
+                                },
+                                "examples": {
+                                    "TopOutOfRange": {
+                                        "value": {
+                                            "error": {
+                                                "code": "InvalidNamedGroupsRequest",
+                                                "message": "Cannot retrieve Groups.",
+                                                "details": [
+                                                    {
+                                                        "code": "InvalidParameter",
+                                                        "message": "Provided '$top' query parameter value is not valid. The value must be a positive integer that does not exceed 1000.",
+                                                        "target": "$top"
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            "application/json;MultipleContinuationTokens": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/DetailedErrorResponse"
+                                },
+                                "examples": {
+                                    "MultipleContinuationTokens": {
+                                        "value": {
+                                            "error": {
+                                                "code": "InvalidNamedGroupsRequest",
+                                                "message": "Cannot retrieve Groups.",
+                                                "details": [
+                                                    {
+                                                        "code": "InvalidParameter",
+                                                        "message": "Provided '$continuationToken' query parameter value is not valid. A single value must be provided.",
+                                                        "target": "$continuationToken"
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            "application/json;InvalidTag": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/DetailedErrorResponse"
+                                },
+                                "examples": {
+                                    "InvalidTag": {
+                                        "value": {
+                                            "error": {
+                                                "code": "InvalidNamedGroupsRequest",
+                                                "message": "Cannot retrieve Groups.",
+                                                "details": [
+                                                    {
+                                                        "code": "InvalidParameter",
+                                                        "message": "Provided 'tag' query parameter value is not valid. The value cannot be empty or consist only of whitespace characters.",
+                                                        "target": "tag"
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "429": {
+                        "description": "This response indicates that the client sent more requests than allowed by this API for the current tier of the client.",
+                        "headers": {
+                            "retry-after": {
+                                "description": "Number of seconds to wait until client is allowed to make more requests.",
+                                "required": true,
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                },
+                                "example": {
+                                    "error": {
+                                        "code": "RateLimitExceeded",
+                                        "message": "The client sent more requests than allowed by this API for the current tier of the client."
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Technology Preview",
+                    "Groups"
+                ],
+                "summary": "Create Group",
+                "description": "---\r\n\r\nCreates a group. A group is a collection of design elements from an iModel represented by an [ECSQL](https://www.itwinjs.org/learning/ecsql/) query.\r\n\r\n### Group Query\r\n\r\nThe `query` parameter of a Group must be a valid ECSQL query.\r\n\r\nIf a valid ECSQL query is given and the selected class is `bis.Element`, or if it is a descendant of the class `bis.Element`, the only required column is `ECInstanceId`. However, it is recommended to always select at least `ECInstanceId` and `ECClassId` columns.\r\n\r\n- `SELECT * FROM bis.Element` is a valid query\r\n- Assuming that class `Building.Beam` is a descendant of the class `bis.Element`, the query `SELECT * FROM Building.Beam` is a valid query\r\n- `SELECT ECInstanceId, ECClassId FROM bis.Element` is a valid query\r\n- Assuming that class `Building.Beam` is a descendant of the class `bis.Element`, the query `SELECT ECInstanceId, ECClassId FROM Building.Beam` is valid\r\n- `SELECT ECClassId FROM bis.Element` is _not_ a valid query because ECInstanceId column is missing\r\n- Assuming that class `Building.Beam` is a descendant of the class `bis.Element`, the query `SELECT ECClassId FROM Building.Beam` is _not_ valid because ECInstanceId column is missing\r\n- Assuming that `Building.BeamAspect` is an aspect, the query `SELECT A.ECInstanceId ECInstanceId FROM bis.Element E JOIN Building.BeamAspect A ON A.Element.id = E.ECInstanceId` is _not_ valid because the selected `ECInstanceId` is of the aspect, not the element\r\n- Assuming that `Building.BeamAspect` is an aspect, the query `SELECT Element.id FROM Building.BeamAspect` is _not_ valid because the selected column's name is not `ECInstanceId`\r\n- Assuming that `Building.BeamAspect` is an aspect, the query `SELECT Element.id ECInstanceId FROM Building.BeamAspect` is valid\r\n\r\nIn all other cases the provided ECSQL query is required to select `ECInstanceId` and `ECClassId`. If `ECClassId` is omitted, the service assumes that query selects elements from the `bis.Element` class or its descendants. In some cases the results might be unexpected, e.g., you assume that you are querying `bis.ElementAspect` but you only select `ECInstanceId` so the service only selects the elements that have a matching `ECInstanceId`. Because of this it is always recommended to select both `ECInstanceId` and `ECClassId`.\r\n\r\n### Authentication\r\n\r\nRequires `Authorization` header with valid Bearer token for scope `itwin-platform`.\r\n\r\nFor more documentation on authorization and how to get access token visit [OAUTH2 Authorization](https://developer.bentley.com/apis/overview/authorization/) page.\r\n\r\n### Authorization\r\n\r\nUser must have `insights_modify` permission(s) assigned at the iTwin level.\r\n\r\nAlternatively the user should be an Organization Administrator for the Organization that owns a given iTwin or iModel.\r\n\r\nAn Organization Administrator must have at least one of the following roles assigned in User Management: Account Administrator, Co-Administrator, or CONNECT Services Administrator. For more information about User Management please visit our Bentley Communities [Licensing, Cloud, and Web Services](https://bentleysystems.service-now.com/community?id=kb_article_view&sys_kb_id=1e5410491b7d8a90f3fc5287624bcb57) wiki page.\r\n\r\n### Rate limits\r\n\r\nAll iTwin Platform API operations have a rate limit. For more documentation on that visit [Rate limits and quotas](https://developer.bentley.com/apis/overview/rate-limits/) page.\r\n\r\n---\r\n",
+                "operationId": "create-group",
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "OAuth access token with `itwin-platform` scope",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/components/schemas/AuthorizationHeader.schema"
+                        }
+                    },
+                    {
+                        "name": "Accept",
+                        "in": "header",
+                        "description": "Setting to `application/vnd.bentley.itwin-platform.v1+json` is recommended.",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/components/schemas/AcceptHeader.schema"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/NamedGroupCreateRequest"
+                            },
+                            "example": {
+                                "iTwinId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                                "displayName": "PhysicalElements",
+                                "description": "A group of physical elements",
+                                "query": "SELECT ECInstanceId, ECClassId FROM BisCore.PhysicalElement",
+                                "metadata": [
+                                    {
+                                        "key": "key1",
+                                        "value": "value1"
+                                    },
+                                    {
+                                        "key": "key2",
+                                        "value": "value2"
+                                    }
+                                ],
+                                "tags": [
+                                    "Structural",
+                                    "Phase-1"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/NamedGroupSingleResponse"
+                                },
+                                "example": {
+                                    "group": {
+                                        "id": "08f252c4-ee78-4e2b-9280-f7365400b932",
+                                        "displayName": "PhysicalElements",
+                                        "description": "A group of physical elements",
+                                        "query": "SELECT ECInstanceId, ECClassId FROM BisCore.PhysicalElement",
+                                        "metadata": [
+                                            {
+                                                "key": "key1",
+                                                "value": "value1"
+                                            },
+                                            {
+                                                "key": "key2",
+                                                "value": "value2"
+                                            }
+                                        ],
+                                        "tags": [
+                                            "Structural",
+                                            "Phase-1"
+                                        ],
+                                        "createdDateTime": "2021-09-03T10:48:45.0000000+00:00",
+                                        "modifiedDateTime": "2022-01-10T01:44:56.0000000+00:00",
+                                        "_links": {
+                                            "iTwin": {
+                                                "href": "https://api.bentley.com/itwins/3fa85f64-5717-4562-b3fc-2c963f66afa6"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "This response indicates that request lacks valid authentication credentials. Access token might not been provided, issued by the wrong issuer, does not have required scopes or request headers were malformed.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                },
+                                "examples": {
+                                    "HeaderNotFound": {
+                                        "value": {
+                                            "error": {
+                                                "code": "HeaderNotFound",
+                                                "message": "Header Authorization was not found in the request. Access denied."
+                                            }
+                                        }
+                                    },
+                                    "InvalidApplicationTier": {
+                                        "value": {
+                                            "error": {
+                                                "code": "InvalidApplicationTier",
+                                                "message": "The application is not allowed to access this API."
+                                            }
+                                        }
+                                    },
+                                    "InvalidAuthorizationScheme": {
+                                        "value": {
+                                            "error": {
+                                                "code": "InvalidAuthorizationScheme",
+                                                "message": "Authorization scheme 'Baerer' is not valid."
+                                            }
+                                        }
+                                    },
+                                    "InvalidHeaderValue": {
+                                        "value": {
+                                            "error": {
+                                                "code": "InvalidHeaderValue",
+                                                "message": "Authorization header is empty."
+                                            }
+                                        }
+                                    },
+                                    "RequiredScopeMissing": {
+                                        "value": {
+                                            "error": {
+                                                "code": "RequiredScopeMissing",
+                                                "message": "Access denied due to invalid access_token. One or more required scopes are missing. Make sure to provide a valid token for this API endpoint."
+                                            }
+                                        }
+                                    },
+                                    "Unauthorized": {
+                                        "value": {
+                                            "error": {
+                                                "code": "Unauthorized",
+                                                "message": "Access denied due to invalid client. Make sure that client was registered on https://developer.bentley.com."
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "User is not authorized to create a Group.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                },
+                                "example": {
+                                    "error": {
+                                        "code": "InsufficientPermissions",
+                                        "message": "The user has insufficient permissions for the requested operation."
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "This response indicates that the requested operation or resource could not be found.",
+                        "content": {
+                            "application/json;ResourceNotFound": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                },
+                                "examples": {
+                                    "ResourceNotFound": {
+                                        "value": {
+                                            "error": {
+                                                "code": "ResourceNotFound",
+                                                "message": "The requested resource was not found. Verify the API URL and the Accept header.",
+                                                "details": [
+                                                    {
+                                                        "code": "OperationNotFound",
+                                                        "message": "Unable to match incoming request to an operation."
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "409": {
+                        "description": "Specified group already exists.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                },
+                                "example": {
+                                    "error": {
+                                        "code": "GroupExists",
+                                        "message": "Group 'PhysicalElements' already exists.",
+                                        "target": "displayName"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "The 422 (Unprocessable Entity) status code indicates that the request cannot be processed by the server due to a client error (e.g. malformed request syntax)",
+                        "content": {
+                            "application/json;MissingDisplayName": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/DetailedErrorResponse"
+                                },
+                                "examples": {
+                                    "MissingDisplayName": {
+                                        "value": {
+                                            "error": {
+                                                "code": "InvalidNamedGroupsRequest",
+                                                "message": "Cannot create Group.",
+                                                "details": [
+                                                    {
+                                                        "code": "MissingRequiredProperty",
+                                                        "message": "Required property is missing.",
+                                                        "target": "displayName"
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            "application/json;MissingQuery": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/DetailedErrorResponse"
+                                },
+                                "examples": {
+                                    "MissingQuery": {
+                                        "value": {
+                                            "error": {
+                                                "code": "InvalidNamedGroupsRequest",
+                                                "message": "Cannot create Group.",
+                                                "details": [
+                                                    {
+                                                        "code": "MissingRequiredProperty",
+                                                        "message": "Required property is missing.",
+                                                        "target": "query"
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            "application/json;InvalidDisplayName": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/DetailedErrorResponse"
+                                },
+                                "examples": {
+                                    "InvalidDisplayName": {
+                                        "value": {
+                                            "error": {
+                                                "code": "InvalidNamedGroupsRequest",
+                                                "message": "Cannot create Group.",
+                                                "details": [
+                                                    {
+                                                        "code": "InvalidValue",
+                                                        "message": "Provided 'displayName' value is not valid. The value cannot be empty or consist only of whitespace characters.",
+                                                        "target": "displayName"
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            "application/json;DuplicateMetadataKey": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/DetailedErrorResponse"
+                                },
+                                "examples": {
+                                    "DuplicateMetadataKey": {
+                                        "value": {
+                                            "error": {
+                                                "code": "InvalidNamedGroupsRequest",
+                                                "message": "Cannot create Group.",
+                                                "details": [
+                                                    {
+                                                        "code": "InvalidValue",
+                                                        "message": "Provided 'metadata[1].key' value is not valid. Duplicate key found: 'k1'.",
+                                                        "target": "metadata[1].key"
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            "application/json;InvalidTags": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/DetailedErrorResponse"
+                                },
+                                "examples": {
+                                    "InvalidTags": {
+                                        "value": {
+                                            "error": {
+                                                "code": "InvalidNamedGroupsRequest",
+                                                "message": "Cannot create Group.",
+                                                "details": [
+                                                    {
+                                                        "code": "InvalidValue",
+                                                        "message": "Provided 'tags' value is not valid. The number of tags cannot exceed 20.",
+                                                        "target": "tags"
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "429": {
+                        "description": "This response indicates that the client sent more requests than allowed by this API for the current tier of the client.",
+                        "headers": {
+                            "retry-after": {
+                                "description": "Number of seconds to wait until client is allowed to make more requests.",
+                                "required": true,
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                },
+                                "example": {
+                                    "error": {
+                                        "code": "RateLimitExceeded",
+                                        "message": "The client sent more requests than allowed by this API for the current tier of the client."
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/{groupId}": {
+            "delete": {
+                "tags": [
+                    "Technology Preview",
+                    "Groups"
+                ],
+                "summary": "Delete Group",
+                "description": "---\r\n\r\nDeletes a group.\r\n\r\n### Authentication\r\n\r\nRequires `Authorization` header with valid Bearer token for scope `itwin-platform`.\r\n\r\nFor more documentation on authorization and how to get access token visit [OAUTH2 Authorization](https://developer.bentley.com/apis/overview/authorization/) page.\r\n\r\n### Authorization\r\n\r\nUser must have `insights_modify` permission(s) assigned at the iTwin level.\r\n\r\nAlternatively the user should be an Organization Administrator for the Organization that owns a given iTwin or iModel.\r\n\r\nAn Organization Administrator must have at least one of the following roles assigned in User Management: Account Administrator, Co-Administrator, or CONNECT Services Administrator. For more information about User Management please visit our Bentley Communities [Licensing, Cloud, and Web Services](https://bentleysystems.service-now.com/community?id=kb_article_view&sys_kb_id=1e5410491b7d8a90f3fc5287624bcb57) wiki page.\r\n\r\n### Rate limits\r\n\r\nAll iTwin Platform API operations have a rate limit. For more documentation on that visit [Rate limits and quotas](https://developer.bentley.com/apis/overview/rate-limits/) page.\r\n\r\n\r\n\r\n---\r\n",
+                "operationId": "delete-group",
+                "parameters": [
+                    {
+                        "name": "groupId",
+                        "in": "path",
+                        "description": "The group Id.",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "OAuth access token with `itwin-platform` scope",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/components/schemas/AuthorizationHeader.schema"
+                        }
+                    },
+                    {
+                        "name": "Accept",
+                        "in": "header",
+                        "description": "Setting to `application/vnd.bentley.itwin-platform.v1+json` is recommended.",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/components/schemas/AcceptHeader.schema"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Deleted a Group successfully."
+                    },
+                    "401": {
+                        "description": "This response indicates that request lacks valid authentication credentials. Access token might not been provided, issued by the wrong issuer, does not have required scopes or request headers were malformed.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                },
+                                "examples": {
+                                    "HeaderNotFound": {
+                                        "value": {
+                                            "error": {
+                                                "code": "HeaderNotFound",
+                                                "message": "Header Authorization was not found in the request. Access denied."
+                                            }
+                                        }
+                                    },
+                                    "InvalidApplicationTier": {
+                                        "value": {
+                                            "error": {
+                                                "code": "InvalidApplicationTier",
+                                                "message": "The application is not allowed to access this API."
+                                            }
+                                        }
+                                    },
+                                    "InvalidAuthorizationScheme": {
+                                        "value": {
+                                            "error": {
+                                                "code": "InvalidAuthorizationScheme",
+                                                "message": "Authorization scheme 'Baerer' is not valid."
+                                            }
+                                        }
+                                    },
+                                    "InvalidHeaderValue": {
+                                        "value": {
+                                            "error": {
+                                                "code": "InvalidHeaderValue",
+                                                "message": "Authorization header is empty."
+                                            }
+                                        }
+                                    },
+                                    "RequiredScopeMissing": {
+                                        "value": {
+                                            "error": {
+                                                "code": "RequiredScopeMissing",
+                                                "message": "Access denied due to invalid access_token. One or more required scopes are missing. Make sure to provide a valid token for this API endpoint."
+                                            }
+                                        }
+                                    },
+                                    "Unauthorized": {
+                                        "value": {
+                                            "error": {
+                                                "code": "Unauthorized",
+                                                "message": "Access denied due to invalid client. Make sure that client was registered on https://developer.bentley.com."
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "User is not authorized to delete a Group.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                },
+                                "example": {
+                                    "error": {
+                                        "code": "InsufficientPermissions",
+                                        "message": "The user has insufficient permissions for the requested operation."
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Specified resource was not found.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                },
+                                "example": {
+                                    "error": {
+                                        "code": "GroupNotFound",
+                                        "message": "Requested Group is not available.",
+                                        "target": "groupId"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "409": {
+                        "description": "Specified group is currently in use.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                },
+                                "example": {
+                                    "error": {
+                                        "code": "GroupInUse",
+                                        "message": "Group is currently in use."
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "429": {
+                        "description": "This response indicates that the client sent more requests than allowed by this API for the current tier of the client.",
+                        "headers": {
+                            "retry-after": {
+                                "description": "Number of seconds to wait until client is allowed to make more requests.",
+                                "required": true,
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                },
+                                "example": {
+                                    "error": {
+                                        "code": "RateLimitExceeded",
+                                        "message": "The client sent more requests than allowed by this API for the current tier of the client."
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "get": {
+                "tags": [
+                    "Technology Preview",
+                    "Groups"
+                ],
+                "summary": "Get Group",
+                "description": "---\r\n\r\nRetrieves a group.\r\n\r\n### Group Query\r\n\r\nThe `query` parameter of a Group must be a valid ECSQL query.\r\n\r\nIf a valid ECSQL query is given and the selected class is `bis.Element`, or if it is a descendant of the class `bis.Element`, the only required column is `ECInstanceId`. However, it is recommended to always select at least `ECInstanceId` and `ECClassId` columns.\r\n\r\n- `SELECT * FROM bis.Element` is a valid query\r\n- Assuming that class `Building.Beam` is a descendant of the class `bis.Element`, the query `SELECT * FROM Building.Beam` is a valid query\r\n- `SELECT ECInstanceId, ECClassId FROM bis.Element` is a valid query\r\n- Assuming that class `Building.Beam` is a descendant of the class `bis.Element`, the query `SELECT ECInstanceId, ECClassId FROM Building.Beam` is valid\r\n- `SELECT ECClassId FROM bis.Element` is _not_ a valid query because ECInstanceId column is missing\r\n- Assuming that class `Building.Beam` is a descendant of the class `bis.Element`, the query `SELECT ECClassId FROM Building.Beam` is _not_ valid because ECInstanceId column is missing\r\n- Assuming that `Building.BeamAspect` is an aspect, the query `SELECT A.ECInstanceId ECInstanceId FROM bis.Element E JOIN Building.BeamAspect A ON A.Element.id = E.ECInstanceId` is _not_ valid because the selected `ECInstanceId` is of the aspect, not the element\r\n- Assuming that `Building.BeamAspect` is an aspect, the query `SELECT Element.id FROM Building.BeamAspect` is _not_ valid because the selected column's name is not `ECInstanceId`\r\n- Assuming that `Building.BeamAspect` is an aspect, the query `SELECT Element.id ECInstanceId FROM Building.BeamAspect` is valid\r\n\r\nIn all other cases the provided ECSQL query is required to select `ECInstanceId` and `ECClassId`. If `ECClassId` is omitted, the service assumes that query selects elements from the `bis.Element` class or its descendants. In some cases the results might be unexpected, e.g., you assume that you are querying `bis.ElementAspect` but you only select `ECInstanceId` so the service only selects the elements that have a matching `ECInstanceId`. Because of this it is always recommended to select both `ECInstanceId` and `ECClassId`.\r\n\r\n### Authentication\r\n\r\nRequires `Authorization` header with valid Bearer token for scope `itwin-platform`.\r\n\r\nFor more documentation on authorization and how to get access token visit [OAUTH2 Authorization](https://developer.bentley.com/apis/overview/authorization/) page.\r\n\r\n### Authorization\r\n\r\nUser must have `insights_view` permission(s) assigned at the iTwin level.\r\n\r\nAlternatively the user should be an Organization Administrator for the Organization that owns a given iTwin or iModel.\r\n\r\nAn Organization Administrator must have at least one of the following roles assigned in User Management: Account Administrator, Co-Administrator, or CONNECT Services Administrator. For more information about User Management please visit our Bentley Communities [Licensing, Cloud, and Web Services](https://bentleysystems.service-now.com/community?id=kb_article_view&sys_kb_id=1e5410491b7d8a90f3fc5287624bcb57) wiki page.\r\n\r\n### Rate limits\r\n\r\nAll iTwin Platform API operations have a rate limit. For more documentation on that visit [Rate limits and quotas](https://developer.bentley.com/apis/overview/rate-limits/) page.\r\n\r\n---\r\n",
+                "operationId": "get-group",
+                "parameters": [
+                    {
+                        "name": "groupId",
+                        "in": "path",
+                        "description": "The group Id.",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "OAuth access token with `itwin-platform` scope",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/components/schemas/AuthorizationHeader.schema"
+                        }
+                    },
+                    {
+                        "name": "Accept",
+                        "in": "header",
+                        "description": "Setting to `application/vnd.bentley.itwin-platform.v1+json` is recommended.",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/components/schemas/AcceptHeader.schema"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/NamedGroupSingleResponse"
+                                },
+                                "example": {
+                                    "group": {
+                                        "id": "08f252c4-ee78-4e2b-9280-f7365400b932",
+                                        "displayName": "PhysicalElements",
+                                        "description": "A group of physical elements",
+                                        "query": "SELECT ECInstanceId, ECClassId FROM BisCore.PhysicalElement",
+                                        "metadata": [
+                                            {
+                                                "key": "key1",
+                                                "value": "value1"
+                                            },
+                                            {
+                                                "key": "key2",
+                                                "value": "value2"
+                                            }
+                                        ],
+                                        "tags": [
+                                            "Structural",
+                                            "Phase-1"
+                                        ],
+                                        "createdDateTime": "2021-09-03T10:48:45.0000000+00:00",
+                                        "modifiedDateTime": "2022-01-10T01:44:56.0000000+00:00",
+                                        "_links": {
+                                            "iTwin": {
+                                                "href": "https://api.bentley.com/itwins/3fa85f64-5717-4562-b3fc-2c963f66afa6"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "This response indicates that request lacks valid authentication credentials. Access token might not been provided, issued by the wrong issuer, does not have required scopes or request headers were malformed.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                },
+                                "examples": {
+                                    "HeaderNotFound": {
+                                        "value": {
+                                            "error": {
+                                                "code": "HeaderNotFound",
+                                                "message": "Header Authorization was not found in the request. Access denied."
+                                            }
+                                        }
+                                    },
+                                    "InvalidApplicationTier": {
+                                        "value": {
+                                            "error": {
+                                                "code": "InvalidApplicationTier",
+                                                "message": "The application is not allowed to access this API."
+                                            }
+                                        }
+                                    },
+                                    "InvalidAuthorizationScheme": {
+                                        "value": {
+                                            "error": {
+                                                "code": "InvalidAuthorizationScheme",
+                                                "message": "Authorization scheme 'Baerer' is not valid."
+                                            }
+                                        }
+                                    },
+                                    "InvalidHeaderValue": {
+                                        "value": {
+                                            "error": {
+                                                "code": "InvalidHeaderValue",
+                                                "message": "Authorization header is empty."
+                                            }
+                                        }
+                                    },
+                                    "RequiredScopeMissing": {
+                                        "value": {
+                                            "error": {
+                                                "code": "RequiredScopeMissing",
+                                                "message": "Access denied due to invalid access_token. One or more required scopes are missing. Make sure to provide a valid token for this API endpoint."
+                                            }
+                                        }
+                                    },
+                                    "Unauthorized": {
+                                        "value": {
+                                            "error": {
+                                                "code": "Unauthorized",
+                                                "message": "Access denied due to invalid client. Make sure that client was registered on https://developer.bentley.com."
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Specified resource was not found.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                },
+                                "example": {
+                                    "error": {
+                                        "code": "GroupNotFound",
+                                        "message": "Requested Group is not available.",
+                                        "target": "groupId"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "429": {
+                        "description": "This response indicates that the client sent more requests than allowed by this API for the current tier of the client.",
+                        "headers": {
+                            "retry-after": {
+                                "description": "Number of seconds to wait until client is allowed to make more requests.",
+                                "required": true,
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                },
+                                "example": {
+                                    "error": {
+                                        "code": "RateLimitExceeded",
+                                        "message": "The client sent more requests than allowed by this API for the current tier of the client."
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "tags": [
+                    "Technology Preview",
+                    "Groups"
+                ],
+                "summary": "Update Group",
+                "description": "---\r\n\r\nUpdates a group.\r\n\r\n### Group Query\r\n\r\nThe `query` parameter of a Group must be a valid ECSQL query.\r\n\r\nIf a valid ECSQL query is given and the selected class is `bis.Element`, or if it is a descendant of the class `bis.Element`, the only required column is `ECInstanceId`. However, it is recommended to always select at least `ECInstanceId` and `ECClassId` columns.\r\n\r\n- `SELECT * FROM bis.Element` is a valid query\r\n- Assuming that class `Building.Beam` is a descendant of the class `bis.Element`, the query `SELECT * FROM Building.Beam` is a valid query\r\n- `SELECT ECInstanceId, ECClassId FROM bis.Element` is a valid query\r\n- Assuming that class `Building.Beam` is a descendant of the class `bis.Element`, the query `SELECT ECInstanceId, ECClassId FROM Building.Beam` is valid\r\n- `SELECT ECClassId FROM bis.Element` is _not_ a valid query because ECInstanceId column is missing\r\n- Assuming that class `Building.Beam` is a descendant of the class `bis.Element`, the query `SELECT ECClassId FROM Building.Beam` is _not_ valid because ECInstanceId column is missing\r\n- Assuming that `Building.BeamAspect` is an aspect, the query `SELECT A.ECInstanceId ECInstanceId FROM bis.Element E JOIN Building.BeamAspect A ON A.Element.id = E.ECInstanceId` is _not_ valid because the selected `ECInstanceId` is of the aspect, not the element\r\n- Assuming that `Building.BeamAspect` is an aspect, the query `SELECT Element.id FROM Building.BeamAspect` is _not_ valid because the selected column's name is not `ECInstanceId`\r\n- Assuming that `Building.BeamAspect` is an aspect, the query `SELECT Element.id ECInstanceId FROM Building.BeamAspect` is valid\r\n\r\nIn all other cases the provided ECSQL query is required to select `ECInstanceId` and `ECClassId`. If `ECClassId` is omitted, the service assumes that query selects elements from the `bis.Element` class or its descendants. In some cases the results might be unexpected, e.g., you assume that you are querying `bis.ElementAspect` but you only select `ECInstanceId` so the service only selects the elements that have a matching `ECInstanceId`. Because of this it is always recommended to select both `ECInstanceId` and `ECClassId`.\r\n\r\n### Authentication\r\n\r\nRequires `Authorization` header with valid Bearer token for scope `itwin-platform`.\r\n\r\nFor more documentation on authorization and how to get access token visit [OAUTH2 Authorization](https://developer.bentley.com/apis/overview/authorization/) page.\r\n\r\n### Authorization\r\n\r\nUser must have `insights_modify` permission(s) assigned at the iTwin level.\r\n\r\nAlternatively the user should be an Organization Administrator for the Organization that owns a given iTwin or iModel.\r\n\r\nAn Organization Administrator must have at least one of the following roles assigned in User Management: Account Administrator, Co-Administrator, or CONNECT Services Administrator. For more information about User Management please visit our Bentley Communities [Licensing, Cloud, and Web Services](https://bentleysystems.service-now.com/community?id=kb_article_view&sys_kb_id=1e5410491b7d8a90f3fc5287624bcb57) wiki page.\r\n\r\n### Rate limits\r\n\r\nAll iTwin Platform API operations have a rate limit. For more documentation on that visit [Rate limits and quotas](https://developer.bentley.com/apis/overview/rate-limits/) page.\r\n\r\n---\r\n",
+                "operationId": "update-group",
+                "parameters": [
+                    {
+                        "name": "groupId",
+                        "in": "path",
+                        "description": "The group Id.",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "OAuth access token with `itwin-platform` scope",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/components/schemas/AuthorizationHeader.schema"
+                        }
+                    },
+                    {
+                        "name": "Accept",
+                        "in": "header",
+                        "description": "Setting to `application/vnd.bentley.itwin-platform.v1+json` is recommended.",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/components/schemas/AcceptHeader.schema"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/NamedGroupUpdateRequest"
+                            },
+                            "example": {
+                                "displayName": "AllElements",
+                                "description": "Updated description",
+                                "query": "SELECT ECInstanceId, ECClassId FROM BisCore.Element",
+                                "metadata": [
+                                    {
+                                        "key": "key1",
+                                        "value": "value1"
+                                    },
+                                    {
+                                        "key": "key2",
+                                        "value": "value2"
+                                    }
+                                ],
+                                "tags": [
+                                    "Structural",
+                                    "Phase-2"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/NamedGroupSingleResponse"
+                                },
+                                "example": {
+                                    "group": {
+                                        "id": "08f252c4-ee78-4e2b-9280-f7365400b932",
+                                        "displayName": "PhysicalElements",
+                                        "description": "A group of physical elements",
+                                        "query": "SELECT ECInstanceId, ECClassId FROM BisCore.PhysicalElement",
+                                        "metadata": [
+                                            {
+                                                "key": "key1",
+                                                "value": "value1"
+                                            },
+                                            {
+                                                "key": "key2",
+                                                "value": "value2"
+                                            }
+                                        ],
+                                        "tags": [
+                                            "Structural",
+                                            "Phase-1"
+                                        ],
+                                        "createdDateTime": "2021-09-03T10:48:45.0000000+00:00",
+                                        "modifiedDateTime": "2022-01-10T01:44:56.0000000+00:00",
+                                        "_links": {
+                                            "iTwin": {
+                                                "href": "https://api.bentley.com/itwins/3fa85f64-5717-4562-b3fc-2c963f66afa6"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "This response indicates that request lacks valid authentication credentials. Access token might not been provided, issued by the wrong issuer, does not have required scopes or request headers were malformed.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                },
+                                "examples": {
+                                    "HeaderNotFound": {
+                                        "value": {
+                                            "error": {
+                                                "code": "HeaderNotFound",
+                                                "message": "Header Authorization was not found in the request. Access denied."
+                                            }
+                                        }
+                                    },
+                                    "InvalidApplicationTier": {
+                                        "value": {
+                                            "error": {
+                                                "code": "InvalidApplicationTier",
+                                                "message": "The application is not allowed to access this API."
+                                            }
+                                        }
+                                    },
+                                    "InvalidAuthorizationScheme": {
+                                        "value": {
+                                            "error": {
+                                                "code": "InvalidAuthorizationScheme",
+                                                "message": "Authorization scheme 'Baerer' is not valid."
+                                            }
+                                        }
+                                    },
+                                    "InvalidHeaderValue": {
+                                        "value": {
+                                            "error": {
+                                                "code": "InvalidHeaderValue",
+                                                "message": "Authorization header is empty."
+                                            }
+                                        }
+                                    },
+                                    "RequiredScopeMissing": {
+                                        "value": {
+                                            "error": {
+                                                "code": "RequiredScopeMissing",
+                                                "message": "Access denied due to invalid access_token. One or more required scopes are missing. Make sure to provide a valid token for this API endpoint."
+                                            }
+                                        }
+                                    },
+                                    "Unauthorized": {
+                                        "value": {
+                                            "error": {
+                                                "code": "Unauthorized",
+                                                "message": "Access denied due to invalid client. Make sure that client was registered on https://developer.bentley.com."
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "User is not authorized to create a Group.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                },
+                                "example": {
+                                    "error": {
+                                        "code": "InsufficientPermissions",
+                                        "message": "The user has insufficient permissions for the requested operation."
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Specified resource was not found.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                },
+                                "example": {
+                                    "error": {
+                                        "code": "GroupNotFound",
+                                        "message": "Requested Group is not available.",
+                                        "target": "groupId"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "409": {
+                        "description": "Specified group already exists.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                },
+                                "example": {
+                                    "error": {
+                                        "code": "GroupExists",
+                                        "message": "Group 'AllElements' already exists.",
+                                        "target": "displayName"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "The 422 (Unprocessable Entity) status code indicates that the request cannot be processed by the server due to a client error (e.g. malformed request syntax)",
+                        "content": {
+                            "application/json;InvalidDisplayName": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/DetailedErrorResponse"
+                                },
+                                "examples": {
+                                    "InvalidDisplayName": {
+                                        "value": {
+                                            "error": {
+                                                "code": "InvalidNamedGroupsRequest",
+                                                "message": "Cannot update Group.",
+                                                "details": [
+                                                    {
+                                                        "code": "InvalidValue",
+                                                        "message": "Provided 'displayName' value is not valid. The value cannot be empty or consist only of whitespace characters.",
+                                                        "target": "displayName"
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            "application/json;NoRequestBodyProperties": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/DetailedErrorResponse"
+                                },
+                                "examples": {
+                                    "NoRequestBodyProperties": {
+                                        "value": {
+                                            "error": {
+                                                "code": "InvalidNamedGroupsRequest",
+                                                "message": "Cannot update Group.",
+                                                "details": [
+                                                    {
+                                                        "code": "MissingRequiredProperty",
+                                                        "message": "Required property is missing. At least one of the following properties must be provided: 'description', 'displayName', 'metadata', 'query', 'tags'."
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            "application/json;InvalidQuery": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/DetailedErrorResponse"
+                                },
+                                "examples": {
+                                    "InvalidQuery": {
+                                        "value": {
+                                            "error": {
+                                                "code": "InvalidNamedGroupsRequest",
+                                                "message": "Cannot update Group.",
+                                                "details": [
+                                                    {
+                                                        "code": "InvalidValue",
+                                                        "message": "Provided 'query' value is not valid. The value cannot be empty or consist only of whitespace characters.",
+                                                        "target": "query"
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            "application/json;InvalidQueryDataType": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/DetailedErrorResponse"
+                                },
+                                "examples": {
+                                    "InvalidQueryDataType": {
+                                        "value": {
+                                            "error": {
+                                                "code": "InvalidNamedGroupsRequest",
+                                                "message": "Cannot update Group.",
+                                                "details": [
+                                                    {
+                                                        "code": "InvalidValue",
+                                                        "message": "Provided 'query' value is not valid. Expected a value of type 'string'.",
+                                                        "target": "query"
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            "application/json;DuplicateMetadataKey": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/DetailedErrorResponse"
+                                },
+                                "examples": {
+                                    "DuplicateMetadataKey": {
+                                        "value": {
+                                            "error": {
+                                                "code": "InvalidNamedGroupsRequest",
+                                                "message": "Cannot update Group.",
+                                                "details": [
+                                                    {
+                                                        "code": "InvalidValue",
+                                                        "message": "Provided 'metadata[1].key' value is not valid. Duplicate key found: 'k1'.",
+                                                        "target": "metadata[1].key"
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            "application/json;InvalidTags": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/DetailedErrorResponse"
+                                },
+                                "examples": {
+                                    "InvalidTags": {
+                                        "value": {
+                                            "error": {
+                                                "code": "InvalidNamedGroupsRequest",
+                                                "message": "Cannot update Group.",
+                                                "details": [
+                                                    {
+                                                        "code": "InvalidValue",
+                                                        "message": "Provided 'tags' value is not valid. The number of tags cannot exceed 20.",
+                                                        "target": "tags"
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "429": {
+                        "description": "This response indicates that the client sent more requests than allowed by this API for the current tier of the client.",
+                        "headers": {
+                            "retry-after": {
+                                "description": "Number of seconds to wait until client is allowed to make more requests.",
+                                "required": true,
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                },
+                                "example": {
+                                    "error": {
+                                        "code": "RateLimitExceeded",
+                                        "message": "The client sent more requests than allowed by this API for the current tier of the client."
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "AuthorizationHeader.schema": {
+                "pattern": "^Bearer .*$",
+                "type": "string"
+            },
+            "AcceptHeader.schema": {
+                "type": "string",
+                "default": "application/vnd.bentley.itwin-platform.v1+json"
+            },
+            "PreferHeader.schema": {
+                "enum": [
+                    "return=representation",
+                    "return=minimal"
+                ],
+                "type": "string"
+            },
+            "Link": {
+                "title": "Link",
+                "required": [
+                    "href"
+                ],
+                "type": "object",
+                "properties": {
+                    "href": {
+                        "type": "string",
+                        "description": "Hyperlink to the specific entity."
+                    }
+                },
+                "additionalProperties": false,
+                "description": "Hyperlink container."
+            },
+            "NamedGroupLinks": {
+                "title": "Group Links",
+                "required": [
+                    "iTwin"
+                ],
+                "type": "object",
+                "properties": {
+                    "iTwin": {
+                        "$ref": "#/components/schemas/Link"
+                    }
+                },
+                "additionalProperties": false,
+                "description": "Hyperlinks to related data which complements this entity."
+            },
+            "NamedGroupMinimalResponse": {
+                "title": "Group Minimal",
+                "required": [
+                    "id",
+                    "displayName",
+                    "description",
+                    "query",
+                    "_links"
+                ],
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "description": "The group Id."
+                    },
+                    "displayName": {
+                        "type": "string",
+                        "description": "Name of the group."
+                    },
+                    "description": {
+                        "type": "string",
+                        "description": "Description of the group. The default value is empty string."
+                    },
+                    "query": {
+                        "type": "string",
+                        "description": "An ECSQL query that represents a collection of iModel elements."
+                    },
+                    "tags": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "description": "Array of tags."
+                    },
+                    "createdDateTime": {
+                        "type": "string",
+                        "description": "Date when the named group was created.",
+                        "format": "date-time",
+                        "example": "0000-00-00T00:00:00.0000000+00:00"
+                    },
+                    "modifiedDateTime": {
+                        "type": "string",
+                        "description": "Date when the named group was modified.",
+                        "format": "date-time",
+                        "example": "0000-00-00T00:00:00.0000000+00:00"
+                    },
+                    "_links": {
+                        "$ref": "#/components/schemas/NamedGroupLinks"
+                    }
+                },
+                "additionalProperties": false,
+                "description": "A group is a collection of design elements from an iModel represented by an ECSQL query."
+            },
+            "PagedResponseLinks": {
+                "title": "Paged Response Links",
+                "required": [
+                    "self"
+                ],
+                "type": "object",
+                "properties": {
+                    "next": {
+                        "$ref": "#/components/schemas/Link"
+                    },
+                    "self": {
+                        "$ref": "#/components/schemas/Link"
+                    }
+                },
+                "additionalProperties": false,
+                "description": "URLs for redoing the current request and/or getting the next page of results if applicable."
+            },
+            "GroupsMinimalResponse": {
+                "title": "Groups (prefer return=minimal)",
+                "required": [
+                    "groups",
+                    "_links"
+                ],
+                "type": "object",
+                "properties": {
+                    "groups": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/NamedGroupMinimalResponse"
+                        },
+                        "description": "List of groups."
+                    },
+                    "_links": {
+                        "$ref": "#/components/schemas/PagedResponseLinks"
+                    }
+                },
+                "additionalProperties": false,
+                "description": "List of groups."
+            },
+            "GroupMetadataEntry": {
+                "title": "Group Metadata Entry",
+                "required": [
+                    "key"
+                ],
+                "type": "object",
+                "properties": {
+                    "key": {
+                        "type": "string",
+                        "description": "Keys must be unique within the Metadata array."
+                    },
+                    "value": {
+                        "type": "string",
+                        "nullable": true
+                    }
+                },
+                "additionalProperties": false
+            },
+            "NamedGroupResponse": {
+                "title": "Group",
+                "required": [
+                    "id",
+                    "displayName",
+                    "description",
+                    "query",
+                    "_links"
+                ],
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "description": "The group Id."
+                    },
+                    "displayName": {
+                        "type": "string",
+                        "description": "Name of the group."
+                    },
+                    "description": {
+                        "type": "string",
+                        "description": "Description of the group. The default value is empty string."
+                    },
+                    "query": {
+                        "type": "string",
+                        "description": "An ECSQL query that represents a collection of iModel elements."
+                    },
+                    "metadata": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/GroupMetadataEntry"
+                        },
+                        "description": "An array of unique key value pairs.",
+                        "nullable": true
+                    },
+                    "tags": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "description": "Array of tags."
+                    },
+                    "createdDateTime": {
+                        "type": "string",
+                        "description": "Date when the named group was created.",
+                        "format": "date-time",
+                        "example": "0000-00-00T00:00:00.0000000+00:00"
+                    },
+                    "modifiedDateTime": {
+                        "type": "string",
+                        "description": "Date when the named group was modified.",
+                        "format": "date-time",
+                        "example": "0000-00-00T00:00:00.0000000+00:00"
+                    },
+                    "_links": {
+                        "$ref": "#/components/schemas/NamedGroupLinks"
+                    }
+                },
+                "additionalProperties": false,
+                "description": "A group is a collection of design elements from an iModel represented by an ECSQL query."
+            },
+            "GroupsResponse": {
+                "title": "Groups (prefer return=representation)",
+                "required": [
+                    "groups",
+                    "_links"
+                ],
+                "type": "object",
+                "properties": {
+                    "groups": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/NamedGroupResponse"
+                        },
+                        "description": "List of groups."
+                    },
+                    "_links": {
+                        "$ref": "#/components/schemas/PagedResponseLinks"
+                    }
+                },
+                "additionalProperties": false,
+                "description": "List of groups."
+            },
+            "Error": {
+                "required": [
+                    "code",
+                    "message"
+                ],
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "string",
+                        "description": "One of a server-defined set of error codes."
+                    },
+                    "message": {
+                        "type": "string",
+                        "description": "A human-readable representation of the error."
+                    },
+                    "target": {
+                        "type": "string",
+                        "description": "The target of the error.",
+                        "nullable": true
+                    }
+                },
+                "description": "Contains error information."
+            },
+            "ErrorResponse": {
+                "title": "Error Response",
+                "required": [
+                    "error"
+                ],
+                "type": "object",
+                "properties": {
+                    "error": {
+                        "$ref": "#/components/schemas/Error"
+                    }
+                },
+                "additionalProperties": false,
+                "description": "Gives details for an error that occurred while handling the request. Note that clients MUST NOT assume that every failed request will produce an object of this schema, or that all of the properties in the response will be non-null, as the error may have prevented this response from being constructed."
+            },
+            "DetailedError": {
+                "required": [
+                    "code",
+                    "message",
+                    "details"
+                ],
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "string",
+                        "description": "One of a server-defined set of error codes."
+                    },
+                    "message": {
+                        "type": "string",
+                        "description": "A human-readable representation of the error."
+                    },
+                    "target": {
+                        "type": "string",
+                        "description": "The target of the error.",
+                        "nullable": true
+                    },
+                    "details": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Error"
+                        },
+                        "description": "Optional array of more specific errors."
+                    }
+                },
+                "description": "Contains error information and an array of more specific errors."
+            },
+            "DetailedErrorResponse": {
+                "title": "Detailed Error Response",
+                "required": [
+                    "error"
+                ],
+                "type": "object",
+                "properties": {
+                    "error": {
+                        "$ref": "#/components/schemas/DetailedError"
+                    }
+                },
+                "additionalProperties": false,
+                "description": "Gives details for an error that occurred while handling the request. Note that clients MUST NOT assume that every failed request will produce an object of this schema, or that all of the properties in the response will be non-null, as the error may have prevented this response from being constructed."
+            },
+            "NamedGroupCreateRequest": {
+                "title": "Group (create)",
+                "required": [
+                    "iTwinId",
+                    "displayName",
+                    "query"
+                ],
+                "type": "object",
+                "properties": {
+                    "iTwinId": {
+                        "type": "string",
+                        "description": "The iTwin Id."
+                    },
+                    "displayName": {
+                        "type": "string",
+                        "description": "Name of the group. Must be unique within the iTwin. Name comparisons for ensuring uniqueness are case insensitive."
+                    },
+                    "description": {
+                        "type": "string",
+                        "description": "Description of the group. The default value is empty string.",
+                        "nullable": true
+                    },
+                    "query": {
+                        "type": "string",
+                        "description": "An ECSQL query that represents a collection of iModel elements."
+                    },
+                    "metadata": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/GroupMetadataEntry"
+                        },
+                        "description": "An array of unique key value pairs.",
+                        "nullable": true
+                    },
+                    "tags": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "description": "Array of tags. Tags are case-preserving but matched case-insensitively. Maximum 20 tags, each up to 128 characters. Allowed characters: unicode letters, digits, spaces, hyphens, underscores.",
+                        "nullable": true
+                    }
+                },
+                "additionalProperties": false,
+                "description": "Properties of the group to be created."
+            },
+            "NamedGroupSingleResponse": {
+                "title": "Group response",
+                "required": [
+                    "group"
+                ],
+                "type": "object",
+                "properties": {
+                    "group": {
+                        "$ref": "#/components/schemas/NamedGroupResponse"
+                    }
+                },
+                "additionalProperties": false,
+                "description": "Container for a group object."
+            },
+            "NamedGroupUpdateRequest": {
+                "type": "object",
+                "properties": {
+                    "displayName": {
+                        "type": "string",
+                        "description": "Name of the group. Must be unique within the iTwin. Name comparisons for ensuring uniqueness are case insensitive.",
+                        "nullable": true
+                    },
+                    "description": {
+                        "type": "string",
+                        "description": "Description of the group.",
+                        "nullable": true
+                    },
+                    "query": {
+                        "type": "string",
+                        "description": "An ECSQL query that represents a collection of iModel elements.",
+                        "nullable": true
+                    },
+                    "metadata": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/GroupMetadataEntry"
+                        },
+                        "description": "An array of unique key value pairs.",
+                        "nullable": true
+                    },
+                    "tags": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "description": "Array of tags. Tags are case-preserving but matched case-insensitively. Maximum 20 tags, each up to 128 characters. Allowed characters: unicode letters, digits, spaces, hyphens, underscores.",
+                        "nullable": true
+                    }
+                },
+                "additionalProperties": false
+            }
+        },
+        "securitySchemes": {
+            "apiKeyHeader": {
+                "type": "apiKey",
+                "name": "X-Api-Subscription-Key",
+                "in": "header"
+            },
+            "apiKeyQuery": {
+                "type": "apiKey",
+                "name": "subscription-key",
+                "in": "query"
+            }
+        }
+    },
+    "security": [
+        {
+            "apiKeyHeader": []
+        },
+        {
+            "apiKeyQuery": []
+        }
+    ]
+}

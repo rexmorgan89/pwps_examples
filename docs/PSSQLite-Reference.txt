@@ -1,0 +1,716 @@
+﻿## Invoke-SQLiteBulkCopy
+
+
+NAME
+    Invoke-SQLiteBulkCopy
+    
+SYNOPSIS
+    Use a SQLite transaction to quickly insert data
+    
+    
+SYNTAX
+    Invoke-SQLiteBulkCopy [-DataTable] <DataTable> [-DataSource] <String> [-Table] <String> [[-ConflictClause] <String>] [-NotifyAfter <Int32>] [-Force] 
+    [-QueryTimeout <Int32>] [-WhatIf] [-Confirm] [<CommonParameters>]
+    
+    Invoke-SQLiteBulkCopy [-DataTable] <DataTable> [-SQLiteConnection] <SQLiteConnection> [-Table] <String> [[-ConflictClause] <String>] [-NotifyAfter 
+    <Int32>] [-Force] [-QueryTimeout <Int32>] [-WhatIf] [-Confirm] [<CommonParameters>]
+    
+    
+DESCRIPTION
+    Use a SQLite transaction to quickly insert data.  If we run into any errors, we roll back the transaction.
+    
+    The data source is not limited to SQL Server; any data source can be used, as long as the data can be loaded to a DataTable instance or read with a 
+    IDataReader instance.
+    
+
+PARAMETERS
+    -DataTable <DataTable>
+        
+        Required?                    true
+        Position?                    1
+        Default value                
+        Accept pipeline input?       false
+        Accept wildcard characters?  false
+        
+    -DataSource <String>
+        Path to one ore more SQLite data sources to query
+        
+        Required?                    true
+        Position?                    2
+        Default value                
+        Accept pipeline input?       false
+        Accept wildcard characters?  false
+        
+    -SQLiteConnection <SQLiteConnection>
+        An existing SQLiteConnection to use.  We do not close this connection upon completed query.
+        
+        Required?                    true
+        Position?                    2
+        Default value                
+        Accept pipeline input?       true (ByPropertyName)
+        Accept wildcard characters?  false
+        
+    -Table <String>
+        
+        Required?                    true
+        Position?                    3
+        Default value                
+        Accept pipeline input?       false
+        Accept wildcard characters?  false
+        
+    -ConflictClause <String>
+        The conflict clause to use in case a conflict occurs during insert. Valid values: Rollback, Abort, Fail, Ignore, Replace
+        
+        See https://www.sqlite.org/lang_conflict.html for more details
+        
+        Required?                    false
+        Position?                    4
+        Default value                
+        Accept pipeline input?       false
+        Accept wildcard characters?  false
+        
+    -NotifyAfter <Int32>
+        The number of rows to fire the notification event after transferring.  0 means don't notify.  Notifications hit the verbose stream (use -verbose to 
+        see them)
+        
+        Required?                    false
+        Position?                    named
+        Default value                0
+        Accept pipeline input?       false
+        Accept wildcard characters?  false
+        
+    -Force [<SwitchParameter>]
+        If specified, skip the confirm prompt
+        
+        Required?                    false
+        Position?                    named
+        Default value                False
+        Accept pipeline input?       false
+        Accept wildcard characters?  false
+        
+    -QueryTimeout <Int32>
+        Specifies the number of seconds before the queries time out.
+        
+        Required?                    false
+        Position?                    named
+        Default value                600
+        Accept pipeline input?       false
+        Accept wildcard characters?  false
+        
+    -WhatIf [<SwitchParameter>]
+        
+        Required?                    false
+        Position?                    named
+        Default value                
+        Accept pipeline input?       false
+        Accept wildcard characters?  false
+        
+    -Confirm [<SwitchParameter>]
+        
+        Required?                    false
+        Position?                    named
+        Default value                
+        Accept pipeline input?       false
+        Accept wildcard characters?  false
+        
+    <CommonParameters>
+        This cmdlet supports the common parameters: Verbose, Debug,
+        ErrorAction, ErrorVariable, WarningAction, WarningVariable,
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see 
+        about_CommonParameters (https:/go.microsoft.com/fwlink/?LinkID=113216). 
+    
+INPUTS
+    System.Data.DataTable
+    
+    
+OUTPUTS
+    None
+        Produces no output
+    
+    
+NOTES
+    
+    
+        This function borrows from:
+            Chad Miller's Write-Datatable
+            jbs534's Invoke-SQLBulkCopy
+            Mike Shepard's Invoke-BulkCopy from SQLPSX
+    
+    -------------------------- EXAMPLE 1 --------------------------
+    
+    PS C:\>#
+    
+    #Create a table
+        Invoke-SqliteQuery -DataSource "C:\Names.SQLite" -Query "CREATE TABLE NAMES (
+            fullname VARCHAR(20) PRIMARY KEY,
+            surname TEXT,
+            givenname TEXT,
+            BirthDate DATETIME)" 
+    
+    #Build up some fake data to bulk insert, convert it to a datatable
+        $DataTable = 1..10000 | %{
+            [pscustomobject]@{
+                fullname = "Name $_"
+                surname = "Name"
+                givenname = "$_"
+                BirthDate = (Get-Date).Adddays(-$_)
+            }
+        } | Out-DataTable
+    
+    #Copy the data in within a single transaction (SQLite is faster this way)
+        Invoke-SQLiteBulkCopy -DataTable $DataTable -DataSource $Database -Table Names -NotifyAfter 1000 -ConflictClause Ignore -Verbose
+    
+    
+    
+    
+    
+RELATED LINKS
+    https://github.com/RamblingCookieMonster/Invoke-SQLiteQuery
+    New-SQLiteConnection 
+    Invoke-SQLiteBulkCopy 
+    Out-DataTable 
+
+
+
+
+
+--
+
+## Invoke-SqliteQuery
+
+
+NAME
+    Invoke-SqliteQuery
+    
+SYNOPSIS
+    Runs a SQL script against a SQLite database.
+    
+    
+SYNTAX
+    Invoke-SqliteQuery [-DataSource] <String[]> [-Query] <String> [[-QueryTimeout] <Int32>] [[-As] <String>] [[-SqlParameters] <IDictionary>] 
+    [[-AppendDataSource]] [[-AssemblyPath] <String>] [<CommonParameters>]
+    
+    Invoke-SqliteQuery [-DataSource] <String[]> [-InputFile] <String> [[-QueryTimeout] <Int32>] [[-As] <String>] [[-SqlParameters] <IDictionary>] 
+    [[-AppendDataSource]] [[-AssemblyPath] <String>] [<CommonParameters>]
+    
+    Invoke-SqliteQuery [-Query] <String> [[-QueryTimeout] <Int32>] [[-As] <String>] [[-SqlParameters] <IDictionary>] [[-AppendDataSource]] [[-AssemblyPath] 
+    <String>] [-SQLiteConnection] <SQLiteConnection> [<CommonParameters>]
+    
+    Invoke-SqliteQuery [-InputFile] <String> [[-QueryTimeout] <Int32>] [[-As] <String>] [[-SqlParameters] <IDictionary>] [[-AppendDataSource]] 
+    [[-AssemblyPath] <String>] [-SQLiteConnection] <SQLiteConnection> [<CommonParameters>]
+    
+    
+DESCRIPTION
+    Runs a SQL script against a SQLite database.
+    
+    Paramaterized queries are supported. 
+    
+    Help details below borrowed from Invoke-Sqlcmd, may be inaccurate here.
+    
+
+PARAMETERS
+    -DataSource <String[]>
+        Path to one or more SQLite data sources to query
+        
+        Required?                    true
+        Position?                    1
+        Default value                
+        Accept pipeline input?       true (ByValue, ByPropertyName)
+        Accept wildcard characters?  false
+        
+    -Query <String>
+        Specifies a query to be run.
+        
+        Required?                    true
+        Position?                    2
+        Default value                
+        Accept pipeline input?       true (ByPropertyName)
+        Accept wildcard characters?  false
+        
+    -InputFile <String>
+        Specifies a file to be used as the query input to Invoke-SqliteQuery. Specify the full path to the file.
+        
+        Required?                    true
+        Position?                    2
+        Default value                
+        Accept pipeline input?       true (ByPropertyName)
+        Accept wildcard characters?  false
+        
+    -QueryTimeout <Int32>
+        Specifies the number of seconds before the queries time out.
+        
+        Required?                    false
+        Position?                    3
+        Default value                600
+        Accept pipeline input?       true (ByPropertyName)
+        Accept wildcard characters?  false
+        
+    -As <String>
+        Specifies output type - DataSet, DataTable, array of DataRow, PSObject or Single Value 
+        
+        PSObject output introduces overhead but adds flexibility for working with results: http://powershell.org/wp/forums/topic/dealing-with-dbnull/
+        
+        Required?                    false
+        Position?                    4
+        Default value                PSObject
+        Accept pipeline input?       true (ByPropertyName)
+        Accept wildcard characters?  false
+        
+    -SqlParameters <IDictionary>
+        Hashtable of parameters for parameterized SQL queries.  http://blog.codinghorror.com/give-me-parameterized-sql-or-give-me-death/
+        
+        Limited support for conversions to SQLite friendly formats is supported.
+            For example, if you pass in a .NET DateTime, we convert it to a string that SQLite will recognize as a datetime
+        
+        Example:
+            -Query "SELECT ServerName FROM tblServerInfo WHERE ServerName LIKE @ServerName"
+            -SqlParameters @{"ServerName = "c-is-hyperv-1"}
+        
+        Required?                    false
+        Position?                    5
+        Default value                
+        Accept pipeline input?       true (ByPropertyName)
+        Accept wildcard characters?  false
+        
+    -AppendDataSource [<SwitchParameter>]
+        If specified, append the SQLite data source path to PSObject or DataRow output
+        
+        Required?                    false
+        Position?                    6
+        Default value                False
+        Accept pipeline input?       false
+        Accept wildcard characters?  false
+        
+    -AssemblyPath <String>
+        
+        Required?                    false
+        Position?                    7
+        Default value                $SQLiteAssembly
+        Accept pipeline input?       false
+        Accept wildcard characters?  false
+        
+    -SQLiteConnection <SQLiteConnection>
+        An existing SQLiteConnection to use.  We do not close this connection upon completed query.
+        
+        Required?                    true
+        Position?                    8
+        Default value                
+        Accept pipeline input?       true (ByPropertyName)
+        Accept wildcard characters?  false
+        
+    <CommonParameters>
+        This cmdlet supports the common parameters: Verbose, Debug,
+        ErrorAction, ErrorVariable, WarningAction, WarningVariable,
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see 
+        about_CommonParameters (https:/go.microsoft.com/fwlink/?LinkID=113216). 
+    
+INPUTS
+    DataSource 
+        You can pipe DataSource paths to Invoke-SQLiteQuery.  The query will execute against each Data Source.
+    
+    
+OUTPUTS
+    As PSObject:     System.Management.Automation.PSCustomObject
+    As DataRow:      System.Data.DataRow
+    As DataTable:    System.Data.DataTable
+    As DataSet:      System.Data.DataTableCollectionSystem.Data.DataSet
+    As SingleValue:  Dependent on data type in first column.
+    
+    
+    -------------------------- EXAMPLE 1 --------------------------
+    
+    PS C:\>#
+    
+    # First, we create a database and a table
+        $Query = "CREATE TABLE NAMES (fullname VARCHAR(20) PRIMARY KEY, surname TEXT, givenname TEXT, BirthDate DATETIME)"
+        $Database = "C:\Names.SQLite"
+    
+        Invoke-SqliteQuery -Query $Query -DataSource $Database
+    
+    # We have a database, and a table, let's view the table info
+        Invoke-SqliteQuery -DataSource $Database -Query "PRAGMA table_info(NAMES)"
+            
+            cid name      type         notnull dflt_value pk
+            --- ----      ----         ------- ---------- --
+              0 fullname  VARCHAR(20)        0             1
+              1 surname   TEXT               0             0
+              2 givenname TEXT               0             0
+              3 BirthDate DATETIME           0             0
+    
+    # Insert some data, use parameters for the fullname and birthdate
+        $query = "INSERT INTO NAMES (fullname, surname, givenname, birthdate) VALUES (@full, 'Cookie', 'Monster', @BD)"
+        Invoke-SqliteQuery -DataSource $Database -Query $query -SqlParameters @{
+            full = "Cookie Monster"
+            BD   = (get-date).addyears(-3)
+        }
+    
+    # Check to see if we inserted the data:
+        Invoke-SqliteQuery -DataSource $Database -Query "SELECT * FROM NAMES"
+            
+            fullname       surname givenname BirthDate            
+            --------       ------- --------- ---------            
+            Cookie Monster Cookie  Monster   3/14/2012 12:27:13 PM
+    
+    # Insert another entry with too many characters in the fullname.
+    # Illustrate that SQLite data types may be misleading:
+        Invoke-SqliteQuery -DataSource $Database -Query $query -SqlParameters @{
+            full = "Cookie Monster$('!' * 20)"
+            BD   = (get-date).addyears(-3)
+        }
+    
+        Invoke-SqliteQuery -DataSource $Database -Query "SELECT * FROM NAMES"
+    
+            fullname              surname givenname BirthDate            
+            --------              ------- --------- ---------            
+            Cookie Monster        Cookie  Monster   3/14/2012 12:27:13 PM
+            Cookie Monster![...]! Cookie  Monster   3/14/2012 12:29:32 PM
+    
+    
+    
+    
+    -------------------------- EXAMPLE 2 --------------------------
+    
+    PS C:\>Invoke-SqliteQuery -DataSource C:\NAMES.SQLite -Query "SELECT * FROM NAMES" -AppendDataSource
+    
+    fullname       surname givenname BirthDate             Database       
+        --------       ------- --------- ---------             --------       
+        Cookie Monster Cookie  Monster   3/14/2012 12:55:55 PM C:\Names.SQLite
+    
+    # Append Database column (path) to each result
+    
+    
+    
+    
+    -------------------------- EXAMPLE 3 --------------------------
+    
+    PS C:\>Invoke-SqliteQuery -DataSource C:\Names.SQLite -InputFile C:\Query.sql
+    
+    # Invoke SQL from an input file
+    
+    
+    
+    
+    -------------------------- EXAMPLE 4 --------------------------
+    
+    PS C:\>$Connection = New-SQLiteConnection -DataSource :MEMORY:
+    
+    Invoke-SqliteQuery -SQLiteConnection $Connection -Query "CREATE TABLE OrdersToNames (OrderID INT PRIMARY KEY, fullname TEXT);"
+    Invoke-SqliteQuery -SQLiteConnection $Connection -Query "INSERT INTO OrdersToNames (OrderID, fullname) VALUES (1,'Cookie Monster');"
+    Invoke-SqliteQuery -SQLiteConnection $Connection -Query "PRAGMA STATS"
+    
+    # Execute a query against an existing SQLiteConnection
+        # Create a connection to a SQLite data source in memory
+        # Create a table in the memory based datasource, verify it exists with PRAGMA STATS
+    
+    
+    
+    
+    -------------------------- EXAMPLE 5 --------------------------
+    
+    PS C:\>$Connection = New-SQLiteConnection -DataSource :MEMORY:
+    
+    Invoke-SqliteQuery -SQLiteConnection $Connection -Query "CREATE TABLE OrdersToNames (OrderID INT PRIMARY KEY, fullname TEXT);"
+    Invoke-SqliteQuery -SQLiteConnection $Connection -Query "INSERT INTO OrdersToNames (OrderID, fullname) VALUES (1,'Cookie Monster');"
+    Invoke-SqliteQuery -SQLiteConnection $Connection -Query "INSERT INTO OrdersToNames (OrderID) VALUES (2);"
+    
+    # We now have two entries, only one has a fullname.  Despite this, the following command returns both; very un-PowerShell!
+    Invoke-SqliteQuery -SQLiteConnection $Connection -Query "SELECT * FROM OrdersToNames" -As DataRow | Where{$_.fullname}
+    
+        OrderID fullname      
+        ------- --------      
+              1 Cookie Monster
+              2               
+    
+    # Using the default -As PSObject, we can get PowerShell-esque behavior:
+    Invoke-SqliteQuery -SQLiteConnection $Connection -Query "SELECT * FROM OrdersToNames" | Where{$_.fullname}
+    
+        OrderID fullname                                                                         
+        ------- --------                                                                         
+              1 Cookie Monster
+    
+    
+    
+    
+    
+RELATED LINKS
+    https://github.com/RamblingCookieMonster/Invoke-SQLiteQuery
+    New-SQLiteConnection 
+    Invoke-SQLiteBulkCopy 
+    Out-DataTable 
+    https://www.sqlite.org/datatype3.html
+    https://www.sqlite.org/lang.html
+    http://www.sqlite.org/pragma.html
+
+
+
+
+
+--
+
+## New-SQLiteConnection
+
+
+NAME
+    New-SQLiteConnection
+    
+SYNOPSIS
+    Creates a SQLiteConnection to a SQLite data source
+    
+    
+SYNTAX
+    New-SQLiteConnection [-DataSource] <String[]> [[-Password] <SecureString>] [[-ReadOnly]] [[-Open] <Boolean>] [<CommonParameters>]
+    
+    
+DESCRIPTION
+    Creates a SQLiteConnection to a SQLite data source
+    
+
+PARAMETERS
+    -DataSource <String[]>
+        SQLite Data Source to connect to.
+        
+        Required?                    true
+        Position?                    1
+        Default value                
+        Accept pipeline input?       true (ByValue, ByPropertyName)
+        Accept wildcard characters?  false
+        
+    -Password <SecureString>
+        Specifies A Secure String password to use in the SQLite connection string.
+                
+        SECURITY NOTE: If you use the -Debug switch, the connectionstring including plain text password will be sent to the debug stream.
+        
+        Required?                    false
+        Position?                    3
+        Default value                
+        Accept pipeline input?       true (ByPropertyName)
+        Accept wildcard characters?  false
+        
+    -ReadOnly [<SwitchParameter>]
+        If specified, open SQLite data source as read only
+        
+        Required?                    false
+        Position?                    4
+        Default value                False
+        Accept pipeline input?       true (ByPropertyName)
+        Accept wildcard characters?  false
+        
+    -Open <Boolean>
+        We open the connection by default.  You can use this parameter to create a connection without opening it.
+        
+        Required?                    false
+        Position?                    5
+        Default value                True
+        Accept pipeline input?       true (ByPropertyName)
+        Accept wildcard characters?  false
+        
+    <CommonParameters>
+        This cmdlet supports the common parameters: Verbose, Debug,
+        ErrorAction, ErrorVariable, WarningAction, WarningVariable,
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see 
+        about_CommonParameters (https:/go.microsoft.com/fwlink/?LinkID=113216). 
+    
+INPUTS
+    
+OUTPUTS
+    System.Data.SQLite.SQLiteConnection
+    
+    
+    -------------------------- EXAMPLE 1 --------------------------
+    
+    PS C:\>$Connection = New-SQLiteConnection -DataSource C:\NAMES.SQLite
+    
+    Invoke-SQLiteQuery -SQLiteConnection $Connection -query $Query
+    
+    # Connect to C:\NAMES.SQLite, invoke a query against it
+    
+    
+    
+    
+    -------------------------- EXAMPLE 2 --------------------------
+    
+    PS C:\>$Connection = New-SQLiteConnection -DataSource :MEMORY:
+    
+    Invoke-SqliteQuery -SQLiteConnection $Connection -Query "CREATE TABLE OrdersToNames (OrderID INT PRIMARY KEY, fullname TEXT);"
+    Invoke-SqliteQuery -SQLiteConnection $Connection -Query "INSERT INTO OrdersToNames (OrderID, fullname) VALUES (1,'Cookie Monster');"
+    Invoke-SqliteQuery -SQLiteConnection $Connection -Query "PRAGMA STATS"
+    
+    # Create a connection to a SQLite data source in memory
+    # Create a table in the memory based datasource, verify it exists with PRAGMA STATS
+    
+    $Connection.Close()
+    $Connection.Open()
+    Invoke-SqliteQuery -SQLiteConnection $Connection -Query "PRAGMA STATS"
+    
+    #Close the connection, open it back up, verify that the ephemeral data no longer exists
+    
+    
+    
+    
+    
+RELATED LINKS
+    https://github.com/RamblingCookieMonster/Invoke-SQLiteQuery
+    Invoke-SQLiteQuery 
+
+
+
+
+
+--
+
+## Out-DataTable
+
+
+NAME
+    Out-DataTable
+    
+SYNOPSIS
+    Creates a DataTable for an object
+    
+    
+SYNTAX
+    Out-DataTable [-InputObject] <PSObject[]> [-NonNullable <String[]>] [<CommonParameters>]
+    
+    
+DESCRIPTION
+    Creates a DataTable based on an object's properties.
+    
+
+PARAMETERS
+    -InputObject <PSObject[]>
+        One or more objects to convert into a DataTable
+        
+        Required?                    true
+        Position?                    1
+        Default value                
+        Accept pipeline input?       true (ByValue)
+        Accept wildcard characters?  false
+        
+    -NonNullable <String[]>
+        A list of columns to set disable AllowDBNull on
+        
+        Required?                    false
+        Position?                    named
+        Default value                @()
+        Accept pipeline input?       false
+        Accept wildcard characters?  false
+        
+    <CommonParameters>
+        This cmdlet supports the common parameters: Verbose, Debug,
+        ErrorAction, ErrorVariable, WarningAction, WarningVariable,
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see 
+        about_CommonParameters (https:/go.microsoft.com/fwlink/?LinkID=113216). 
+    
+INPUTS
+    Object
+        Any object can be piped to Out-DataTable
+    
+    
+OUTPUTS
+    System.Data.DataTable
+    
+    
+NOTES
+    
+    
+        Adapted from script by Marc van Orsouw and function from Chad Miller
+        Version History
+        v1.0  - Chad Miller - Initial Release
+        v1.1  - Chad Miller - Fixed Issue with Properties
+        v1.2  - Chad Miller - Added setting column datatype by property as suggested by emp0
+        v1.3  - Chad Miller - Corrected issue with setting datatype on empty properties
+        v1.4  - Chad Miller - Corrected issue with DBNull
+        v1.5  - Chad Miller - Updated example
+        v1.6  - Chad Miller - Added column datatype logic with default to string
+        v1.7  - Chad Miller - Fixed issue with IsArray
+        v1.8  - ramblingcookiemonster - Removed if($Value) logic.  This would not catch empty strings, zero, $false and other non-null items
+                                      - Added perhaps pointless error handling
+    
+    -------------------------- EXAMPLE 1 --------------------------
+    
+    PS C:\>$dt = Get-psdrive | Out-DataTable
+    
+    # This example creates a DataTable from the properties of Get-psdrive and assigns output to $dt variable
+    
+    
+    
+    
+    -------------------------- EXAMPLE 2 --------------------------
+    
+    PS C:\>Get-Process | Select Name, CPU | Out-DataTable | Invoke-SQLBulkCopy -ServerInstance $SQLInstance -Database $Database -Table $SQLTable -force 
+    -verbose
+    
+    # Get a list of processes and their CPU, create a datatable, bulk import that data
+    
+    
+    
+    
+    
+RELATED LINKS
+    https://github.com/RamblingCookieMonster/PowerShell
+    Invoke-SQLBulkCopy 
+    Invoke-Sqlcmd2 
+    New-SQLConnection 
+
+
+
+
+
+--
+
+## Update-Sqlite
+
+
+NAME
+    Update-Sqlite
+    
+SYNTAX
+    Update-Sqlite [[-version] <string>] [[-OS] {linux-x64 | osx-x64 | win-x64 | win-x86}]  [<CommonParameters>]
+    
+    
+PARAMETERS
+    -OS <string>
+        
+        Required?                    false
+        Position?                    1
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    -version <string>
+        
+        Required?                    false
+        Position?                    0
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        
+    <CommonParameters>
+        This cmdlet supports the common parameters: Verbose, Debug,
+        ErrorAction, ErrorVariable, WarningAction, WarningVariable,
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see 
+        about_CommonParameters (https:/go.microsoft.com/fwlink/?LinkID=113216). 
+    
+    
+INPUTS
+    None
+    
+    
+OUTPUTS
+    System.Object
+    
+ALIASES
+    None
+    
+
+REMARKS
+    None
+
+
+
+
+
+--
+

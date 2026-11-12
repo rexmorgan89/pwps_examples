@@ -1,0 +1,961 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>iTwin Membership Console - User Guide</title>
+    <style>
+      :root {
+        --ink: #17324d;
+        --text: #2b3640;
+        --muted: #52606d;
+        --line: #d6dce2;
+        --bg: #f4f6f8;
+        --accent: #2f6faf;
+        --warn: #b42318;
+        --ok: #176b4d;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html {
+        scroll-behavior: smooth;
+        scroll-padding-top: 16px;
+      }
+      body {
+        margin: 0;
+        font:
+          15px/1.6 "Segoe UI",
+          system-ui,
+          sans-serif;
+        color: var(--text);
+        background: var(--bg);
+      }
+      .layout {
+        display: flex;
+        max-width: 1280px;
+        margin: 0 auto;
+      }
+      nav {
+        position: sticky;
+        top: 0;
+        align-self: flex-start;
+        width: 250px;
+        height: 100vh;
+        overflow-y: auto;
+        padding: 24px 16px;
+        border-right: 1px solid var(--line);
+        background: #fff;
+      }
+      nav h2 {
+        margin: 0 0 12px;
+        font-size: 13px;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        color: var(--muted);
+      }
+      nav ol {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+      nav a {
+        display: block;
+        padding: 5px 10px;
+        border-radius: 4px;
+        color: var(--ink);
+        text-decoration: none;
+      }
+      nav a:hover,
+      nav a:focus-visible {
+        background: #e8f1fb;
+        outline: none;
+      }
+      nav .tab-link {
+        padding-left: 22px;
+        font-size: 14px;
+      }
+      main {
+        flex: 1;
+        min-width: 0;
+        padding: 32px 40px 64px;
+      }
+      header {
+        margin-bottom: 28px;
+      }
+      h1 {
+        margin: 0 0 6px;
+        font-size: 30px;
+        color: var(--ink);
+      }
+      h2 {
+        margin: 44px 0 12px;
+        padding-bottom: 6px;
+        border-bottom: 1px solid var(--line);
+        font-size: 22px;
+        color: var(--ink);
+      }
+      h3 {
+        margin: 24px 0 8px;
+        font-size: 17px;
+        color: var(--ink);
+      }
+      p.lead {
+        margin: 0;
+        font-size: 17px;
+        color: var(--muted);
+      }
+      code {
+        padding: 1px 5px;
+        border-radius: 4px;
+        background: #e9edf1;
+        font:
+          13px Consolas,
+          monospace;
+      }
+      pre {
+        overflow-x: auto;
+        padding: 12px 16px;
+        border-radius: 6px;
+        background: #1e2a36;
+        color: #e9edf1;
+      }
+      pre code {
+        padding: 0;
+        background: none;
+        color: inherit;
+      }
+      table {
+        width: 100%;
+        margin: 12px 0;
+        border-collapse: collapse;
+        background: #fff;
+        border: 1px solid var(--line);
+      }
+      th,
+      td {
+        padding: 8px 12px;
+        border-bottom: 1px solid var(--line);
+        text-align: left;
+        vertical-align: top;
+      }
+      th {
+        background: #eef2f5;
+        color: var(--ink);
+        font-weight: 600;
+      }
+      .note,
+      .warning {
+        margin: 16px 0;
+        padding: 10px 14px;
+        border-left: 4px solid var(--accent);
+        border-radius: 0 6px 6px 0;
+        background: #e8f1fb;
+      }
+      .warning {
+        border-color: var(--warn);
+        background: #fdecea;
+      }
+      .badge {
+        display: inline-block;
+        padding: 0 8px;
+        border-radius: 10px;
+        font-size: 12px;
+        font-weight: 600;
+        white-space: nowrap;
+      }
+      .badge.live {
+        background: #fdf0d5;
+        color: #8a5300;
+      }
+      .badge.local {
+        background: #e3f4ec;
+        color: var(--ok);
+      }
+      .badge.none {
+        background: #e9edf1;
+        color: var(--muted);
+      }
+      figure {
+        margin: 16px 0 20px;
+      }
+      figure a {
+        display: block;
+      }
+      figure img {
+        display: block;
+        max-width: 100%;
+        height: auto;
+        border: 1px solid var(--line);
+        border-radius: 6px;
+        box-shadow: 0 2px 8px rgba(23, 50, 77, 0.12);
+      }
+      figcaption {
+        margin-top: 6px;
+        font-size: 13px;
+        color: var(--muted);
+      }
+      ol.steps li,
+      ul li {
+        margin-bottom: 6px;
+      }
+      .top {
+        font-size: 13px;
+      }
+      @media (max-width: 860px) {
+        .layout {
+          display: block;
+        }
+        nav {
+          position: static;
+          width: auto;
+          height: auto;
+          border-right: 0;
+          border-bottom: 1px solid var(--line);
+        }
+        main {
+          padding: 24px 18px 48px;
+        }
+      }
+      @media print {
+        nav,
+        .top {
+          display: none;
+        }
+        body {
+          background: #fff;
+        }
+        main {
+          padding: 0;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="layout">
+      <nav aria-label="Contents">
+        <h2>Contents</h2>
+        <ol>
+          <li><a href="#before-you-start">Before you start</a></li>
+          <li><a href="#start-the-console">Start the console</a></li>
+          <li><a href="#choose-a-tab">Choose a tab</a></li>
+          <li>
+            <a href="#set-up-the-local-inventory">Set up the local inventory</a>
+          </li>
+          <li>
+            <a class="tab-link" href="#manage-memberships"
+              >Manage Memberships</a
+            >
+          </li>
+          <li>
+            <a class="tab-link" href="#assign-user-roles">Assign User Roles</a>
+          </li>
+          <li>
+            <a class="tab-link" href="#copy-role-definitions"
+              >Copy Role Definitions</a
+            >
+          </li>
+          <li>
+            <a class="tab-link" href="#user-membership-report"
+              >User Membership Report</a
+            >
+          </li>
+          <li>
+            <a class="tab-link" href="#bulk-changes-csv">Bulk Changes (CSV)</a>
+          </li>
+          <li><a href="#logs-and-audit-files">Logs and audit files</a></li>
+          <li><a href="#troubleshooting">Troubleshooting</a></li>
+        </ol>
+      </nav>
+      <main>
+        <header>
+          <h1>iTwin Membership Console</h1>
+          <p class="lead">
+            <code>ManageUsersConnectedProjects.ps1</code> opens one window for
+            managing who can access your Bentley iTwins and what they can do
+            there.
+          </p>
+          <p class="note">
+            The screenshots use fictitious projects, users, and organizations.
+            Select any screenshot to open it at full size.
+          </p>
+        </header>
+
+        <section id="before-you-start">
+          <h2>Before you start</h2>
+          <ul>
+            <li>
+              Use <strong>Windows PowerShell 5.1 x64</strong>. The console must
+              run in an STA host, so start it with <code>-STA</code>.
+            </li>
+            <li>
+              Install <code>pwps_dab</code> (for Bentley sign-in) and
+              <code>PSSQLite</code> (for the local inventory):
+              <code>Install-Module PSSQLite -Scope CurrentUser</code>.
+            </li>
+            <li>
+              To add or remove members you need the
+              <code>administration_invite_member</code> permission on the iTwin,
+              or an Organization Administrator role. To copy roles you need
+              <code>administration_manage_roles</code> on each destination, or
+              an Organization Administrator role.
+            </li>
+            <li>
+              The first time the console calls Bentley, a Bentley sign-in window
+              opens.
+            </li>
+          </ul>
+        </section>
+
+        <section id="start-the-console">
+          <h2>Start the console</h2>
+          <p>From the tool folder, run:</p>
+          <pre><code>powershell.exe -NoProfile -ExecutionPolicy Bypass -STA -File .\ManageUsersConnectedProjects.ps1</code></pre>
+          <p>Optional parameters:</p>
+          <table>
+            <thead>
+              <tr>
+                <th>Parameter</th>
+                <th>Default</th>
+                <th>Purpose</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>-ProjectConfigPath</code></td>
+                <td><code>iTwinProjects.csv</code></td>
+                <td>Projects that are tracked in the local inventory.</td>
+              </tr>
+              <tr>
+                <td><code>-AuditLogPath</code></td>
+                <td><code>iTwinMembershipManager-audit.csv</code></td>
+                <td>One row per membership or role-assignment change.</td>
+              </tr>
+              <tr>
+                <td><code>-RoleCopyAuditLogPath</code></td>
+                <td><code>iTwinRoleCopy-audit.csv</code></td>
+                <td>One row per copied role and destination.</td>
+              </tr>
+            </tbody>
+          </table>
+          <p>
+            Select the <strong>?</strong> button at the top right of the console
+            at any time to open this guide.
+          </p>
+        </section>
+
+        <section id="choose-a-tab">
+          <h2>Choose a tab</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>Tab</th>
+                <th>Use it to</th>
+                <th>Reads from</th>
+                <th>Changes Bentley</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><a href="#manage-memberships">Manage Memberships</a></td>
+                <td>
+                  Browse who is on which tracked project, add users, and remove
+                  memberships.
+                </td>
+                <td><span class="badge local">Local inventory</span></td>
+                <td>Yes, after you confirm</td>
+              </tr>
+              <tr>
+                <td><a href="#assign-user-roles">Assign User Roles</a></td>
+                <td>Give users on one iTwin more iTwin or enterprise roles.</td>
+                <td><span class="badge live">Bentley (live)</span></td>
+                <td>Yes, after you confirm</td>
+              </tr>
+              <tr>
+                <td>
+                  <a href="#copy-role-definitions">Copy Role Definitions</a>
+                </td>
+                <td>
+                  Copy roles and their permissions from one iTwin or account to
+                  others, create a renamed copy of a role, or overwrite the
+                  permissions of an existing role.
+                </td>
+                <td><span class="badge live">Bentley (live)</span></td>
+                <td>Yes, after you confirm</td>
+              </tr>
+              <tr>
+                <td>
+                  <a href="#user-membership-report">User Membership Report</a>
+                </td>
+                <td>See every project and role one user has.</td>
+                <td><span class="badge local">Local inventory</span></td>
+                <td>No</td>
+              </tr>
+              <tr>
+                <td><a href="#bulk-changes-csv">Bulk Changes (CSV)</a></td>
+                <td>Apply many membership changes listed in a CSV file.</td>
+                <td><span class="badge none">CSV and Bentley</span></td>
+                <td>Yes, after you confirm</td>
+              </tr>
+            </tbody>
+          </table>
+          <p>
+            Tabs that read the <strong>local inventory</strong> show what was
+            last seen when projects were polled. Poll projects first (see
+            <a href="#set-up-the-local-inventory">Set up the local inventory</a
+            >) for current results. Bentley API calls run on the window's
+            thread, so the window does not respond until each call finishes.
+          </p>
+        </section>
+
+        <section id="set-up-the-local-inventory">
+          <h2>Set up the local inventory</h2>
+          <p>
+            The first time you open the console there is no inventory yet, so
+            the <strong>Manage Memberships</strong> tab shows two buttons
+            instead of the browser:
+          </p>
+          <ol class="steps">
+            <li>
+              Select <strong>Discover projects</strong>, search for or page
+              through your iTwins, select the ones to track, and select
+              <strong>Add selected to configuration</strong>. Select
+              <strong>Show organization projects</strong> to list every project
+              in your organization; this requires an Organization Administrator
+              role.
+            </li>
+            <li>
+              Select <strong>Poll configured projects</strong>. The console
+              reads the members and roles of every tracked project and stores
+              them in <code>iTwinMembershipInventory.sqlite</code>.
+            </li>
+          </ol>
+          <p>
+            Poll again whenever you need current data. For scheduled polling,
+            use <code>AddRemoveUsersConnectedProjects.ps1 -Mode Poll</code>.
+          </p>
+        </section>
+
+        <section id="manage-memberships">
+          <h2>Manage Memberships</h2>
+          <figure>
+            <a href="images/01-manage-memberships.png"
+              ><img
+                src="images/01-manage-memberships.png"
+                alt="Manage Memberships tab with one project and two users selected"
+                width="1443"
+                height="861"
+            /></a>
+            <figcaption>
+              One project selected on the left, two of its users in the middle,
+              and their memberships on the right.
+            </figcaption>
+          </figure>
+          <p>Browse the inventory in three linked panes, from left to right:</p>
+          <ol class="steps">
+            <li>
+              Choose what to <strong>Browse</strong>: <code>Projects</code>,
+              <code>Users</code>, or <code>Organizations</code>. The left pane
+              lists them.
+            </li>
+            <li>
+              Select one or more items on the left. The middle pane lists
+              related users and organizations (or projects).
+            </li>
+            <li>
+              Select items in the middle to narrow the
+              <strong>Matching memberships</strong> pane on the right. Each row
+              shows project, email, organization, and roles.
+            </li>
+          </ol>
+          <p>
+            Use <strong>Organization filter</strong> to limit the lists to one
+            organization, <strong>Include history</strong> to show memberships
+            that no longer exist, and <strong>Favorites only</strong> to show
+            only projects that are favorites in Bentley.
+          </p>
+          <table>
+            <thead>
+              <tr>
+                <th>Button</th>
+                <th>What it does</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Add user to selected projects</strong></td>
+                <td>
+                  In Projects mode, adds one email to every selected project.
+                  <code>Team Member</code> is used when it exists; otherwise you
+                  choose a role for each project.
+                </td>
+              </tr>
+              <tr>
+                <td><strong>Remove selected memberships</strong></td>
+                <td>
+                  Removes the exact rows selected in the right pane from
+                  Bentley. <strong>This cannot be undone.</strong>
+                </td>
+              </tr>
+              <tr>
+                <td><strong>Stop tracking selected projects</strong></td>
+                <td>
+                  Removes projects from <code>iTwinProjects.csv</code> and
+                  deletes their local history. Bentley is not changed. Backups
+                  of the CSV and database are made first.
+                </td>
+              </tr>
+              <tr>
+                <td><strong>Refresh inventory</strong></td>
+                <td>Reloads the lists from the local database.</td>
+              </tr>
+            </tbody>
+          </table>
+          <p class="top"><a href="#choose-a-tab">Back to tabs</a></p>
+        </section>
+
+        <section id="assign-user-roles">
+          <h2>Assign User Roles</h2>
+          <figure>
+            <a href="images/02-assign-user-roles.png"
+              ><img
+                src="images/02-assign-user-roles.png"
+                alt="Assign User Roles tab with an iTwin, two users, and a role selected"
+                width="1443"
+                height="861"
+            /></a>
+            <figcaption>
+              An iTwin, a member and a non-member found by organization search,
+              and one role selected.
+            </figcaption>
+          </figure>
+          <p>
+            This tab works directly against Bentley and does not need a poll.
+          </p>
+          <ol class="steps">
+            <li>
+              <strong>Select an iTwin.</strong> Use
+              <strong>All iTwins</strong> or <strong>My Favorites</strong>, the
+              status list, and <strong>Search</strong>. Use
+              <strong>Previous</strong> and <strong>Next</strong> to page
+              through results.
+            </li>
+            <li>
+              <strong>Select users.</strong> Current members are listed with
+              their roles. To add someone who is not a member, type part of a
+              name, email, or organization and select
+              <strong>Search organization</strong>, or select
+              <strong>Enter email...</strong> to type addresses. People outside
+              your organization are invited by email.
+            </li>
+            <li>
+              <strong>Select roles.</strong> Roles marked
+              <strong>(Enterprise)</strong> are defined on your organization's
+              account and are available on every iTwin in it.
+            </li>
+            <li>
+              Select <strong>Assign selected roles to selected users</strong>,
+              review the summary, and confirm.
+            </li>
+          </ol>
+          <p>
+            Existing roles are always kept; users only receive the roles they
+            are missing. If the iTwin is tracked, its local inventory is
+            refreshed afterwards.
+          </p>
+          <p class="top"><a href="#choose-a-tab">Back to tabs</a></p>
+        </section>
+
+        <section id="copy-role-definitions">
+          <h2>Copy Role Definitions</h2>
+          <figure>
+            <a href="images/03-copy-role-definitions.png"
+              ><img
+                src="images/03-copy-role-definitions.png"
+                alt="Copy Role Definitions tab with a source, two roles, and three destinations selected"
+                width="1446"
+                height="865"
+            /></a>
+            <figcaption>
+              A source iTwin, two of its roles with their permissions previewed,
+              and three destinations. The read-only
+              <strong>Role to copy</strong>
+              field shows the selected role names.
+            </figcaption>
+          </figure>
+          <p>
+            Copies the <strong>definition</strong> of a role (its name,
+            description, and permissions) to other iTwins or accounts. It does
+            not copy members or role assignments.
+          </p>
+          <ol class="steps">
+            <li>
+              <strong>Source iTwin or account.</strong> Pick where the roles
+              come from. Use the <strong>Accounts</strong> tab to copy
+              enterprise roles.
+            </li>
+            <li>
+              <strong>Roles to copy.</strong> Click roles to select them, or use
+              <strong>Select all</strong>. The
+              <strong>Permission preview</strong> at the bottom shows each
+              selected role's permissions grouped by service area, and the
+              read-only <strong>Role to copy</strong> field at the bottom lists
+              the selected role names.
+            </li>
+            <li>
+              <strong>Destinations.</strong> Click to select one or more iTwins
+              and accounts. Selections are kept when you change tabs, pages, or
+              searches; the summary under the list shows everything selected.
+            </li>
+            <li>
+              Choose what to do with <strong>Existing roles</strong> that have
+              the same name (ignoring case) on a destination:
+              <ul>
+                <li>
+                  <strong>Skip roles that already exist</strong> (default and
+                  safest).
+                </li>
+                <li>
+                  <strong>Add missing permissions to existing roles</strong>.
+                </li>
+                <li>
+                  <strong>Replace permissions of existing roles</strong>. This
+                  can remove permissions from the destination role.
+                </li>
+              </ul>
+            </li>
+            <li>
+              Select <strong>Copy selected roles...</strong>. The console reads
+              every destination and shows the planned change for each role
+              before anything is changed.
+            </li>
+          </ol>
+          <figure>
+            <a href="images/04-copy-role-confirmation.png"
+              ><img
+                src="images/04-copy-role-confirmation.png"
+                alt="Role copy confirmation listing planned and skipped changes for each destination"
+                width="807"
+                height="585"
+            /></a>
+            <figcaption>
+              The confirmation lists the planned change for every role and
+              destination.
+            </figcaption>
+          </figure>
+          <p>
+            Review the plan and select <strong>Copy roles</strong> to apply it,
+            or <strong>Cancel</strong>. A results window follows, and each
+            result is written to the role copy audit CSV.
+          </p>
+
+          <h3 id="create-new-role">Create a new role from a source role</h3>
+          <figure>
+            <a href="images/03b-create-new-role.png"
+              ><img
+                src="images/03b-create-new-role.png"
+                alt="Create New Role checked, with the Reviewer role copied as Senior Reviewer to the source iTwin and one other iTwin"
+                width="1446"
+                height="865"
+            /></a>
+            <figcaption>
+              <strong>Create New Role</strong> makes the name field editable.
+              Here, Reviewer is copied as Senior Reviewer.
+            </figcaption>
+          </figure>
+          <p>
+            Check <strong>Create New Role</strong> to copy one source role under
+            a different name, for example to start a new role from an existing
+            one. The field changes to <strong>New role name</strong> and becomes
+            editable; when the option is cleared, the field is read-only again
+            and shows the selected role names.
+          </p>
+          <ol class="steps">
+            <li>Select exactly one role in <strong>Roles to copy</strong>.</li>
+            <li>
+              Select one or more destinations. The source iTwin or account
+              itself can be a destination, which creates the new role next to
+              the original.
+            </li>
+            <li>Type the <strong>New role name</strong>.</li>
+            <li>
+              <strong>Existing roles</strong> applies when a destination already
+              has a role with the new name: skip it, add missing permissions, or
+              replace its permissions.
+            </li>
+            <li>
+              Select <strong>Create role...</strong>, review the plan, and
+              confirm.
+            </li>
+          </ol>
+          <figure>
+            <a href="images/04b-create-role-confirmation.png"
+              ><img
+                src="images/04b-create-role-confirmation.png"
+                alt="Create role confirmation showing the new role name and the planned change on each destination"
+                width="807"
+                height="585"
+            /></a>
+            <figcaption>
+              The confirmation shows the new role name and the planned change on
+              each destination.
+            </figcaption>
+          </figure>
+          <p>
+            The new role gets the source role's permissions and description.
+            Members and role assignments are not copied. Results are written to
+            the role copy audit CSV with the new name in the
+            <strong>RoleName</strong> column.
+          </p>
+
+          <h3 id="overwrite-existing-role">Overwrite an existing role</h3>
+          <figure>
+            <a href="images/03c-overwrite-existing-role.png"
+              ><img
+                src="images/03c-overwrite-existing-role.png"
+                alt="Overwrite Existing Role checked, with the fourth pane listing destination roles and the permission changes for Field Inspector"
+                width="1446"
+                height="865"
+            /></a>
+            <figcaption>
+              The fourth pane lists the destination's roles. The yellow box
+              shows the permissions that will be added and removed.
+            </figcaption>
+          </figure>
+          <p>
+            To update one specific role, whatever its name, check
+            <strong>Overwrite Existing Role</strong>. A fourth pane,
+            <strong>Existing role to overwrite</strong>, appears. Select one
+            source role and one destination (it may be the source itself), then
+            pick the role to overwrite. The yellow box lists the permissions
+            that will be added and removed. Choose
+            <strong>Add missing permissions</strong> or
+            <strong>Replace permissions</strong> and select
+            <strong>Overwrite role...</strong>. Only permissions change; the
+            role's name, description, and members are kept. Changing an
+            enterprise role affects every iTwin in that account.
+          </p>
+          <p>
+            <strong>Create New Role</strong> and
+            <strong>Overwrite Existing Role</strong> cannot be used together;
+            checking one clears the other.
+          </p>
+          <p class="note">
+            Copying to an <strong>account</strong> creates enterprise roles that
+            are available on every iTwin in that account. Copying an account's
+            enterprise roles to one of its own iTwins creates separate iTwin
+            roles with the same names.
+          </p>
+          <p class="top"><a href="#choose-a-tab">Back to tabs</a></p>
+        </section>
+
+        <section id="user-membership-report">
+          <h2>User Membership Report</h2>
+          <figure>
+            <a href="images/05-user-membership-report.png"
+              ><img
+                src="images/05-user-membership-report.png"
+                alt="User Membership Report for one user"
+                width="1443"
+                height="861"
+            /></a>
+            <figcaption>
+              Every active project membership and role for one user.
+            </figcaption>
+          </figure>
+          <p>
+            Type an email address and select <strong>Run report</strong> (or
+            press Enter). The grid lists each active project membership and role
+            for that user from the local inventory, including when each role was
+            assigned and when the membership was last observed. The report never
+            changes Bentley.
+          </p>
+          <p class="top"><a href="#choose-a-tab">Back to tabs</a></p>
+        </section>
+
+        <section id="bulk-changes-csv">
+          <h2>Bulk Changes (CSV)</h2>
+          <figure>
+            <a href="images/06-bulk-changes-csv.png"
+              ><img
+                src="images/06-bulk-changes-csv.png"
+                alt="Bulk Changes (CSV) tab after a preview"
+                width="1443"
+                height="861"
+            /></a>
+            <figcaption>
+              An action CSV after <strong>Preview</strong>; nothing has been
+              changed yet.
+            </figcaption>
+          </figure>
+          <p>Applies many changes from an action CSV file.</p>
+          <ol class="steps">
+            <li>
+              Select <strong>Download CSV Template</strong> to save a sample
+              file, then replace its placeholder project GUIDs, emails, and
+              roles. Or select <strong>Browse...</strong> to choose an existing
+              file.
+            </li>
+            <li>
+              Optionally enter a <strong>Default role ID</strong> to use for
+              <code>AssignRole</code> rows that do not name a role.
+            </li>
+            <li>
+              Select <strong>Preview</strong>. The file is validated and listed
+              without calling Bentley.
+            </li>
+            <li>
+              Select <strong>Apply to Bentley</strong> and confirm to make the
+              changes.
+            </li>
+          </ol>
+          <table>
+            <thead>
+              <tr>
+                <th>Column</th>
+                <th>Required</th>
+                <th>Notes</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>ProjectGUID</code></td>
+                <td>Yes</td>
+                <td>Must be listed in <code>iTwinProjects.csv</code>.</td>
+              </tr>
+              <tr>
+                <td><code>User</code></td>
+                <td>Yes</td>
+                <td>Email address.</td>
+              </tr>
+              <tr>
+                <td><code>Action</code></td>
+                <td>Yes</td>
+                <td>
+                  <code>AssignRole</code>, <code>UnassignRole</code>, or
+                  <code>RemoveMember</code>.
+                </td>
+              </tr>
+              <tr>
+                <td><code>RoleId</code></td>
+                <td>No</td>
+                <td>Role GUID. Use it when a role name is ambiguous.</td>
+              </tr>
+              <tr>
+                <td><code>RoleDisplayName</code></td>
+                <td>No</td>
+                <td>
+                  Role name, matched ignoring case, including enterprise roles.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <p class="warning">
+            <code>UnassignRole</code> and <code>RemoveMember</code> cannot be
+            undone. Each row reports <code>Success</code>, <code>Skipped</code>,
+            or <code>Failed</code>, and a failed row does not stop the rest.
+          </p>
+          <p class="top"><a href="#choose-a-tab">Back to tabs</a></p>
+        </section>
+
+        <section id="logs-and-audit-files">
+          <h2>Logs and audit files</h2>
+          <p>Files are written beside the script:</p>
+          <ul>
+            <li>
+              <code
+                >ManageUsersConnectedProjects.ps1.&lt;timestamp&gt;.LastRun.log</code
+              >: everything the console reported during that session.
+            </li>
+            <li>
+              <code>iTwinMembershipManager-audit.csv</code>: membership and
+              role-assignment changes, with time, Windows user, project, email,
+              action, status, and detail.
+            </li>
+            <li>
+              <code>iTwinRoleCopy-audit.csv</code>: role copy results, with
+              source, destination, role, action, status, and detail.
+            </li>
+          </ul>
+          <p>Sign-in tokens are never written to these files.</p>
+        </section>
+
+        <section id="troubleshooting">
+          <h2>Troubleshooting</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>Message or symptom</th>
+                <th>What to do</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <code>This script requires an STA PowerShell host.</code>
+                </td>
+                <td>
+                  Start Windows PowerShell with <code>-STA</code>, as shown in
+                  <a href="#start-the-console">Start the console</a>.
+                </td>
+              </tr>
+              <tr>
+                <td><code>PSSQLite is required.</code></td>
+                <td>
+                  Run <code>Install-Module PSSQLite -Scope CurrentUser</code>.
+                </td>
+              </tr>
+              <tr>
+                <td>Manage Memberships says the inventory is not available.</td>
+                <td>
+                  Discover projects, then poll them. See
+                  <a href="#set-up-the-local-inventory"
+                    >Set up the local inventory</a
+                  >.
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <code
+                    >Organization access is unavailable; showing your
+                    iTwins.</code
+                  >
+                </td>
+                <td>
+                  Your account is not an Organization Administrator, so only
+                  iTwins you belong to are listed.
+                </td>
+              </tr>
+              <tr>
+                <td>Enterprise roles are missing from Assign User Roles.</td>
+                <td>
+                  Reading them needs <code>administration_manage_roles</code> on
+                  the account or an Organization Administrator role.
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  A report or the Manage Memberships tab shows out-of-date data.
+                </td>
+                <td>
+                  Select <strong>Poll configured projects</strong>, then
+                  <strong>Refresh inventory</strong>.
+                </td>
+              </tr>
+              <tr>
+                <td>The window stops responding briefly.</td>
+                <td>
+                  A Bentley call is running. Wait for the wait cursor to clear.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <p>
+            For command-line modes, scheduled polling, and inventory details,
+            see <code>iTwinMembershipInventory.md</code> in the tool folder.
+          </p>
+        </section>
+      </main>
+    </div>
+  </body>
+</html>

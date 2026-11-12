@@ -1,0 +1,1452 @@
+{
+    "openapi": "3.0.1",
+    "info": {
+        "title": "Mesh Export",
+        "description": "Generate and stream 3D Tiles from iModels.",
+        "license": {
+            "name": "iTwin Platform License",
+            "url": "https://developer.bentley.com/terms-of-service/"
+        },
+        "version": "v1"
+    },
+    "servers": [
+        {
+            "url": "https://api.bentley.com/mesh-export"
+        }
+    ],
+    "paths": {
+        "/": {
+            "get": {
+                "tags": [
+                    "Export"
+                ],
+                "summary": "Get Exports",
+                "description": "---\r\n\r\nRetrieves a list of all 3D Tiles generation tasks, each with its current status (not started, in-progress, completed, or failed).\r\n\r\nTo obtain the URL for the tiles so that the 3D viewer can stream them, you can use the `prefer` header with the value `return=representation`. This will include a URL for the viewer to access the tiles.\r\n\r\nWhen a mesh export succeeds, the `_links.mesh` returns a URL to stream the resulting tiles from the blob container.\r\n\r\nYou can list the contents of the container by appending the query parameters `restype=container&comp=list` to the URL.\r\n\r\nThe link is valid for one hour.\r\n\r\n### Streaming 3DTiles\r\n\r\nExporting `3DTiles` always produces a JSON file `tileset.json`, that contains the description and structure of the tileset, and many 3D tile files in GLB format (GLTF binary).\r\n\r\n3D viewers require a URL to the `tileset.json` file to start streaming the tiles.\r\n\r\nTo generate this URL you must:\r\n- Split the URL provided in `_links.mesh.href` in two parts: the URL base and the query parameters.\r\n- Append the file name `tileset.json`to the base URL.\r\n- Append the query parameters to the resulting previous URL.\r\n\r\nFor example: `{baseUrl}/tileset.json?{SASKey}`\r\n\r\n### Selecting the latest version\r\n\r\nTo obtain the latest version, you do not need to define the `changesetId`.\r\nThis will return the list of exports ordered by `changesetIndex`, with the newest first.\r\n\r\nTo filter the exports, we recommend using `&exportType=3DTiles`.\r\nThis will also help the system improve auto-generation, as it will allow the service to know the type of export we want to use.\r\n\r\n### Auto-generation\r\n\r\nRecently, the iTwin platform incorporated the ability to auto-generate 3D Tiles when iModels change. Therefore, it is no longer necessary to manually generate the tiles, as the platform will handle it.\r\n\r\nSometimes, the generation of tiles may be starting. If the call to get-exports does not return any export, we recommend trying again after a few seconds (10s-30s).\r\n\r\n**Important:** The first generation of 3D tiles for an iModel may be slower, but subsequent automatic generations will be faster, so we recommend keeping this in mind and informing the user.\r\n\r\n### SASKey\r\n\r\nWhen accessing 3D Tiles, the provided URL includes a Shared Access Signature (SAS) key, which grants secure, temporary access to each file within the container. The SAS key is embedded in the URL, allowing direct access to the files without requiring further authentication. Ensure that the URL retains its SAS key, as it controls access permissions and is necessary to retrieve the files in the container.\r\n\r\n### Authentication\r\n\r\nRequires `Authorization` header with valid Bearer token for scope `itwin-platform`.\r\n\r\nFor more documentation on authorization and how to get access token visit [OAUTH2 Authorization](https://developer.bentley.com/apis/overview/authorization/) page.\r\n\r\n---\r\n",
+                "operationId": "get-exports",
+                "parameters": [
+                    {
+                        "name": "iModelId",
+                        "in": "query",
+                        "description": "Optional iModel Id query parameter. Will return all exports contained in the iModel as long as user has access to it.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "changesetId",
+                        "in": "query",
+                        "description": "Optional Changeset Id query parameter. Will return all exports that have the matching changeset Id.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "$top",
+                        "in": "query",
+                        "description": "The [$top](https://www.odata.org/getting-started/basic-tutorial/#topskip) system query option requests the number of items in the queried collection to be included in the result.",
+                        "schema": {
+                            "maximum": 1000,
+                            "minimum": 1,
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "$skip",
+                        "in": "query",
+                        "description": "The [$skip](https://www.odata.org/getting-started/basic-tutorial/#topskip) query option requests the number of items in the queried collection that are to be skipped and not included in the result.",
+                        "schema": {
+                            "minimum": 0,
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "$orderBy",
+                        "in": "query",
+                        "description": "The $orderBy query parameter allows you to order by exports' last modified date. At the moment, only `$orderBy=date:asc` and `$orderBy=date:desc` is supported.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "cdn",
+                        "in": "query",
+                        "description": "Optional cdn query parameter. Will return cdn based urls if set to 1.",
+                        "schema": {
+                            "type": "number"
+                        }
+                    },
+                    {
+                        "name": "tileVersion",
+                        "in": "query",
+                        "description": "Optional tileVersion query parameter. Will return all exports compatible with that tileVersion.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "exportType",
+                        "in": "query",
+                        "description": "Optional exportType query parameter. Will return all exports that have the matching exportType.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "iTwinJS",
+                        "in": "query",
+                        "description": "Optional iTwinJS query parameter. Will return all exports compatible with that iTwinJS version.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "prefer",
+                        "in": "header",
+                        "description": "This operation supports `return=representation` and `return=minimal` preferences, defaults to return=minimal if not provided.",
+                        "schema": {
+                            "enum": [
+                                "return=minimal",
+                                "return=representation"
+                            ],
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "OAuth access token with `itwin-platform` scope",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/components/schemas/AuthorizationHeader.schema"
+                        }
+                    },
+                    {
+                        "name": "Accept",
+                        "in": "header",
+                        "description": "Setting to `application/vnd.bentley.itwin-platform.v1+json` is recommended.",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/components/schemas/AcceptHeader.schema"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List of user requested exports.",
+                        "content": {
+                            "application/json;minimal": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ExportListResponse"
+                                },
+                                "example": {
+                                    "exports": [
+                                        {
+                                            "id": "fc3aa1e5-5196-4dd9-a73e-4cfda693e576",
+                                            "displayName": "My iModel",
+                                            "status": "NotStarted",
+                                            "lastModified": "2024-08-22T06:18:43.0000000+00:00",
+                                            "request": {
+                                                "iModelId": "b80f4fc2-4dbb-42c5-bb1f-f5aace3977dc",
+                                                "changesetId": "ed94ed9a0704918d36eeb620219f5e17d8858858",
+                                                "exportType": "3DTiles"
+                                            },
+                                            "_links": {
+                                                "mesh": {
+                                                    "href": "https://example.cloudfront.net/mesh-export/fc3aa1e5-5196-4dd9-a73e-4cfda693e576"
+                                                }
+                                            }
+                                        },
+                                        {
+                                            "id": "57ea169d-144a-4219-b530-9ce360fd194f",
+                                            "displayName": "My previous iModel",
+                                            "status": "Complete",
+                                            "lastModified": "2024-08-22T06:18:43.0000000+00:00",
+                                            "request": {
+                                                "iModelId": "b80f4fc2-4dbb-42c5-bb1f-f5aace3977dc",
+                                                "changesetId": "e3a5dece-c1eb-477c-a782-32a4c43ba2ad",
+                                                "exportType": "3DTiles"
+                                            },
+                                            "_links": {
+                                                "mesh": {
+                                                    "href": "https://example.cloudfront.net/mesh-export/57ea169d-144a-4219-b530-9ce360fd194f"
+                                                }
+                                            }
+                                        },
+                                        {
+                                            "id": "4777e39e-03a7-48b1-a5c1-4018beaefb25",
+                                            "displayName": "Invalid",
+                                            "status": "Invalid",
+                                            "lastModified": "2024-08-22T06:18:43.0000000+00:00",
+                                            "error": "Export failed, see linked zipped logs",
+                                            "request": {
+                                                "iModelId": "b80f4fc2-4dbb-42c5-bb1f-f5aace3977dc",
+                                                "changesetId": "e3a5dece-c1eb-477c-a782-32a4c43ba2ad",
+                                                "exportType": "3DTiles"
+                                            },
+                                            "_links": {
+                                                "mesh": {
+                                                    "href": "https://example.cloudfront.net/mesh-export/4777e39e-03a7-48b1-a5c1-4018beaefb25"
+                                                }
+                                            }
+                                        }
+                                    ],
+                                    "_links": {
+                                        "self": {
+                                            "href": "https://api.bentley.com/mesh-export/?$top=100&$skip=0"
+                                        },
+                                        "next": {
+                                            "href": "https://api.bentley.com/mesh-export/?$top=100&$skip=100"
+                                        }
+                                    }
+                                }
+                            },
+                            "application/json;representation": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ExportListResponse"
+                                },
+                                "example": {
+                                    "exports": [
+                                        {
+                                            "id": "fc3aa1e5-5196-4dd9-a73e-4cfda693e576",
+                                            "displayName": "My iModel",
+                                            "status": "NotStarted",
+                                            "lastModified": "2024-08-22T06:18:43.0000000+00:00",
+                                            "request": {
+                                                "iModelId": "b80f4fc2-4dbb-42c5-bb1f-f5aace3977dc",
+                                                "changesetId": "ed94ed9a0704918d36eeb620219f5e17d8858858",
+                                                "exportType": "3DTiles"
+                                            },
+                                            "_links": {
+                                                "mesh": {
+                                                    "href": "https://example.cloudfront.net/mesh-export/fc3aa1e5-5196-4dd9-a73e-4cfda693e576"
+                                                }
+                                            }
+                                        },
+                                        {
+                                            "id": "57ea169d-144a-4219-b530-9ce360fd194f",
+                                            "displayName": "My previous iModel",
+                                            "status": "Complete",
+                                            "lastModified": "2024-08-22T06:18:43.0000000+00:00",
+                                            "request": {
+                                                "iModelId": "b80f4fc2-4dbb-42c5-bb1f-f5aace3977dc",
+                                                "changesetId": "e3a5dece-c1eb-477c-a782-32a4c43ba2ad",
+                                                "exportType": "3DTiles"
+                                            },
+                                            "_links": {
+                                                "mesh": {
+                                                    "href": "https://example.cloudfront.net/mesh-export/57ea169d-144a-4219-b530-9ce360fd194f"
+                                                }
+                                            }
+                                        },
+                                        {
+                                            "id": "4777e39e-03a7-48b1-a5c1-4018beaefb25",
+                                            "displayName": "Invalid",
+                                            "status": "Invalid",
+                                            "lastModified": "2024-08-22T06:18:43.0000000+00:00",
+                                            "error": "Export failed, see linked zipped logs",
+                                            "request": {
+                                                "iModelId": "b80f4fc2-4dbb-42c5-bb1f-f5aace3977dc",
+                                                "changesetId": "e3a5dece-c1eb-477c-a782-32a4c43ba2ad",
+                                                "exportType": "3DTiles"
+                                            },
+                                            "_links": {
+                                                "mesh": {
+                                                    "href": "https://example.cloudfront.net/mesh-export/4777e39e-03a7-48b1-a5c1-4018beaefb25"
+                                                }
+                                            }
+                                        }
+                                    ],
+                                    "_links": {
+                                        "self": {
+                                            "href": "https://api.bentley.com/mesh-export/?$top=100&$skip=0"
+                                        },
+                                        "next": {
+                                            "href": "https://api.bentley.com/mesh-export/?$top=100&$skip=100"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "This response indicates that request lacks valid authentication credentials. Access token might not been provided, issued by the wrong issuer, does not have required scopes or request headers were malformed.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                },
+                                "examples": {
+                                    "HeaderNotFound": {
+                                        "value": {
+                                            "error": {
+                                                "code": "HeaderNotFound",
+                                                "message": "Header Authorization was not found in the request. Access denied."
+                                            }
+                                        }
+                                    },
+                                    "InvalidApplicationTier": {
+                                        "value": {
+                                            "error": {
+                                                "code": "InvalidApplicationTier",
+                                                "message": "The application is not allowed to access this API."
+                                            }
+                                        }
+                                    },
+                                    "InvalidAuthorizationScheme": {
+                                        "value": {
+                                            "error": {
+                                                "code": "InvalidAuthorizationScheme",
+                                                "message": "Authorization scheme 'Baerer' is not valid."
+                                            }
+                                        }
+                                    },
+                                    "InvalidHeaderValue": {
+                                        "value": {
+                                            "error": {
+                                                "code": "InvalidHeaderValue",
+                                                "message": "Authorization header is empty."
+                                            }
+                                        }
+                                    },
+                                    "RequiredScopeMissing": {
+                                        "value": {
+                                            "error": {
+                                                "code": "RequiredScopeMissing",
+                                                "message": "Access denied due to invalid access_token. One or more required scopes are missing. Make sure to provide a valid token for this API endpoint."
+                                            }
+                                        }
+                                    },
+                                    "Unauthorized": {
+                                        "value": {
+                                            "error": {
+                                                "code": "Unauthorized",
+                                                "message": "Access denied due to invalid client. Make sure that client was registered on https://developer.bentley.com."
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Cannot retrieve export.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                },
+                                "example": {
+                                    "error": {
+                                        "code": "InvalidMeshExportRequest",
+                                        "message": "Cannot retrieve export.",
+                                        "details": [
+                                            {
+                                                "code": "InvalidParameter",
+                                                "message": "$top must be lower or equal to 1000.",
+                                                "target": "$top"
+                                            },
+                                            {
+                                                "code": "InvalidParameter",
+                                                "message": "iModelId is invalid.",
+                                                "target": "iModelId"
+                                            },
+                                            {
+                                                "code": "InvalidParameter",
+                                                "message": "changesetId is invalid.",
+                                                "target": "changesetId"
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "429": {
+                        "description": "This response indicates that the client sent more requests than allowed by this API for the current tier of the client.",
+                        "headers": {
+                            "retry-after": {
+                                "description": "Number of seconds to wait until client is allowed to make more requests.",
+                                "required": true,
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                },
+                                "example": {
+                                    "error": {
+                                        "code": "RateLimitExceeded",
+                                        "message": "The client sent more requests than allowed by this API for the current tier of the client."
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Export"
+                ],
+                "summary": "Start Export",
+                "description": "---\r\n\r\nStart a mesh export from the iModel. The exports will remain available until they are deleted.\r\n\r\n### Deprecation\r\n\r\nRecently, the iTwin platform incorporated the ability to auto-generate 3D Tiles when iModels change. Therefore, it is no longer necessary to manually generate the tiles, as the platform will handle it.\r\n\r\nIn the future, all tiles will be generated automatically, and the ability to generate them manually will be deprecated.\r\n\r\nTherefore, we advise against using this functionality or deprecating it as soon as possible if you are currently using it.\r\n\r\n### Authentication\r\n\r\nRequires `Authorization` header with valid Bearer token for scope `itwin-platform`.\r\n\r\nFor more documentation on authorization and how to get access token visit [OAUTH2 Authorization](https://developer.bentley.com/apis/overview/authorization/) page.\r\n\r\n---\r\n",
+                "operationId": "start-export",
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "OAuth access token with `itwin-platform` scope",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/components/schemas/AuthorizationHeader.schema"
+                        }
+                    },
+                    {
+                        "name": "Accept",
+                        "in": "header",
+                        "description": "Setting to `application/vnd.bentley.itwin-platform.v1+json` is recommended.",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/components/schemas/AcceptHeader.schema"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/StartExport"
+                            },
+                            "example": {
+                                "iModelId": "b80f4fc2-4dbb-42c5-bb1f-f5aace3977dc",
+                                "changesetId": "ed94ed9a0704918d36eeb620219f5e17d8858858",
+                                "exportType": "3DTiles"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "202": {
+                        "description": "The export was accepted and will be processed",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ExportResponse"
+                                },
+                                "example": {
+                                    "export": {
+                                        "id": "fc3aa1e5-5196-4dd9-a73e-4cfda693e576",
+                                        "displayName": "My iModel",
+                                        "status": "NotStarted",
+                                        "lastModified": "2024-08-22T03:18:43.0000000+00:00",
+                                        "request": {
+                                            "iModelId": "b80f4fc2-4dbb-42c5-bb1f-f5aace3977dc",
+                                            "changesetId": "ed94ed9a0704918d36eeb620219f5e17d8858858",
+                                            "exportType": "3DTiles"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "This response indicates that request lacks valid authentication credentials. Access token might not been provided, issued by the wrong issuer, does not have required scopes or request headers were malformed.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                },
+                                "examples": {
+                                    "HeaderNotFound": {
+                                        "value": {
+                                            "error": {
+                                                "code": "HeaderNotFound",
+                                                "message": "Header Authorization was not found in the request. Access denied."
+                                            }
+                                        }
+                                    },
+                                    "InvalidApplicationTier": {
+                                        "value": {
+                                            "error": {
+                                                "code": "InvalidApplicationTier",
+                                                "message": "The application is not allowed to access this API."
+                                            }
+                                        }
+                                    },
+                                    "InvalidAuthorizationScheme": {
+                                        "value": {
+                                            "error": {
+                                                "code": "InvalidAuthorizationScheme",
+                                                "message": "Authorization scheme 'Baerer' is not valid."
+                                            }
+                                        }
+                                    },
+                                    "InvalidHeaderValue": {
+                                        "value": {
+                                            "error": {
+                                                "code": "InvalidHeaderValue",
+                                                "message": "Authorization header is empty."
+                                            }
+                                        }
+                                    },
+                                    "RequiredScopeMissing": {
+                                        "value": {
+                                            "error": {
+                                                "code": "RequiredScopeMissing",
+                                                "message": "Access denied due to invalid access_token. One or more required scopes are missing. Make sure to provide a valid token for this API endpoint."
+                                            }
+                                        }
+                                    },
+                                    "Unauthorized": {
+                                        "value": {
+                                            "error": {
+                                                "code": "Unauthorized",
+                                                "message": "Access denied due to invalid client. Make sure that client was registered on https://developer.bentley.com."
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Requested iModel is not available.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                },
+                                "example": {
+                                    "error": {
+                                        "code": "IModelNotFound",
+                                        "message": "Requested iModel is not available."
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Cannot create export job.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                },
+                                "example": {
+                                    "error": {
+                                        "code": "InvalidMeshExportRequest",
+                                        "message": "Cannot create export job.",
+                                        "details": [
+                                            {
+                                                "code": "InvalidRequestBody",
+                                                "message": "iModelId cannot be empty.",
+                                                "target": "iModelId"
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "429": {
+                        "description": "This response indicates that the client sent more requests than allowed by this API for the current tier of the client.",
+                        "headers": {
+                            "retry-after": {
+                                "description": "Number of seconds to wait until client is allowed to make more requests.",
+                                "required": true,
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                },
+                                "example": {
+                                    "error": {
+                                        "code": "RateLimitExceeded",
+                                        "message": "The client sent more requests than allowed by this API for the current tier of the client."
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/{id}": {
+            "delete": {
+                "tags": [
+                    "Export"
+                ],
+                "summary": "Delete Export",
+                "description": "---\r\n\r\nDeletes an export that is completed or invalid.\r\n\r\n### Authentication\r\n\r\nRequires `Authorization` header with valid Bearer token for scope `itwin-platform`.\r\n\r\nFor more documentation on authorization and how to get access token visit [OAUTH2 Authorization](https://developer.bentley.com/apis/overview/authorization/) page.\r\n\r\n---\r\n",
+                "operationId": "delete-export",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Export Id to delete",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "OAuth access token with `itwin-platform` scope",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/components/schemas/AuthorizationHeader.schema"
+                        }
+                    },
+                    {
+                        "name": "Accept",
+                        "in": "header",
+                        "description": "Setting to `application/vnd.bentley.itwin-platform.v1+json` is recommended.",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/components/schemas/AcceptHeader.schema"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Delete successful"
+                    },
+                    "401": {
+                        "description": "This response indicates that request lacks valid authentication credentials. Access token might not been provided, issued by the wrong issuer, does not have required scopes or request headers were malformed.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                },
+                                "examples": {
+                                    "HeaderNotFound": {
+                                        "value": {
+                                            "error": {
+                                                "code": "HeaderNotFound",
+                                                "message": "Header Authorization was not found in the request. Access denied."
+                                            }
+                                        }
+                                    },
+                                    "InvalidApplicationTier": {
+                                        "value": {
+                                            "error": {
+                                                "code": "InvalidApplicationTier",
+                                                "message": "The application is not allowed to access this API."
+                                            }
+                                        }
+                                    },
+                                    "InvalidAuthorizationScheme": {
+                                        "value": {
+                                            "error": {
+                                                "code": "InvalidAuthorizationScheme",
+                                                "message": "Authorization scheme 'Baerer' is not valid."
+                                            }
+                                        }
+                                    },
+                                    "InvalidHeaderValue": {
+                                        "value": {
+                                            "error": {
+                                                "code": "InvalidHeaderValue",
+                                                "message": "Authorization header is empty."
+                                            }
+                                        }
+                                    },
+                                    "RequiredScopeMissing": {
+                                        "value": {
+                                            "error": {
+                                                "code": "RequiredScopeMissing",
+                                                "message": "Access denied due to invalid access_token. One or more required scopes are missing. Make sure to provide a valid token for this API endpoint."
+                                            }
+                                        }
+                                    },
+                                    "Unauthorized": {
+                                        "value": {
+                                            "error": {
+                                                "code": "Unauthorized",
+                                                "message": "Access denied due to invalid client. Make sure that client was registered on https://developer.bentley.com."
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Requested export is not available.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                },
+                                "example": {
+                                    "error": {
+                                        "code": "ExportNotFound",
+                                        "message": "Requested export is not available."
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "429": {
+                        "description": "This response indicates that the client sent more requests than allowed by this API for the current tier of the client.",
+                        "headers": {
+                            "retry-after": {
+                                "description": "Number of seconds to wait until client is allowed to make more requests.",
+                                "required": true,
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                },
+                                "example": {
+                                    "error": {
+                                        "code": "RateLimitExceeded",
+                                        "message": "The client sent more requests than allowed by this API for the current tier of the client."
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "get": {
+                "tags": [
+                    "Export"
+                ],
+                "summary": "Get Export",
+                "description": "---\r\n\r\nRetrieves the information for a single export using its `exportId`.\r\n\r\n\r\n**Important**: Although this method has not been officially deprecated yet, `get-exports` is the recommended method to obtain the list of exports and access to the tiles.\r\n\r\nWe strongly recommend discontinuing the use of `get-export`, as we will remove it during the transition from Tech Preview to General Availability.\r\n\r\n### Authentication\r\n\r\nRequires `Authorization` header with valid Bearer token for scope `itwin-platform`.\r\n\r\nFor more documentation on authorization and how to get access token visit [OAUTH2 Authorization](https://developer.bentley.com/apis/overview/authorization/) page.\r\n\r\n---\r\n",
+                "operationId": "get-export",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Export Id to get the results",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "cdn",
+                        "in": "query",
+                        "description": "Optional cdn query parameter. Will return cdn based urls if set to 1.",
+                        "schema": {
+                            "type": "number"
+                        }
+                    },
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "OAuth access token with `itwin-platform` scope",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/components/schemas/AuthorizationHeader.schema"
+                        }
+                    },
+                    {
+                        "name": "Accept",
+                        "in": "header",
+                        "description": "Setting to `application/vnd.bentley.itwin-platform.v1+json` is recommended.",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/components/schemas/AcceptHeader.schema"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Specified export",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ExportResponse"
+                                },
+                                "example": {
+                                    "export": {
+                                        "id": "fc3aa1e5-5196-4dd9-a73e-4cfda693e576",
+                                        "displayName": "My previous iModel",
+                                        "status": "Complete",
+                                        "lastModified": "2024-08-22T03:18:43.0000000+00:00",
+                                        "request": {
+                                            "iModelId": "b80f4fc2-4dbb-42c5-bb1f-f5aace3977dc",
+                                            "changesetId": "ed94ed9a0704918d36eeb620219f5e17d8858858",
+                                            "exportType": "3DTiles"
+                                        },
+                                        "_links": {
+                                            "mesh": {
+                                                "href": "https://api.bentley.com/mesh-export/fc3aa1e5-5196-4dd9-a73e-4cfda693e576"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "This response indicates that request lacks valid authentication credentials. Access token might not been provided, issued by the wrong issuer, does not have required scopes or request headers were malformed.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                },
+                                "examples": {
+                                    "HeaderNotFound": {
+                                        "value": {
+                                            "error": {
+                                                "code": "HeaderNotFound",
+                                                "message": "Header Authorization was not found in the request. Access denied."
+                                            }
+                                        }
+                                    },
+                                    "InvalidApplicationTier": {
+                                        "value": {
+                                            "error": {
+                                                "code": "InvalidApplicationTier",
+                                                "message": "The application is not allowed to access this API."
+                                            }
+                                        }
+                                    },
+                                    "InvalidAuthorizationScheme": {
+                                        "value": {
+                                            "error": {
+                                                "code": "InvalidAuthorizationScheme",
+                                                "message": "Authorization scheme 'Baerer' is not valid."
+                                            }
+                                        }
+                                    },
+                                    "InvalidHeaderValue": {
+                                        "value": {
+                                            "error": {
+                                                "code": "InvalidHeaderValue",
+                                                "message": "Authorization header is empty."
+                                            }
+                                        }
+                                    },
+                                    "RequiredScopeMissing": {
+                                        "value": {
+                                            "error": {
+                                                "code": "RequiredScopeMissing",
+                                                "message": "Access denied due to invalid access_token. One or more required scopes are missing. Make sure to provide a valid token for this API endpoint."
+                                            }
+                                        }
+                                    },
+                                    "Unauthorized": {
+                                        "value": {
+                                            "error": {
+                                                "code": "Unauthorized",
+                                                "message": "Access denied due to invalid client. Make sure that client was registered on https://developer.bentley.com."
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Requested export is not available.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                },
+                                "example": {
+                                    "error": {
+                                        "code": "ExportNotFound",
+                                        "message": "Requested export is not available."
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "429": {
+                        "description": "This response indicates that the client sent more requests than allowed by this API for the current tier of the client.",
+                        "headers": {
+                            "retry-after": {
+                                "description": "Number of seconds to wait until client is allowed to make more requests.",
+                                "required": true,
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                },
+                                "example": {
+                                    "error": {
+                                        "code": "RateLimitExceeded",
+                                        "message": "The client sent more requests than allowed by this API for the current tier of the client."
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "AuthorizationHeader.schema": {
+                "pattern": "^Bearer .*$",
+                "type": "string"
+            },
+            "AcceptHeader.schema": {
+                "type": "string",
+                "default": "application/vnd.bentley.itwin-platform.v1+json"
+            },
+            "ExportStatus": {
+                "enum": [
+                    "NotStarted",
+                    "InProgress",
+                    "Complete",
+                    "Invalid"
+                ],
+                "type": "string",
+                "description": "Status of the export."
+            },
+            "TilerConfigItem": {
+                "required": [
+                    "key",
+                    "value"
+                ],
+                "type": "object",
+                "properties": {
+                    "key": {
+                        "maxLength": 256,
+                        "minLength": 1,
+                        "type": "string",
+                        "description": "Configuration key name."
+                    },
+                    "value": {
+                        "anyOf": [
+                            {
+                                "maxLength": 1000,
+                                "minLength": 1,
+                                "type": "string"
+                            },
+                            {
+                                "type": "number"
+                            },
+                            {
+                                "type": "boolean"
+                            }
+                        ],
+                        "description": "Configuration value; may be a string, number, or boolean."
+                    }
+                },
+                "additionalProperties": false,
+                "description": "A key-value configuration item for the tilerConfig."
+            },
+            "ExportResultBody": {
+                "required": [
+                    "iModelId",
+                    "exportType",
+                    "changesetId"
+                ],
+                "type": "object",
+                "properties": {
+                    "iModelId": {
+                        "type": "string",
+                        "description": "ID of the iModel."
+                    },
+                    "contextId": {
+                        "type": "string",
+                        "description": "Context/iTwin ID of the export (kept for backwards compatibility)."
+                    },
+                    "iTwinId": {
+                        "type": "string",
+                        "description": "iTwin ID of the export."
+                    },
+                    "changesetId": {
+                        "type": "string",
+                        "description": "ID of the changeset extracted from."
+                    },
+                    "exportType": {
+                        "enum": [
+                            "IMODEL",
+                            "CESIUM",
+                            "3DTILES",
+                            "3DTiles"
+                        ],
+                        "type": "string",
+                        "description": "Type of mesh exported."
+                    },
+                    "changesetIndex": {
+                        "type": "string",
+                        "description": "Index of the changeset."
+                    },
+                    "tilerConfig": {
+                        "title": "Tiler Config",
+                        "maxItems": 100,
+                        "minItems": 1,
+                        "uniqueItems": true,
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/TilerConfigItem"
+                        },
+                        "description": "A list of key value pairs forwarded to the tiler executable."
+                    }
+                },
+                "additionalProperties": false,
+                "description": "The original export request body stored with the result."
+            },
+            "ExportDirStructure": {
+                "type": "object",
+                "description": "List of export directory children along with their size, in bytes."
+            },
+            "ExportMetrics": {
+                "type": "object",
+                "description": "Memory and CPU usage metrics from the graphics and tiles producer."
+            },
+            "ExportStatsDisplay": {
+                "type": "object",
+                "properties": {
+                    "iModelSize": {
+                        "type": "number",
+                        "description": "Size of the iModel .bin file, in bytes"
+                    },
+                    "compressedSize": {
+                        "type": "number",
+                        "description": "Size of the exported and compressed tiles, in bytes."
+                    },
+                    "rawSize": {
+                        "type": "number",
+                        "description": "Size of the exported tiles, in bytes."
+                    },
+                    "startTime": {
+                        "type": "string",
+                        "description": "Starting date of the export job, pretty-printed.",
+                        "format": "date-time"
+                    },
+                    "duration": {
+                        "type": "number",
+                        "description": "Duration of the export job, in milliseconds."
+                    },
+                    "diskSize": {
+                        "type": "number",
+                        "description": " Disk size, in bytes."
+                    },
+                    "freeDiskSpace": {
+                        "type": "number",
+                        "description": "Free disk space, in bytes."
+                    },
+                    "exportDirSize": {
+                        "type": "number",
+                        "description": "Export directory size, in bytes."
+                    },
+                    "exportDirStructure": {
+                        "$ref": "#/components/schemas/ExportDirStructure"
+                    },
+                    "metrics": {
+                        "$ref": "#/components/schemas/ExportMetrics"
+                    }
+                },
+                "additionalProperties": false,
+                "description": "Statistics of the export job. This obsoletes the Consumption type."
+            },
+            "Link": {
+                "required": [
+                    "href"
+                ],
+                "type": "object",
+                "properties": {
+                    "href": {
+                        "type": "string",
+                        "description": "Http reference",
+                        "example": "https://api.bentley.com/path1/path2/id"
+                    }
+                },
+                "additionalProperties": false,
+                "description": "An href link reference."
+            },
+            "Export": {
+                "required": [
+                    "id",
+                    "displayName",
+                    "status",
+                    "lastModified",
+                    "request"
+                ],
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "description": "ID of the export request."
+                    },
+                    "displayName": {
+                        "type": "string",
+                        "description": "Name of the exported iModel"
+                    },
+                    "status": {
+                        "$ref": "#/components/schemas/ExportStatus"
+                    },
+                    "lastModified": {
+                        "type": "string",
+                        "description": "Date when job metadata was last modified"
+                    },
+                    "request": {
+                        "$ref": "#/components/schemas/ExportResultBody"
+                    },
+                    "stats": {
+                        "$ref": "#/components/schemas/ExportStatsDisplay"
+                    },
+                    "error": {
+                        "type": "string",
+                        "description": "Error message for Invalid exports."
+                    },
+                    "_links": {
+                        "type": "object",
+                        "properties": {
+                            "mesh": {
+                                "$ref": "#/components/schemas/Link"
+                            }
+                        },
+                        "additionalProperties": false
+                    }
+                },
+                "additionalProperties": false,
+                "description": "An export with all its details.",
+                "example": {
+                    "id": "fc3aa1e5-5196-4dd9-a73e-4cfda693e576",
+                    "displayName": "My iModel",
+                    "status": "Complete",
+                    "request": {
+                        "iModelId": "b80f4fc2-4dbb-42c5-bb1f-f5aace3977dc",
+                        "changesetId": "ed94ed9a0704918d36eeb620219f5e17d8858858",
+                        "exportType": "3DTiles"
+                    },
+                    "_links": {
+                        "mesh": {
+                            "href": "https://example.cloudfront.net/mesh-export/fc3aa1e5-5196-4dd9-a73e-4cfda693e576"
+                        }
+                    }
+                }
+            },
+            "ExportListLinks": {
+                "required": [
+                    "self"
+                ],
+                "type": "object",
+                "properties": {
+                    "self": {
+                        "$ref": "#/components/schemas/Link"
+                    },
+                    "prev": {
+                        "$ref": "#/components/schemas/Link"
+                    },
+                    "next": {
+                        "$ref": "#/components/schemas/Link"
+                    }
+                },
+                "additionalProperties": false,
+                "description": "Pagination links for an export list response."
+            },
+            "ExportListRepresentationResponse": {
+                "required": [
+                    "exports",
+                    "_links"
+                ],
+                "type": "object",
+                "properties": {
+                    "exports": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Export"
+                        },
+                        "description": "Requested export list."
+                    },
+                    "_links": {
+                        "$ref": "#/components/schemas/ExportListLinks"
+                    }
+                },
+                "additionalProperties": false,
+                "description": "Full representation response containing a list of exports with all details.",
+                "example": {
+                    "exports": [
+                        {
+                            "id": "fc3aa1e5-5196-4dd9-a73e-4cfda693e576",
+                            "displayName": "My iModel",
+                            "status": "NotStarted",
+                            "request": {
+                                "iModelId": "b80f4fc2-4dbb-42c5-bb1f-f5aace3977dc",
+                                "changesetId": "ed94ed9a0704918d36eeb620219f5e17d8858858",
+                                "exportType": "3DTiles"
+                            },
+                            "_links": {
+                                "mesh": {
+                                    "href": "https://example.cloudfront.net/mesh-export/fc3aa1e5-5196-4dd9-a73e-4cfda693e576"
+                                }
+                            }
+                        },
+                        {
+                            "id": "57ea169d-144a-4219-b530-9ce360fd194f",
+                            "displayName": "My previous iModel",
+                            "status": "Complete",
+                            "request": {
+                                "iModelId": "b80f4fc2-4dbb-42c5-bb1f-f5aace3977dc",
+                                "changesetId": "e3a5dece-c1eb-477c-a782-32a4c43ba2ad",
+                                "exportType": "3DTiles"
+                            },
+                            "_links": {
+                                "mesh": {
+                                    "href": "https://example.cloudfront.net/mesh-export/57ea169d-144a-4219-b530-9ce360fd194f"
+                                }
+                            }
+                        },
+                        {
+                            "id": "4777e39e-03a7-48b1-a5c1-4018beaefb25",
+                            "displayName": "Invalid",
+                            "status": "Invalid",
+                            "error": "Export failed, see linked zipped logs",
+                            "request": {
+                                "iModelId": "b80f4fc2-4dbb-42c5-bb1f-f5aace3977dc",
+                                "changesetId": "e3a5dece-c1eb-477c-a782-32a4c43ba2ad",
+                                "exportType": "3DTiles"
+                            },
+                            "_links": {
+                                "mesh": {
+                                    "href": "https://example.cloudfront.net/mesh-export/4777e39e-03a7-48b1-a5c1-4018beaefb25"
+                                }
+                            }
+                        }
+                    ],
+                    "_links": {
+                        "self": {
+                            "href": "https://api.bentley.com/mesh-export/?$top=100&$skip=0"
+                        },
+                        "next": {
+                            "href": "https://api.bentley.com/mesh-export/?$top=100&$skip=100"
+                        }
+                    }
+                }
+            },
+            "ExportMinimal": {
+                "required": [
+                    "id",
+                    "displayName",
+                    "status",
+                    "lastModified"
+                ],
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "description": "ID of the export request."
+                    },
+                    "displayName": {
+                        "type": "string",
+                        "description": "Name of the exported iModel."
+                    },
+                    "status": {
+                        "$ref": "#/components/schemas/ExportStatus"
+                    },
+                    "lastModified": {
+                        "type": "string",
+                        "description": "Date when job metadata was last modified."
+                    }
+                },
+                "additionalProperties": false,
+                "description": "Minimal export representation containing only essential fields."
+            },
+            "ExportListMinimalResponse": {
+                "required": [
+                    "exports",
+                    "_links"
+                ],
+                "type": "object",
+                "properties": {
+                    "exports": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/ExportMinimal"
+                        },
+                        "description": "Requested export list minimal representation."
+                    },
+                    "_links": {
+                        "$ref": "#/components/schemas/ExportListLinks"
+                    }
+                },
+                "additionalProperties": false,
+                "description": "Minimal response containing a list of exports with essential fields only."
+            },
+            "ExportListResponse": {
+                "oneOf": [
+                    {
+                        "$ref": "#/components/schemas/ExportListRepresentationResponse"
+                    },
+                    {
+                        "$ref": "#/components/schemas/ExportListMinimalResponse"
+                    }
+                ],
+                "description": "Response containing a list of exports, either in full representation or minimal form depending on the `prefer` header."
+            },
+            "Error": {
+                "required": [
+                    "code",
+                    "message"
+                ],
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "string",
+                        "description": "One of a server-defined set of error codes."
+                    },
+                    "message": {
+                        "type": "string",
+                        "description": "A human-readable representation of the error."
+                    },
+                    "target": {
+                        "type": "string",
+                        "description": "The target of the error.",
+                        "nullable": true
+                    }
+                },
+                "description": "Contains error information."
+            },
+            "ErrorResponse": {
+                "title": "Error Response",
+                "required": [
+                    "error"
+                ],
+                "type": "object",
+                "properties": {
+                    "error": {
+                        "$ref": "#/components/schemas/Error"
+                    }
+                },
+                "additionalProperties": false,
+                "description": "Gives details for an error that occurred while handling the request. Note that clients MUST NOT assume that every failed request will produce an object of this schema, or that all of the properties in the response will be non-null, as the error may have prevented this response from being constructed."
+            },
+            "StartExport": {
+                "required": [
+                    "iModelId",
+                    "changesetId"
+                ],
+                "type": "object",
+                "properties": {
+                    "iModelId": {
+                        "type": "string",
+                        "description": "ID of the iModel to extract from."
+                    },
+                    "changesetId": {
+                        "type": "string",
+                        "description": "ID of the changeset to extract from. If omitted, export latest."
+                    },
+                    "exportType": {
+                        "enum": [
+                            "IMODEL",
+                            "CESIUM",
+                            "3DTILES",
+                            "3DTiles"
+                        ],
+                        "type": "string",
+                        "description": "Type of mesh to create, Accepted value are IMODEL, CESIUM and 3DTiles (or 3DTILES). If omitted, defaults to 3DTiles."
+                    },
+                    "tilerConfig": {
+                        "title": "Tiler Config",
+                        "maxItems": 100,
+                        "minItems": 1,
+                        "uniqueItems": true,
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/TilerConfigItem"
+                        },
+                        "description": "A list of key-value pair configuration items forwarded to the tiler executable to customize tile generation behavior."
+                    },
+                    "lastModified": {
+                        "type": "string",
+                        "description": "Date when job metadata was last modified.",
+                        "format": "date-time"
+                    }
+                },
+                "additionalProperties": false,
+                "description": "Request body for starting a mesh export.",
+                "example": {
+                    "iModelId": "b80f4fc2-4dbb-42c5-bb1f-f5aace3977dc",
+                    "changesetId": "ed94ed9a0704918d36eeb620219f5e17d8858858",
+                    "exportType": "3DTiles",
+                    "tilerConfig": [
+                        {
+                            "key": "maxTileSize",
+                            "value": 128
+                        },
+                        {
+                            "key": "enableCompression",
+                            "value": true
+                        },
+                        {
+                            "key": "outputFormat",
+                            "value": "glb"
+                        }
+                    ]
+                }
+            },
+            "ExportResponse": {
+                "type": "object",
+                "properties": {
+                    "export": {
+                        "$ref": "#/components/schemas/Export"
+                    }
+                },
+                "additionalProperties": false,
+                "description": "Response containing the details of a single export.",
+                "example": {
+                    "export": {
+                        "id": "fc3aa1e5-5196-4dd9-a73e-4cfda693e576",
+                        "displayName": "My iModel",
+                        "status": "Complete",
+                        "lastModified": "2024-08-22T03:18:43.0000000+00:00",
+                        "request": {
+                            "iModelId": "b80f4fc2-4dbb-42c5-bb1f-f5aace3977dc",
+                            "changesetId": "ed94ed9a0704918d36eeb620219f5e17d8858858",
+                            "exportType": "3DTiles"
+                        },
+                        "_links": {
+                            "mesh": {
+                                "href": "https://example.cloudfront.net/mesh-export/fc3aa1e5-5196-4dd9-a73e-4cfda693e576"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "securitySchemes": {
+            "apiKeyHeader": {
+                "type": "apiKey",
+                "name": "X-Api-Subscription-Key",
+                "in": "header"
+            },
+            "apiKeyQuery": {
+                "type": "apiKey",
+                "name": "subscription-key",
+                "in": "query"
+            }
+        }
+    },
+    "security": [
+        {
+            "apiKeyHeader": []
+        },
+        {
+            "apiKeyQuery": []
+        }
+    ]
+}
